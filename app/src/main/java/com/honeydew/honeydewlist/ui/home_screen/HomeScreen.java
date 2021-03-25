@@ -1,10 +1,12 @@
-package com.honeydew.honeydewlist;
+package com.honeydew.honeydewlist.ui.home_screen;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
+
+import com.honeydew.honeydewlist.R;
 
 public class HomeScreen extends AppCompatActivity {
     String Username;
