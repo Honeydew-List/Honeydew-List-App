@@ -1,6 +1,16 @@
 name: Automerge
 
 on:
+
+  # Try merging pull requests belonging to a workflow run.
+  workflow_run:
+    workflows:
+      - Run Unit Tests
+      - Generate APK
+      - Analyze
+    types:
+      - completed
+
   # Try merging a pull request when it is approved.
   pull_request_review:
     types:
