@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.honeydew.honeydewlist.ui.home_screen.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_tasks"
+        android:name="com.honeydew.honeydewlist.ui.home_screen.ui.tasks.TasksFragment"
+        android:label="@string/title_tasks"
+        tools:layout="@layout/fragment_tasks" />
+
+    <fragment
+        android:id="@+id/navigation_rewards"
+        android:name="com.honeydew.honeydewlist.ui.home_screen.ui.rewards.RewardsFragment"
+        android:label="@string/title_rewards"
+        tools:layout="@layout/fragment_rewards" />
+
+    <fragment
+        android:id="@+id/navigation_options"
+        android:name="com.honeydew.honeydewlist.ui.home_screen.ui.options.OptionsFragment"
+        android:label="@string/title_options"
+        tools:layout="@layout/fragment_options" />
+
+</navigation>
