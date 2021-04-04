@@ -9,9 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.HoneydewList">
-        <activity android:name=".ui.login.LoginActivity" android:label="Login">
-        </activity>
-        <activity android:name=".ui.home_screen.HomeScreen" android:label="Home" />
+        <activity
+            android:name=".ui.home_screen.HomeScreen"
+            android:label="Home Screen"></activity>
+        <activity
+            android:name=".ui.login.LoginActivity"
+            android:label="Login"></activity>
         <activity
             android:name=".MainActivity"
             android:label="Honeydew List"
