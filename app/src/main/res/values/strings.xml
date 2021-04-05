@@ -29,4 +29,8 @@
     <string name="back">Back</string>
     <string name="email">Email</string>
     <string name="nextButtonText">next</string>
+    <string name="next">Next</string>
+    <string name="forgot_password_text">Forgot Password</string>
+    <string name="appTitle">Honeydew List</string>
+    <string name="registerButtonText">Register</string>
 </resources>
