@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String Username;
                 Username = username_value.getText().toString();
-                Intent i = new Intent(getApplicationContext(), Register.class);
+                Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
                 i.putExtra("username", Username);
                 startActivity(i);
             }
