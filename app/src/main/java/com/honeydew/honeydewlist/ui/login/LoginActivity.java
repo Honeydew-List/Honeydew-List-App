@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.honeydew.honeydewlist.ui.home_screen.HomeScreen;
 import com.honeydew.honeydewlist.R;
@@ -19,11 +20,12 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         EditText username_value, password_value;
-        Button login;
+        Button login, register;
 
         username_value = (EditText) findViewById(R.id.username);
         password_value = (EditText) findViewById(R.id.password);
         login = (Button) findViewById(R.id.loginButton);
+        register = (Button) findViewById(R.id.registerButton);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,8 +39,19 @@ public class LoginActivity extends AppCompatActivity {
                     downloadIntent.putExtra("username", Username);
                     startActivity(downloadIntent);
                 } else {
-
+                    Toast.makeText(getApplicationContext(),"Incorrect Username or Password", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String Username;
+                Username = username_value.getText().toString();
+                Intent i = new Intent(getApplicationContext(), Register.class);
+                i.putExtra("username", Username);
+                startActivity(i);
             }
         });
     }
