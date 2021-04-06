@@ -115,8 +115,8 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
                         }
                     });
                     snackBar.show();
-                } else if (Question1.matches(Question2) || Question1.matches(Question3)
-                        || Question2.matches(Question3)) {
+                } else if (Question1.equalsIgnoreCase(Question2) || Question1.equalsIgnoreCase(Question3)
+                        || Question2.equalsIgnoreCase(Question3)) {
                     snackBar = Snackbar.make(
                             findViewById(android.R.id.content),
                             "Questions cannot be used more than once",
