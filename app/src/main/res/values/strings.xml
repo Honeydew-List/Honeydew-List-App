@@ -49,4 +49,7 @@
     <string name="option_11">What time of the day were you born? (hh:mm)</string>
     <string name="option_12">What time of the day was your first child born? (hh:mm)</string>
     <string name="answer">Answer</string>
+    <string name="security_question_1">Question 1</string>
+    <string name="security_question_2">Question 2</string>
+    <string name="security_question_3">Question 3</string>
 </resources>
