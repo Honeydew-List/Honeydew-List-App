@@ -24,4 +24,32 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="register">Register</string>
+    <string name="finish">Finish</string>
+    <string name="back">Back</string>
+    <string name="email">Email</string>
+    <string name="nextButtonText">next</string>
+    <string name="next">Next</string>
+    <string name="forgot_password_text">Forgot Password</string>
+    <string name="appTitle">Honeydew List</string>
+    <string name="registerButtonText">Register</string>
+    <string name="verifyPasswordHint">Verify Password</string>
+    <string name="security_questions">Security Questions</string>
+    <string name="label">Question 1</string>
+    <string name="option_1">What was the house number and street name you lived in as a child?</string>
+    <string name="option_2">What were the last four digits of your childhood telephone number?</string>
+    <string name="option_3">What primary school did you attend?</string>
+    <string name="option_4">In what town or city was your first full time job?</string>
+    <string name="option_5">In what town or city did you meet your spouse or partner?</string>
+    <string name="option_6">What is the middle name of your oldest child?</string>
+    <string name="option_7">What are the last five digits of your driver\'s license number?</string>
+    <string name="option_8">What is your grandmother\'s (on your mother\'s side) maiden name?</string>
+    <string name="option_9">What is your spouse or partner\'s mother\'s maiden name?</string>
+    <string name="option_10">In what town or city did your parents meet?</string>
+    <string name="option_11">What time of the day were you born? (hh:mm)</string>
+    <string name="option_12">What time of the day was your first child born? (hh:mm)</string>
+    <string name="answer">Answer</string>
+    <string name="security_question_1">Question 1</string>
+    <string name="security_question_2">Question 2</string>
+    <string name="security_question_3">Question 3</string>
 </resources>
