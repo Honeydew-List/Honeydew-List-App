@@ -34,7 +34,14 @@ public class LoginActivity extends AppCompatActivity {
                 Username = username_value.getText().toString();
                 Password = password_value.getText().toString();
 
+                // TODO: Verify Username and Password match in database
                 if (Username.matches("ABC") && Password.matches("123")) {
+                    Toast.makeText(
+                            getApplicationContext(),
+                            "Login Successful",
+                            Toast.LENGTH_SHORT
+                    ).show();
+
                     Intent downloadIntent = new Intent(getApplicationContext(), HomeScreen.class);
                     downloadIntent.putExtra("username", Username);
                     startActivity(downloadIntent);
@@ -47,10 +54,12 @@ public class LoginActivity extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String Username;
+                String Username, Password;
                 Username = username_value.getText().toString();
+                Password = password_value.getText().toString();
                 Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
                 i.putExtra("username", Username);
+                i.putExtra("password", Password);
                 startActivity(i);
             }
         });

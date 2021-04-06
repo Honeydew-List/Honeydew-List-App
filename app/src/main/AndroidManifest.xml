@@ -10,8 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HoneydewList">
         <activity
+            android:name=".ui.login.RegisterSecurityQuestionsActivity"
+            android:label="Security Questions">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ui.login.RegisterActivity" />
+        </activity>
+        <activity
             android:name=".ui.login.RegisterActivity"
-            android:label="Register" >
+            android:label="Register">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ui.login.LoginActivity" />

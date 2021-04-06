@@ -34,4 +34,5 @@
     <string name="appTitle">Honeydew List</string>
     <string name="registerButtonText">Register</string>
     <string name="verifyPasswordHint">Verify Password</string>
+    <string name="security_questions">Security Questions</string>
 </resources>
