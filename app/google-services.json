@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "991743564614",
+    "project_id": "honeydew-list-b6481",
+    "storage_bucket": "honeydew-list-b6481.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:991743564614:android:eaac765d2c7770c5742347",
+        "android_client_info": {
+          "package_name": "com.honeydew.honeydewlist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "991743564614-448qj13jfuo89pk5r0vql5pi4f4gbrq3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHj2xoxKSs4NgpFoRKzWYilSA-MA0X8Bo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "991743564614-448qj13jfuo89pk5r0vql5pi4f4gbrq3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
