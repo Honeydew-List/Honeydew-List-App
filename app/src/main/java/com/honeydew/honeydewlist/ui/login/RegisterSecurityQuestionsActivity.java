@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
@@ -148,6 +149,12 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
                 } else {
                     // TODO: Send Email, Username, Password,
                     //  Security Questions and their answers to database
+
+                    Toast.makeText(
+                            getApplicationContext(),
+                            "Account Creation Successful",
+                            Toast.LENGTH_SHORT
+                    ).show();
 
                     Intent i = new Intent(
                             getApplicationContext(),
