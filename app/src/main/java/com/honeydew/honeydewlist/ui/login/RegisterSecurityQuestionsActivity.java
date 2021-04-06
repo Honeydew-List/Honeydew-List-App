@@ -16,9 +16,11 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_security_questions);
 
+        // TODO: Create security questions dropdown list
+
         // TODO: Get security questions and answers from user
 
-        // TODO: Send account into to database on successful account creation
+        // TODO: Send account info to database on successful account creation
 
         // For back button
         ActionBar actionBar = getSupportActionBar();
