@@ -129,11 +129,12 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
                             snackBar.dismiss();
                         }
                     });
+                    snackBar.show();
                 } else if (Answer1.matches("") || Answer2.matches("")
                         || Answer3.matches("")) {
                     snackBar = Snackbar.make(
                             findViewById(android.R.id.content),
-                            "Please answer all questions",
+                            "All questions must be answered",
                             Snackbar.LENGTH_SHORT
                     );
                     snackBar.setAction("Dismiss", new View.OnClickListener() {
@@ -143,6 +144,7 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
                             snackBar.dismiss();
                         }
                     });
+                    snackBar.show();
                 } else {
                     // TODO: Send Email, Username, Password,
                     //  Security Questions and their answers to database
