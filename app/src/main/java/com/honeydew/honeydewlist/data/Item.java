@@ -1,21 +1,12 @@
 package com.honeydew.honeydewlist.data;
 
-abstract public class Item {
+abstract public class Item extends Owner {
     private String name = "";
-    private String owner = "";
     private String description = "";
-    protected Item(String name, String description, String owner) {
+    protected Item(String name, String description, String owner, String uuid) {
+        super(owner, uuid);
         this.name = name;
         this.description = description;
-        this.owner = owner;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
     }
 
     public String getName() {
