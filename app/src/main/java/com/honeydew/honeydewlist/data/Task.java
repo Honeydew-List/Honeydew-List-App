@@ -6,6 +6,12 @@ public class Task extends Item {
     private List<String> steps;
     private Long points;
     private Boolean completed = false;
+
+    // Required for FireStore
+    public Task() {
+        super(); // Required for firestore
+    }
+
     public Task(String name, String description, String owner, String uuid, Long points, List<String> steps, Boolean completed) {
         super(name, description, owner, uuid);
         this.steps = steps;

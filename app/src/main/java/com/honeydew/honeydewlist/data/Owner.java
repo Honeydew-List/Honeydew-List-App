@@ -9,6 +9,11 @@ public class Owner {
         this.uuid = uuid;
     }
 
+    // Required for FireStore
+    public Owner() {
+
+    }
+
     public String getOwner() {
         return owner;
     }

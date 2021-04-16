@@ -1,17 +1,14 @@
 package com.honeydew.honeydewlist.ui.home_screen.ui.tasks;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,86 +20,88 @@ import com.google.firebase.firestore.Query;
 import com.honeydew.honeydewlist.R;
 import com.honeydew.honeydewlist.data.Task;
 
+import java.text.MessageFormat;
+
 public class TasksFragment extends Fragment {
 
-    @SuppressWarnings("rawtypes")
-    private FirestoreRecyclerAdapter adapter;
+    public TasksFragment() {};
+
+    private TaskAdapter adapter;
+    private FirebaseFirestore firebaseFirestore;
+    private RecyclerView recyclerView;
+    private CheckBox checkBox;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        TasksViewModel tasksViewModel = new ViewModelProvider(this).get(TasksViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_tasks, container, false);
-//        final TextView textView = root.findViewById(R.id.text_tasks);
-//        tasksViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
-        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-        RecyclerView mFirestoreList = root.findViewById(R.id.firestore_task_list);
+        View view = inflater.inflate(R.layout.fragment_tasks, container, false);
 
-        // TODO: Do this for every friend and add it to the task list
-        // Query
-        Query query = firebaseFirestore.collection("users")
-                .document("ABC#0123").collection("tasks");
-        // RecyclerOptions
-        FirestoreRecyclerOptions<TasksModel> tasks = new FirestoreRecyclerOptions
-                .Builder<TasksModel>().setQuery(query, TasksModel.class)
-                .build();
-
-
-        // View Holder
-        adapter = new FirestoreRecyclerAdapter<TasksModel, TasksViewHolder>(tasks) {
-
-            @NonNull
-            @Override
-            public TasksViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_task_single, parent, false);
-                return new TasksViewHolder(view);
-            }
-
-            @SuppressLint("SetTextI18n")
-            @Override
-            protected void onBindViewHolder(@NonNull TasksViewHolder holder, int position, @NonNull TasksModel model) {
-                Task task = model.getTask();
-                holder.list_name.setText(task.getName());
-                holder.list_desc.setText(task.getDescription());
-                holder.list_melon_count.setText(task.getPoints().toString());
-            }
-        };
-
-        mFirestoreList.setHasFixedSize(true);
-        mFirestoreList.setLayoutManager(new LinearLayoutManager(getContext()));
-        mFirestoreList.setAdapter(adapter);
-        return root;
+        recyclerView = view.findViewById(R.id.firestore_task_list);
+        setUpRecyclerView();
+        return view;
     }
 
-    private static class TasksViewHolder extends RecyclerView.ViewHolder{
+    private void setUpRecyclerView() {
+        Query query = FirebaseFirestore.getInstance().collection("users")
+                .document("ABC#0123").collection("tasks");
 
-        private TextView list_name;
-        private TextView list_desc;
-        private TextView list_melon_count;
+        FirestoreRecyclerOptions<Task> options = new FirestoreRecyclerOptions
+                .Builder<Task>().setQuery(query, Task.class)
+                .build();
 
-        public TasksViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            list_name = itemView.findViewById(R.id.list_item_name);
-            list_name = itemView.findViewById(R.id.list_item_description);
-            list_name = itemView.findViewById(R.id.list_item_melon_count);
-
-        }
+        adapter = new TaskAdapter(options);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        adapter.startListening();
+        if (adapter != null) {
+            adapter.startListening();
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        adapter.startListening();
+        if (adapter != null) {
+            adapter.stopListening();
+        }
+    }
+}
+
+class TaskAdapter extends FirestoreRecyclerAdapter<Task, TaskAdapter.TaskViewHolder> {
+
+    public TaskAdapter(@NonNull FirestoreRecyclerOptions<Task> options) {
+        super(options);
+    }
+
+    @Override
+    protected void onBindViewHolder(@NonNull TaskViewHolder holder, int position, @NonNull Task model) {
+        holder.name.setText(model.getName());
+        holder.desc.setText(model.getDescription());
+        holder.points.setText(MessageFormat.format("{0}", model.getPoints()));
+    }
+
+    @NonNull
+    @Override
+    public TaskViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_task_single,
+                viewGroup, false);
+        return new TaskViewHolder(v);
+    }
+
+    public class TaskViewHolder extends RecyclerView.ViewHolder {
+
+        TextView name, desc, points;
+
+        public TaskViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            name = itemView.findViewById(R.id.list_item_name);
+            desc = itemView.findViewById(R.id.list_item_description);
+            points = itemView.findViewById(R.id.list_item_melon_count);
+        }
     }
 }

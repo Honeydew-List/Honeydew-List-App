@@ -9,6 +9,11 @@ abstract public class Item extends Owner {
         this.description = description;
     }
 
+    // Required for FireStore
+    protected Item() {
+        super();
+    }
+
     public String getName() {
         return name;
     }
