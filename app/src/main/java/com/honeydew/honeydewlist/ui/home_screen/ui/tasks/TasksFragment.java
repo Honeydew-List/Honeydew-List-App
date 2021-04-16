@@ -25,15 +25,12 @@ import com.honeydew.honeydewlist.data.Task;
 
 public class TasksFragment extends Fragment {
 
-    private TasksViewModel tasksViewModel;
-    private FirebaseFirestore firebaseFirestore;
-    private RecyclerView mFirestoreList;
+    @SuppressWarnings("rawtypes")
     private FirestoreRecyclerAdapter adapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        tasksViewModel =
-                new ViewModelProvider(this).get(TasksViewModel.class);
+        TasksViewModel tasksViewModel = new ViewModelProvider(this).get(TasksViewModel.class);
         View root = inflater.inflate(R.layout.fragment_tasks, container, false);
 //        final TextView textView = root.findViewById(R.id.text_tasks);
 //        tasksViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
@@ -42,8 +39,8 @@ public class TasksFragment extends Fragment {
 //                textView.setText(s);
 //            }
 //        });
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        mFirestoreList = root.findViewById(R.id.firestore_task_list);
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        RecyclerView mFirestoreList = root.findViewById(R.id.firestore_task_list);
 
         // TODO: Do this for every friend and add it to the task list
         // Query
@@ -81,7 +78,7 @@ public class TasksFragment extends Fragment {
         return root;
     }
 
-    private class TasksViewHolder extends RecyclerView.ViewHolder{
+    private static class TasksViewHolder extends RecyclerView.ViewHolder{
 
         private TextView list_name;
         private TextView list_desc;
