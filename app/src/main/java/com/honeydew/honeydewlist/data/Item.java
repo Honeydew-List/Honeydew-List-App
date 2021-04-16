@@ -4,7 +4,7 @@ abstract public class Item {
     protected String label = "";
     protected String description = "";
     protected boolean completed = false;
-    Item(String label, String description, boolean completed) {
+    protected Item(String label, String description, boolean completed) {
         this.label = label;
         this.description = description;
         this.completed = completed;
@@ -21,5 +21,12 @@ abstract public class Item {
         // Then return false if there is
         this.label = label;
         return true;
+    }
+
+    /**
+     * @return label
+     */
+    protected String getLabel() {
+        return this.label;
     }
 }
