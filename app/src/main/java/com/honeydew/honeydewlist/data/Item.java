@@ -4,43 +4,33 @@ abstract public class Item {
     private String name = "";
     private String owner = "";
     private String description = "";
-    protected Item(String name, String description) {
+    protected Item(String name, String description, String owner) {
         this.name = name;
         this.description = description;
+        this.owner = owner;
     }
 
-
-    /**
-     * setLabel
-     * @param name the name of task
-     * @return success Return a boolean value indicating if it was successful
-     */
-    protected Boolean setLabel(String name) {
-        // Could check name against blacklisted words
-        // Then return false if there is
-        this.name = name;
-        return true;
-    }
-
-    /**
-     * getLabel
-     * @return name
-     */
-    protected String getLabel() {
-        return this.name;
-    }
-
-    /**
-     * getDescription
-     * @return description
-     */
-    protected String getDescription() { return this.description; }
-
-    protected String getOwner() {
+    public String getOwner() {
         return owner;
     }
 
-    protected void setOwner(String owner) {
+    public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

@@ -4,36 +4,36 @@ import java.util.List;
 
 public class Task extends Item {
     private List<String> steps;
-    private long points;
+    private Long points;
     private Boolean completed = false;
-    public Task(String name, String description, long points, List<String> steps, Boolean completed) {
-        super(name, description);
+    public Task(String name, String description, String owner, Long points, List<String> steps, Boolean completed) {
+        super(name, description, owner);
         this.steps = steps;
         this.points = points;
         this.completed = completed;
     }
 
-    protected List<String> getSteps() {
+    public List<String> getSteps() {
         return steps;
     }
 
-    protected void setSteps(List<String> steps) {
+    public void setSteps(List<String> steps) {
         this.steps = steps;
     }
 
-    protected long getPoints() {
+    public Long getPoints() {
         return points;
     }
 
-    protected void setPoints(long points) {
+    public void setPoints(Long points) {
         this.points = points;
     }
 
-    protected Boolean getCompleted() {
+    public Boolean getCompleted() {
         return completed;
     }
 
-    protected void setCompleted(Boolean completed) {
+    public void setCompleted(Boolean completed) {
         this.completed = completed;
     }
 }
