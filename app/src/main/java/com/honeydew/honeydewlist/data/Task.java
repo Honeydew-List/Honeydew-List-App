@@ -6,8 +6,8 @@ public class Task extends Item {
     private List<String> steps;
     private Long points;
     private Boolean completed = false;
-    public Task(String name, String description, String owner, Long points, List<String> steps, Boolean completed) {
-        super(name, description, owner);
+    public Task(String name, String description, String owner, String uuid, Long points, List<String> steps, Boolean completed) {
+        super(name, description, owner, uuid);
         this.steps = steps;
         this.points = points;
         this.completed = completed;
