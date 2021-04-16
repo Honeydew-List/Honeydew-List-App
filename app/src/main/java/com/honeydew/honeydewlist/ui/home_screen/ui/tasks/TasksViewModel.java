@@ -12,19 +12,5 @@ import java.util.List;
 
 public class TasksViewModel extends ViewModel {
 
-    private Task task;
-
-    private TasksViewModel() {};
-
-    private TasksViewModel(String name, String description, long points, List<String> steps, Boolean completionStatus) {
-        this.task = new Task(name, description, points, steps, completionStatus);
-    }
-
-    public Task getTask() {
-        return task;
-    }
-
-    public void setTask(Task task) {
-        this.task = task;
-    }
+    public TasksViewModel() {};
 }
