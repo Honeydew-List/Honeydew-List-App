@@ -9,8 +9,8 @@ public class TasksModel {
 
     private TasksModel() {};
 
-    private TasksModel(String name, String description, String owner, long points, List<String> steps, Boolean completionStatus) {
-        this.task = new Task(name, description, owner, points, steps, completionStatus);
+    private TasksModel(String name, String description, String owner, String uuid, long points, List<String> steps, boolean completionStatus) {
+        this.task = new Task(name, description, owner, uuid, points, steps, completionStatus);
     }
 
     public Task getTask() {
