@@ -45,7 +45,7 @@ public class TasksFragment extends Fragment {
         // TODO: Do this for every friend and add it to the task list
         // Query
         Query query = firebaseFirestore.collection("users")
-                .document("ABC#123").collection("tasks");
+                .document("ABC#0123").collection("tasks");
         // RecyclerOptions
         FirestoreRecyclerOptions<TasksModel> tasks = new FirestoreRecyclerOptions
                 .Builder<TasksModel>().setQuery(query, TasksModel.class)
