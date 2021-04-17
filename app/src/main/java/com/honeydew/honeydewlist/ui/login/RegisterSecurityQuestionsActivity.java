@@ -205,6 +205,7 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
                     i.putExtra("answer1", Answer1);
                     i.putExtra("answer2", Answer2);
                     i.putExtra("answer3", Answer3);
+                    finish();
                     startActivity(i);
                 }
             }
