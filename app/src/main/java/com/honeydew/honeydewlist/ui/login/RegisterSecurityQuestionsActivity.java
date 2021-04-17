@@ -168,9 +168,8 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
                     //  Security Questions and their answers to database
                     createAccount(Email,Password);
                     user.put("email", Email);
-                    user.put("password",Password);
                     user.put("username", Username);
-                    user.put("secquestion1", Question1);
+                    user.put("sec_question1", Question1);
 
                     db.collection("users")
                             .add(user)
