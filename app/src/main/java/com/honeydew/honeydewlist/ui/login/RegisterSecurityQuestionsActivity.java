@@ -164,8 +164,9 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
                     });
                     snackBar.show();
                 } else {
-                    // TODO: Send Email, Username, Password,
+                    // Send Email, Username,
                     //  Security Questions and their answers to database
+                    // Create account and put fields into user map
                     createAccount(Email,Password);
                     user.put("email", Email);
                     user.put("username", Username);
@@ -175,13 +176,13 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
                     user.put("sec_answer1", Answer1);
                     user.put("sec_answer2", Answer2);
                     user.put("sec_answer3", Answer3);
-
-                    db.collection("users")
-                            .add(user)
-                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    // Upload user map to database
+                    db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                            .set(user)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
-                                public void onSuccess(DocumentReference documentReference) {
-                                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG, "DocumentSnapshot successfully written.");
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
