@@ -4,14 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
     >
+
+    <TextView
+        android:id="@+id/list_item_owner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="@string/defaultTextViewValue"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/list_item_melon_count"
+        app:layout_constraintEnd_toStartOf="@+id/list_item_check_box"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/list_item_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text="@string/defaultTextViewValue"
+        app:layout_constraintBottom_toTopOf="@+id/list_item_description"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -19,19 +31,11 @@
         android:id="@+id/list_item_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:layout_marginTop="10dp"
+        android:text="@string/defaultTextViewValue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/list_item_name" />
-
-    <CheckBox
-        android:id="@+id/list_item_check_box"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CheckBox"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/list_item_melon_count"
@@ -39,8 +43,19 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:text="TextView"
+        android:text="@string/defaultTextViewValue"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/list_item_check_box"
+        app:layout_constraintEnd_toStartOf="@+id/list_item_check_box" />
+
+    <CheckBox
+        android:id="@+id/list_item_check_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:textIsSelectable="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
