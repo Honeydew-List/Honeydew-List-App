@@ -26,6 +26,7 @@ class TaskAdapter extends FirestoreRecyclerAdapter<Task, TaskAdapter.TaskViewHol
         holder.name.setText(model.getName());
         holder.desc.setText(model.getDescription());
         holder.points.setText(MessageFormat.format("{0}", model.getPoints()));
+        holder.owner.setText(model.getOwner());
     }
 
     @NonNull
@@ -38,7 +39,7 @@ class TaskAdapter extends FirestoreRecyclerAdapter<Task, TaskAdapter.TaskViewHol
 
     public static class TaskViewHolder extends RecyclerView.ViewHolder {
 
-        TextView name, desc, points;
+        TextView name, desc, points, owner;
 
         public TaskViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -46,6 +47,7 @@ class TaskAdapter extends FirestoreRecyclerAdapter<Task, TaskAdapter.TaskViewHol
             name = itemView.findViewById(R.id.list_item_name);
             desc = itemView.findViewById(R.id.list_item_description);
             points = itemView.findViewById(R.id.list_item_melon_count);
+            owner = itemView.findViewById(R.id.list_item_owner);
         }
     }
 }
