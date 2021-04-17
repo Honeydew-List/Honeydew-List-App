@@ -26,11 +26,11 @@ public class TasksFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_tasks, container, false);
+        View root = inflater.inflate(R.layout.fragment_tasks, container, false);
 
-        recyclerView = view.findViewById(R.id.firestore_task_list);
+        recyclerView = root.findViewById(R.id.firestore_task_list);
         setUpRecyclerView();
-        return view;
+        return root;
     }
 
     private void setUpRecyclerView() {
