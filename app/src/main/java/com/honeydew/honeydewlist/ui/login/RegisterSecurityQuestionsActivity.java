@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,15 +21,29 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.honeydew.honeydewlist.R;
 import com.honeydew.honeydewlist.ui.home_screen.HomeScreen;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
+
+    private FirebaseAuth mAuth;
+    private static final String TAG ="EmailPassword";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +104,8 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
         finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                Map<String,Object> user = new HashMap<>();
                 final Snackbar snackBar;
 
                 String Question1, Question2, Question3;
@@ -147,8 +164,33 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
                     });
                     snackBar.show();
                 } else {
-                    // TODO: Send Email, Username, Password,
+                    // Send Email, Username,
                     //  Security Questions and their answers to database
+                    // Create account and put fields into user map
+                    createAccount(Email,Password);
+                    user.put("email", Email);
+                    user.put("username", Username);
+                    user.put("sec_question1", Question1);
+                    user.put("sec_question2", Question2);
+                    user.put("sec_question3", Question3);
+                    user.put("sec_answer1", Answer1);
+                    user.put("sec_answer2", Answer2);
+                    user.put("sec_answer3", Answer3);
+                    // Upload user map to database
+                    db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                            .set(user)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG, "DocumentSnapshot successfully written.");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error adding document", e);
+                                }
+                            });
 
                     Toast.makeText(
                             getApplicationContext(),
@@ -169,6 +211,7 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
                     i.putExtra("answer1", Answer1);
                     i.putExtra("answer2", Answer2);
                     i.putExtra("answer3", Answer3);
+                    finish();
                     startActivity(i);
                 }
             }
@@ -179,6 +222,8 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
     }
 
     // For back button
@@ -203,5 +248,42 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         return super.onContextItemSelected(item);
+    }
+
+    private void createAccount(String email, String password) {
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(RegisterSecurityQuestionsActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            updateUI(null);
+                        }
+                    }
+                });
+    }
+
+    private void reload() { }
+
+    private void updateUI(FirebaseUser user) {
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){
+            reload();
+        }
     }
 }
