@@ -44,11 +44,11 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private static final String TAG ="EmailPassword";
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    Map<String,Object> user = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map<String,Object> user = new HashMap<>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_security_questions);
 
@@ -170,6 +170,11 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
                     user.put("email", Email);
                     user.put("username", Username);
                     user.put("sec_question1", Question1);
+                    user.put("sec_question2", Question2);
+                    user.put("sec_question3", Question3);
+                    user.put("sec_answer1", Answer1);
+                    user.put("sec_answer2", Answer2);
+                    user.put("sec_answer3", Answer3);
 
                     db.collection("users")
                             .add(user)
