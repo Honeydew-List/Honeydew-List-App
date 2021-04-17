@@ -47,8 +47,6 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Map<String,Object> user = new HashMap<>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_security_questions);
 
@@ -106,6 +104,8 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
         finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                Map<String,Object> user = new HashMap<>();
                 final Snackbar snackBar;
 
                 String Question1, Question2, Question3;
