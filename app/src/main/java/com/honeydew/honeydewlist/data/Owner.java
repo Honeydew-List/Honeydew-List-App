@@ -1,6 +1,6 @@
 package com.honeydew.honeydewlist.data;
 
-public class Owner {
+abstract public class Owner {
     private String owner;
     private String uuid;
 
