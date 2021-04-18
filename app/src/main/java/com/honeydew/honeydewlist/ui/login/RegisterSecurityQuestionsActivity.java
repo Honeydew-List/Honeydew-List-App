@@ -53,6 +53,7 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
         // Get account info from previous page
         String Email, Username, Password;
         Intent intent = getIntent();
+        String UserUUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Email = intent.getStringExtra("email");
         Username = intent.getStringExtra("username");
         Password = intent.getStringExtra("password");
@@ -170,6 +171,7 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
                     createAccount(Email,Password);
                     user.put("email", Email);
                     user.put("username", Username);
+                    user.put("uuid", UserUUID);
                     user.put("sec_question1", Question1);
                     user.put("sec_question2", Question2);
                     user.put("sec_question3", Question3);
@@ -177,7 +179,7 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
                     user.put("sec_answer2", Answer2);
                     user.put("sec_answer3", Answer3);
                     // Upload user map to database
-                    db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    db.collection("users").document(UserUUID)
                             .set(user)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
