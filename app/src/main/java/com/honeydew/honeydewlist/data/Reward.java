@@ -6,8 +6,8 @@ public class Reward extends Item {
     private Long cost;
     private Long quantity; // TODO: Add quantity restriction, for now set quantity to 1
     private Boolean completed;
-    protected Reward(String name, String description, String owner, String uuid) {
-        super(name, description, owner, uuid);
+    protected Reward(String name, String description, String itemID, String owner, String uuid) {
+        super(name, description, itemID, owner, uuid);
     }
 
     public Long getCost() {

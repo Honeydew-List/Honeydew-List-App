@@ -16,8 +16,9 @@ public class Task extends Item {
         super(); // Required for firestore
     }
 
-    public Task(String name, String description, String owner, String uuid, Long points, List<String> steps, Boolean completionStatus) {
-        super(name, description, owner, uuid);
+    public Task(String name, String description, String itemID, String owner, String uuid,
+                Long points, List<String> steps, Boolean completionStatus) {
+        super(name, description, itemID, owner, uuid);
         this.steps = steps;
         this.points = points;
         this.completionStatus = completionStatus;
