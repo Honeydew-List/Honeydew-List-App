@@ -3,9 +3,13 @@ package com.honeydew.honeydewlist.ui.home_screen.ui.tasks;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,11 +33,14 @@ import java.util.Objects;
 
 public class TasksFragment extends Fragment {
 
-    public TasksFragment() {};
+    public TasksFragment() {
+        this.setHasOptionsMenu(true);
+    };
 
     ListView coursesLV;
     ArrayList<Task> dataModalArrayList;
     FirebaseFirestore db;
+    ProgressBar progressBar;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -42,6 +49,7 @@ public class TasksFragment extends Fragment {
         // below line is use to initialize our variables
         coursesLV = root.findViewById(R.id.idLVCourses);
         dataModalArrayList = new ArrayList<>();
+        progressBar = root.findViewById(R.id.progressBar);
 
         // initializing our variable for firebase
         // firestore and getting its instance.
@@ -61,6 +69,7 @@ public class TasksFragment extends Fragment {
         // firestore using collection in android.
         db.collection("users/" + user + "/tasks").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+                    progressBar.setVisibility(View.GONE);
                     // after getting the data we are calling on success method
                     // and inside this method we are checking if the received
                     // query snapshot is empty or not.
