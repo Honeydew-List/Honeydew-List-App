@@ -54,4 +54,5 @@
     <string name="security_question_3">Question 3</string>
     <string name="defaultTextViewValue">TextView</string>
     <string name="completed">Completed</string>
+    <string name="ownerLabel">Owner:</string>
 </resources>
