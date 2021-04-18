@@ -85,6 +85,7 @@ public class TasksLVAdapter extends ArrayAdapter<Task> {
             Intent i = new Intent(v.getContext(), CreateTaskActivity.class);
             i.putExtra("owner", dataModal.getOwner());
             i.putExtra("ownerUUID", dataModal.getUUID());
+            i.putExtra("itemID", dataModal.getItemID());
             getContext().startActivity(i);
         });
         return listitemView;
