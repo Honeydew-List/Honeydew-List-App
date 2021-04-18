@@ -1,6 +1,7 @@
 package com.honeydew.honeydewlist.ui.home_screen.ui.tasks;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,6 +71,8 @@ public class TasksFragment extends Fragment {
                             // after getting this list we are passing
                             // that list to our object class.
                             Task dataModal = d.toObject(Task.class);
+                            dataModal.setItemID(d.getId());
+                            Log.i("dataModal ID", "loadDatailListview: " + dataModal.getItemID());
 
                             // after getting data from Firebase we are
                             // storing that data in our array list
