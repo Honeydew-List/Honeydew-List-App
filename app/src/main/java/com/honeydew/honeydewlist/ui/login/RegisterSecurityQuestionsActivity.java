@@ -44,14 +44,18 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private static final String TAG ="EmailPassword";
+    private String Question1, Question2, Question3;
+    private String Answer1, Answer2, Answer3;
+    private String Email, Username, Password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_security_questions);
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
 
         // Get account info from previous page
-        String Email, Username, Password;
         Intent intent = getIntent();
         Email = intent.getStringExtra("email");
         Username = intent.getStringExtra("username");
@@ -104,12 +108,8 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
         finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                Map<String,Object> user = new HashMap<>();
                 final Snackbar snackBar;
 
-                String Question1, Question2, Question3;
-                String Answer1, Answer2, Answer3;
                 Question1 = question1.getText().toString();
                 Question2 = question2.getText().toString();
                 Question3 = question3.getText().toString();
@@ -168,44 +168,6 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
                     // Security Questions and their answers to database
                     // Create account and put fields into user map
                     createAccount(Email,Password);
-                    final String uuid = mAuth.getCurrentUser().getUid();
-                    user.put("email", Email);
-                    user.put("username", Username);
-                    user.put("uuid", uuid);
-                    user.put("sec_question1", Question1);
-                    user.put("sec_question2", Question2);
-                    user.put("sec_question3", Question3);
-                    user.put("sec_answer1", Answer1);
-                    user.put("sec_answer2", Answer2);
-                    user.put("sec_answer3", Answer3);
-                    // Upload user map to database
-                    db.collection("users").document(uuid)
-                            .set(user)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Log.d(TAG, "DocumentSnapshot successfully written.");
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.w(TAG, "Error adding document", e);
-                                }
-                            });
-
-                    Toast.makeText(
-                            getApplicationContext(),
-                            "Account Creation Successful",
-                            Toast.LENGTH_SHORT
-                    ).show();
-
-                    Intent i = new Intent(
-                            getApplicationContext(),
-                            HomeScreen.class
-                    );
-                    finish();
-                    startActivity(i);
                 }
             }
         });
@@ -215,9 +177,6 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
-        // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
     }
 
     // For back button
@@ -262,14 +221,59 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
                             updateUI(null);
                         }
                     }
+
+                    private void updateUI(FirebaseUser user) {
+                        if (user != null) {
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            Map<String,Object> userData = new HashMap<>();
+                            final String uuid = user.getUid();
+                            userData.put("email", Email);
+                            userData.put("username", Username);
+                            userData.put("uuid", uuid);
+                            userData.put("sec_question1", Question1);
+                            userData.put("sec_question2", Question2);
+                            userData.put("sec_question3", Question3);
+                            userData.put("sec_answer1", Answer1);
+                            userData.put("sec_answer2", Answer2);
+                            userData.put("sec_answer3", Answer3);
+                            // Upload user map to database
+                            db.collection("users").document(uuid)
+                                    .set(userData)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d(TAG, "DocumentSnapshot successfully written.");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w(TAG, "Error adding document", e);
+                                        }
+                                    });
+
+                            Toast.makeText(
+                                    getApplicationContext(),
+                                    "Account Creation Successful",
+                                    Toast.LENGTH_SHORT
+                            ).show();
+
+                            Intent i = new Intent(
+                                    getApplicationContext(),
+                                    HomeScreen.class
+                            );
+                            finish();
+                            startActivity(i);
+                        } else {
+                            // Go back to register screen
+                            finish();
+                        }
+                    }
                 });
     }
 
     private void reload() { }
 
-    private void updateUI(FirebaseUser user) {
-
-    }
 
     @Override
     public void onStart() {
