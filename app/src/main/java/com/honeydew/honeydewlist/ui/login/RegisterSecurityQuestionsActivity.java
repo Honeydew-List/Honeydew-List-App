@@ -204,15 +204,6 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
                             getApplicationContext(),
                             HomeScreen.class
                     );
-                    i.putExtra("email", Email);
-                    i.putExtra("username", Username);
-                    i.putExtra("password", Password);
-                    i.putExtra("question1", Question1);
-                    i.putExtra("question2", Question2);
-                    i.putExtra("question3", Question3);
-                    i.putExtra("answer1", Answer1);
-                    i.putExtra("answer2", Answer2);
-                    i.putExtra("answer3", Answer3);
                     finish();
                     startActivity(i);
                 }
