@@ -168,8 +168,10 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
                     //  Security Questions and their answers to database
                     // Create account and put fields into user map
                     createAccount(Email,Password);
+                    final String uuid = FirebaseAuth.getInstance().getCurrentUser().getUid();
                     user.put("email", Email);
                     user.put("username", Username);
+                    user.put("uuid", uuid);
                     user.put("sec_question1", Question1);
                     user.put("sec_question2", Question2);
                     user.put("sec_question3", Question3);
@@ -177,7 +179,7 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
                     user.put("sec_answer2", Answer2);
                     user.put("sec_answer3", Answer3);
                     // Upload user map to database
-                    db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    db.collection("users").document(uuid)
                             .set(user)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
