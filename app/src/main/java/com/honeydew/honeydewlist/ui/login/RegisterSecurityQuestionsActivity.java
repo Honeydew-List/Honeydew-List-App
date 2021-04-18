@@ -165,10 +165,10 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
                     snackBar.show();
                 } else {
                     // Send Email, Username,
-                    //  Security Questions and their answers to database
+                    // Security Questions and their answers to database
                     // Create account and put fields into user map
                     createAccount(Email,Password);
-                    final String uuid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    final String uuid = mAuth.getCurrentUser().getUid();
                     user.put("email", Email);
                     user.put("username", Username);
                     user.put("uuid", uuid);
@@ -215,6 +215,7 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
     }
