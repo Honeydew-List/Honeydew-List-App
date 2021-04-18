@@ -1,23 +1,26 @@
 package com.honeydew.honeydewlist.ui.home_screen.ui.tasks;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+
 import com.honeydew.honeydewlist.R;
 
 import com.honeydew.honeydewlist.data.Task;
+
 // Credit to https://www.geeksforgeeks.org/how-to-create-dynamic-listview-in-android-using-firebase-firestore/
 public class TasksLVAdapter extends ArrayAdapter<Task> {
     // constructor for our list view adapter.
@@ -27,7 +30,8 @@ public class TasksLVAdapter extends ArrayAdapter<Task> {
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(int position, @Nullable final View convertView,
+                        @NonNull final ViewGroup parent) {
         // below line is use to inflate the
         // layout for our item of list view.
         View listitemView = convertView;
@@ -63,8 +67,25 @@ public class TasksLVAdapter extends ArrayAdapter<Task> {
         listitemView.setOnClickListener(v -> {
             // on the item click on our list view.
             // we are displaying a toast message.
-            Toast.makeText(getContext(), "Item clicked is : " + dataModal.getName(),
-                    Toast.LENGTH_SHORT).show();
+//            Toast.makeText(v.getContext(), "Item clicked is : " + dataModal.getName(),
+//                    Toast.LENGTH_SHORT).show();
+//            final Snackbar snackBar = Snackbar.make(
+//                    v.getRootView(),
+//                    "Item clicked is : " + dataModal.getName(),
+//                    Snackbar.LENGTH_SHORT
+//            );
+//            snackBar.setAction("Dismiss", new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    // Call your action method here
+//                    snackBar.dismiss();
+//                }
+//            });
+            Log.i("TasksLVAdapter", "getView: " + dataModal.getName());
+            Intent i = new Intent(v.getContext(), CreateTaskActivity.class);
+            i.putExtra("owner", dataModal.getOwner());
+            i.putExtra("ownerUUID", dataModal.getUUID());
+            getContext().startActivity(i);
         });
         return listitemView;
     }
