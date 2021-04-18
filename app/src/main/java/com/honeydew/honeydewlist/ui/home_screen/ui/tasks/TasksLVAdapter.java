@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.honeydew.honeydewlist.R;
 
 import com.honeydew.honeydewlist.data.Task;
@@ -69,18 +70,19 @@ public class TasksLVAdapter extends ArrayAdapter<Task> {
             // we are displaying a toast message.
 //            Toast.makeText(v.getContext(), "Item clicked is : " + dataModal.getName(),
 //                    Toast.LENGTH_SHORT).show();
-//            final Snackbar snackBar = Snackbar.make(
-//                    v.getRootView(),
-//                    "Item clicked is : " + dataModal.getName(),
-//                    Snackbar.LENGTH_SHORT
-//            );
-//            snackBar.setAction("Dismiss", new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    // Call your action method here
-//                    snackBar.dismiss();
-//                }
-//            });
+            final Snackbar snackBar = Snackbar.make(
+                    v,
+                    "Item clicked is : " + dataModal.getName(),
+                    Snackbar.LENGTH_SHORT
+            );
+            snackBar.setAction("Dismiss", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Call your action method here
+                    snackBar.dismiss();
+                }
+            });
+            snackBar.show();
             // Use the itemID to load the task details from firestore
             Log.i("TasksLVAdapter", "getView: " + dataModal.getName());
             Intent i = new Intent(v.getContext(), CreateTaskActivity.class);
