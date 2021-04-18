@@ -105,4 +105,14 @@ public class TasksFragment extends Fragment {
                     Toast.makeText(requireContext(), "Fail to load data..", Toast.LENGTH_SHORT).show();
                 });
     }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
 }
