@@ -34,7 +34,6 @@ public class TasksFragment extends Fragment {
     ListView coursesLV;
     ArrayList<Task> dataModalArrayList;
     FirebaseFirestore db;
-    final String user = "ABC#0123";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -56,6 +55,8 @@ public class TasksFragment extends Fragment {
     }
 
     private void loadDatailListview() {
+        // user is the selected friend
+        final String user = "ABC#0123";
         // below line is use to get data from Firebase
         // firestore using collection in android.
         db.collection("users/" + user + "/tasks").get()
