@@ -97,4 +97,12 @@ public class TasksFragment extends Fragment {
             }
         });
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (db != null) {
+            db.terminate();
+        }
+    }
 }
