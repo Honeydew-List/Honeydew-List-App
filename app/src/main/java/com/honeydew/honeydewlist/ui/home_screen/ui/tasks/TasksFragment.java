@@ -104,10 +104,10 @@ public class TasksFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.action_add_item) {
-            // add task screen screen
+            // navigate to add task screen
             return true;
         } else if (itemId == R.id.action_filter) {
-            // Screen to choose which friends to show tasks from
+            // navigate to screen to choose which friends to show tasks from
             return true;
         }
         return super.onOptionsItemSelected(item);
