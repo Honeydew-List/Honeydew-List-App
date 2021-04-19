@@ -28,33 +28,15 @@ public class HomeScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
-        // BottomNav tutorial: https://guides.codepath.com/android/Bottom-Navigation-Views
-        final FragmentManager fragmentManager = getSupportFragmentManager();
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.nav_view);
-
-        final Fragment fragment1 = new HomeFragment();
-        final Fragment fragment2 = new TasksFragment();
-        final Fragment fragment3 = new RewardsFragment();
-        final Fragment fragment4 = new OptionsFragment();
-
-        bottomNavigationView.setOnNavigationItemSelectedListener(
-                item -> {
-                    Fragment fragment;
-                    int itemId = item.getItemId();
-                    if (itemId == R.id.navigation_home) {
-                        fragment = fragment1;
-                    } else if (itemId == R.id.navigation_tasks) {
-                        fragment = fragment2;
-                    } else if (itemId == R.id.navigation_rewards) {
-                        fragment = fragment3;
-                    } else {
-                        fragment = fragment4;
-                    }
-                    fragmentManager.beginTransaction().replace(R.id.nav_host_fragment, fragment).commit();
-                    return true;
-                });
-        // Set default selection
-        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.navigation_home, R.id.navigation_tasks, R.id.navigation_rewards,R.id.navigation_options)
+                .build();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(navView, navController);
     }
 
     @Override

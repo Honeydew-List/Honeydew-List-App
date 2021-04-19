@@ -20,7 +20,7 @@ public class RewardsFragment extends Fragment {
 
 //    private RewardsViewModel rewardsViewModel;
 
-    public RewardsFragment() {}
+//    public RewardsFragment() {}
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {

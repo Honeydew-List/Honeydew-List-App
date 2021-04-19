@@ -30,7 +30,7 @@ import java.util.Objects;
 
 public class TasksFragment extends Fragment {
 
-    public TasksFragment() {};
+//    public TasksFragment() {};
 
     ListView coursesLV;
     ArrayList<Task> dataModalArrayList;

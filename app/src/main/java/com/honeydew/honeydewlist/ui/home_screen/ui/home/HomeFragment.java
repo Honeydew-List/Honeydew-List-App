@@ -20,16 +20,15 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.honeydew.honeydewlist.R;
-import com.honeydew.honeydewlist.databinding.FragmentHomeBinding;
 import com.honeydew.honeydewlist.ui.login.LoginActivity;
 import com.honeydew.honeydewlist.ui.login.RegisterActivity;
 
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
-    private FragmentHomeBinding binding;
+//    private FragmentHomeBinding binding;
 
-    public HomeFragment () {}
+//    public HomeFragment () {}
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
