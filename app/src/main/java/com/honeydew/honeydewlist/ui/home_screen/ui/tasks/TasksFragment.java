@@ -34,7 +34,6 @@ public class TasksFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_tasks, container, false);
         setHasOptionsMenu(true);
-        getActivity().setTitle("Tasks");
         // below line is use to initialize our variables
         coursesLV = root.findViewById(R.id.idLVCourses);
         dataModalArrayList = new ArrayList<>();

@@ -27,7 +27,6 @@ public class HomeFragment extends Fragment {
         homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        getActivity().setTitle("Home Screen");
 
         // Temporary logout button
         Button logout;

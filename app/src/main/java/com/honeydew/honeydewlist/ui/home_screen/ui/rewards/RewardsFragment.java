@@ -28,7 +28,6 @@ public class RewardsFragment extends Fragment {
                 new ViewModelProvider(this).get(RewardsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_rewards, container, false);
         setHasOptionsMenu(true);
-        getActivity().setTitle("Rewards");
         final TextView textView = root.findViewById(R.id.text_rewards);
         rewardsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override

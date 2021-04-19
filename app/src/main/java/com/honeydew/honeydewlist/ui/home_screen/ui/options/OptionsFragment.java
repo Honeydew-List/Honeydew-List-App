@@ -23,7 +23,6 @@ public class OptionsFragment extends Fragment {
         optionsViewModel =
                 new ViewModelProvider(this).get(OptionsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_options, container, false);
-        getActivity().setTitle("Options");
         final TextView textView = root.findViewById(R.id.text_options);
         optionsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
