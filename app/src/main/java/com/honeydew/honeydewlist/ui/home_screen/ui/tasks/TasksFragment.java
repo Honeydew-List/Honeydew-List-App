@@ -115,4 +115,12 @@ public class TasksFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (db != null) {
+            db.terminate();
+        }
+    }
 }
