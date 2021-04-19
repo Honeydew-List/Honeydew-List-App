@@ -38,23 +38,20 @@ public class HomeScreen extends AppCompatActivity {
         final Fragment fragment4 = new OptionsFragment();
 
         bottomNavigationView.setOnNavigationItemSelectedListener(
-                new BottomNavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        Fragment fragment;
-                        int itemId = item.getItemId();
-                        if (itemId == R.id.navigation_home) {
-                            fragment = fragment1;
-                        } else if (itemId == R.id.navigation_tasks) {
-                            fragment = fragment2;
-                        } else if (itemId == R.id.navigation_rewards) {
-                            fragment = fragment3;
-                        } else {
-                            fragment = fragment4;
-                        }
-                        fragmentManager.beginTransaction().replace(R.id.nav_host_fragment, fragment).commit();
-                        return true;
+                item -> {
+                    Fragment fragment;
+                    int itemId = item.getItemId();
+                    if (itemId == R.id.navigation_home) {
+                        fragment = fragment1;
+                    } else if (itemId == R.id.navigation_tasks) {
+                        fragment = fragment2;
+                    } else if (itemId == R.id.navigation_rewards) {
+                        fragment = fragment3;
+                    } else {
+                        fragment = fragment4;
                     }
+                    fragmentManager.beginTransaction().replace(R.id.nav_host_fragment, fragment).commit();
+                    return true;
                 });
         // Set default selection
         bottomNavigationView.setSelectedItemId(R.id.navigation_home);
