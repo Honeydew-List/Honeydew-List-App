@@ -18,24 +18,22 @@ import com.honeydew.honeydewlist.R;
 
 public class RewardsFragment extends Fragment {
 
-//    private RewardsViewModel rewardsViewModel;
-
-//    public RewardsFragment() {}
+    private RewardsViewModel rewardsViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-//        rewardsViewModel =
-//                new ViewModelProvider(this).get(RewardsViewModel.class);
+        rewardsViewModel =
+                new ViewModelProvider(this).get(RewardsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_rewards, container, false);
         setHasOptionsMenu(true);
         getActivity().setTitle("Rewards");
-//        final TextView textView = root.findViewById(R.id.text_rewards);
-//        rewardsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
+        final TextView textView = root.findViewById(R.id.text_rewards);
+        rewardsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                textView.setText(s);
+            }
+        });
         return root;
     }
 

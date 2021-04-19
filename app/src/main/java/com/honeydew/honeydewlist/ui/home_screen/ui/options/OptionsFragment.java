@@ -18,8 +18,6 @@ public class OptionsFragment extends Fragment {
 
     private OptionsViewModel optionsViewModel;
 
-//    public OptionsFragment() {}
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         optionsViewModel =

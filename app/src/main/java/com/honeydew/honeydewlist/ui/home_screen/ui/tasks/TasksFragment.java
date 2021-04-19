@@ -11,26 +11,19 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.honeydew.honeydewlist.R;
 import com.honeydew.honeydewlist.data.Task;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class TasksFragment extends Fragment {
-
-//    public TasksFragment() {};
 
     ListView coursesLV;
     ArrayList<Task> dataModalArrayList;

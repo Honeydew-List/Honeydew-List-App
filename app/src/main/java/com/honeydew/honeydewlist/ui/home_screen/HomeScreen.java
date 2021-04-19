@@ -2,24 +2,16 @@ package com.honeydew.honeydewlist.ui.home_screen;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import com.honeydew.honeydewlist.R;
-import com.honeydew.honeydewlist.ui.home_screen.ui.home.HomeFragment;
-import com.honeydew.honeydewlist.ui.home_screen.ui.options.OptionsFragment;
-import com.honeydew.honeydewlist.ui.home_screen.ui.rewards.RewardsFragment;
-import com.honeydew.honeydewlist.ui.home_screen.ui.tasks.TasksFragment;
 
 public class HomeScreen extends AppCompatActivity {
     private long pressedTime;
@@ -52,5 +44,4 @@ public class HomeScreen extends AppCompatActivity {
         }
         pressedTime = System.currentTimeMillis();
     }
-
 }
