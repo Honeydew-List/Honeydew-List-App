@@ -28,6 +28,7 @@ public class HomeScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
+        // BottomNav tutorial: https://guides.codepath.com/android/Bottom-Navigation-Views
         final FragmentManager fragmentManager = getSupportFragmentManager();
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.nav_view);
 
