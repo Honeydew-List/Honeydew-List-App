@@ -111,6 +111,13 @@ public class TasksFragment extends Fragment {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (db != null) {
+            db.terminate();
+        }
     }
 }
