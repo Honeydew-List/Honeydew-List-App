@@ -44,5 +44,4 @@ public class HomeScreen extends AppCompatActivity {
         }
         pressedTime = System.currentTimeMillis();
     }
-
 }

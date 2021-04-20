@@ -55,4 +55,8 @@
     <string name="defaultTextViewValue">TextView</string>
     <string name="completed">Completed</string>
     <string name="ownerLabel">Owner:</string>
+    <string name="add_task">Add Task</string>
+    <string name="done">Done</string>
+    <string name="add_reward">Add Reward</string>
+    <string name="filter">Filter Items</string>
 </resources>

@@ -1,6 +1,5 @@
 package com.honeydew.honeydewlist.ui.home_screen.ui.home;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,7 +17,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.honeydew.honeydewlist.R;
 import com.honeydew.honeydewlist.ui.login.LoginActivity;
-import com.honeydew.honeydewlist.ui.login.RegisterActivity;
 
 public class HomeFragment extends Fragment {
 
