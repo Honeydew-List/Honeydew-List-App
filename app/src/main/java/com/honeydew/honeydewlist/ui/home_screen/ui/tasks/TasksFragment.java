@@ -14,28 +14,19 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.honeydew.honeydewlist.R;
 import com.honeydew.honeydewlist.data.Task;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class TasksFragment extends Fragment {
-
-    public TasksFragment() {
-        this.setHasOptionsMenu(true);
-    };
 
     ListView coursesLV;
     ArrayList<Task> dataModalArrayList;
@@ -45,7 +36,7 @@ public class TasksFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_tasks, container, false);
-
+        setHasOptionsMenu(true);
         // below line is use to initialize our variables
         coursesLV = root.findViewById(R.id.idLVCourses);
         dataModalArrayList = new ArrayList<>();
@@ -108,11 +99,29 @@ public class TasksFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.app_bar_menu, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_add_item) {
+            // navigate to add task screen
+            Toast.makeText(
+                    getContext(),
+                    "Not yet implemented",
+                    Toast.LENGTH_SHORT
+            ).show();
+            return true;
+        } else if (itemId == R.id.action_filter) {
+            // navigate to screen to choose which friends to show tasks from
+            Toast.makeText(
+                    getContext(),
+                    "Not yet implemented",
+                    Toast.LENGTH_SHORT
+            ).show();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
