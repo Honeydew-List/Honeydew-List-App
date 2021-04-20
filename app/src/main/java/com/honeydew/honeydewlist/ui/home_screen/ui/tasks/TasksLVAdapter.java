@@ -85,7 +85,7 @@ public class TasksLVAdapter extends ArrayAdapter<Task> {
             snackBar.show();
             // Use the itemID to load the task details from firestore
             Log.i("TasksLVAdapter", "getView: " + dataModal.getName());
-            Intent i = new Intent(v.getContext(), CreateTaskActivity.class);
+            Intent i = new Intent(v.getContext(), TaskDetailActivity.class);
             i.putExtra("owner", dataModal.getOwner());
             i.putExtra("ownerUUID", dataModal.getUUID());
             i.putExtra("itemID", dataModal.getItemID());

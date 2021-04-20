@@ -1,5 +1,6 @@
 package com.honeydew.honeydewlist.ui.home_screen.ui.tasks;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -115,6 +116,10 @@ public class TasksFragment extends Fragment {
                     "Not yet implemented",
                     Toast.LENGTH_SHORT
             ).show();
+
+            Intent i = new Intent(getContext(), CreateTaskActivity.class);
+            startActivity(i);
+
             return true;
         } else if (itemId == R.id.action_filter) {
             // navigate to screen to choose which friends to show tasks from
