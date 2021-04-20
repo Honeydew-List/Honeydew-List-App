@@ -72,6 +72,7 @@ public class TasksFragment extends Fragment {
                             // after getting this list we are passing
                             // that list to our object class.
                             Task dataModal = d.toObject(Task.class);
+                            assert dataModal != null;
                             dataModal.setItemID(d.getId());
                             Log.i("dataModal ID", "loadDatailListview: " + dataModal.getItemID());
 
