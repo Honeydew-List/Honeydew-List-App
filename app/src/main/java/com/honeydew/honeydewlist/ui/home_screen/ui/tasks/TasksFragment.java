@@ -91,13 +91,13 @@ public class TasksFragment extends Fragment {
                     } else {
                         // if the snapshot is empty we are displaying a toast message.
                         Toast.makeText(requireContext(), "No data found in Database", Toast.LENGTH_SHORT).show();
-                        Log.i("Firebase", "loadDatailListview: No data found in Database");
+                        Log.i("Firebase", "loadDetailListview: No data found in Database");
                     }
                 }).addOnFailureListener(e -> {
                     // we are displaying a toast message
                     // when we get any error from Firebase.
                     Toast.makeText(requireContext(), "Fail to load data..", Toast.LENGTH_SHORT).show();
-                    Log.d("Firestore Error", "loadDatailListview: " + e.getMessage());
+                    Log.d("Firestore Error", "loadDetailListview: " + e.getMessage());
                 });
     }
 
