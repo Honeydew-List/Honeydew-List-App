@@ -49,12 +49,12 @@ public class TasksFragment extends Fragment {
 
         // here we are calling a method
         // to load data in our list view.
-        loadDatailListview();
+        loadDetailListview();
 
         return root;
     }
 
-    private void loadDatailListview() {
+    private void loadDetailListview() {
         // user is the selected friend
         final String user = "ABC#0123";
         // below line is use to get data from Firebase
@@ -72,14 +72,14 @@ public class TasksFragment extends Fragment {
                         for (DocumentSnapshot d : list) {
                             // after getting this list we are passing
                             // that list to our object class.
-                            Task dataModal = d.toObject(Task.class);
-                            assert dataModal != null;
-                            dataModal.setItemID(d.getId());
-                            Log.i("dataModal ID", "loadDatailListview: " + dataModal.getItemID());
+                            Task dataModel = d.toObject(Task.class);
+                            assert dataModel != null;
+                            dataModel.setItemID(d.getId());
+                            Log.i("dataModel ID", "loadDetailListview: " + dataModel.getItemID());
 
                             // after getting data from Firebase we are
                             // storing that data in our array list
-                            dataModalArrayList.add(dataModal);
+                            dataModalArrayList.add(dataModel);
                         }
                         // after that we are passing our array list to our adapter class.
                         TasksLVAdapter adapter = new TasksLVAdapter(requireContext(),
