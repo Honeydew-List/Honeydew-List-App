@@ -14,6 +14,8 @@ import android.widget.EditText;
 
 import com.honeydew.honeydewlist.R;
 
+import java.util.Objects;
+
 public class CreateTaskActivity extends AppCompatActivity {
 
     @Override
@@ -22,8 +24,19 @@ public class CreateTaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_task);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+//        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         toolBarLayout.setTitle(getTitle());
+
+        toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_material);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                onBackPressed();
+            }
+        });
 
         EditText name_value, description_value, reward_value;
         FloatingActionButton fab;
@@ -39,7 +52,7 @@ public class CreateTaskActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String Name, Description;
                 int Reward;
-                
+
                 Name = name_value.getText().toString();
                 Description = description_value.getText().toString();
                 Reward = Integer.parseInt(reward_value.getText().toString());
