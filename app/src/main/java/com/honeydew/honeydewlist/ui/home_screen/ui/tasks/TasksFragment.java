@@ -18,6 +18,8 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -33,6 +35,7 @@ public class TasksFragment extends Fragment {
     ArrayList<Task> dataModalArrayList;
     FirebaseFirestore db;
     ProgressBar progressBar;
+    private String userID;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -47,19 +50,28 @@ public class TasksFragment extends Fragment {
         // firestore and getting its instance.
         db = FirebaseFirestore.getInstance();
 
+        // Get current user
+        final FirebaseAuth auth = FirebaseAuth.getInstance();
+        final FirebaseUser user = auth.getCurrentUser();
+        if (user != null) {
+            userID = user.getUid();
+            loadDetailListview();
+        }
+
         // here we are calling a method
         // to load data in our list view.
-        loadDetailListview();
 
         return root;
     }
 
     private void loadDetailListview() {
         // user is the selected friend
-        final String user = "ABC#0123";
+        // Temp userID for testing
+        userID = "ABC#0123";
+
         // below line is use to get data from Firebase
         // firestore using collection in android.
-        db.collection("users/" + user + "/tasks").get()
+        db.collection("users/" + userID + "/tasks").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     progressBar.setVisibility(View.GONE);
                     // after getting the data we are calling on success method
