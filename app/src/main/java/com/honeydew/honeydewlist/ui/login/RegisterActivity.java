@@ -66,12 +66,9 @@ public class RegisterActivity extends AppCompatActivity {
                             "Email must not be empty",
                             Snackbar.LENGTH_SHORT
                     );
-                    snackBar.setAction("Dismiss", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // Call your action method here
-                            snackBar.dismiss();
-                        }
+                    snackBar.setAction("Dismiss", v1 -> {
+                        // Call your action method here
+                        snackBar.dismiss();
                     });
                     snackBar.show();
                 } else if (Username.matches("")){
@@ -80,12 +77,9 @@ public class RegisterActivity extends AppCompatActivity {
                             "Username must not be empty",
                             Snackbar.LENGTH_SHORT
                     );
-                    snackBar.setAction("Dismiss", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // Call your action method here
-                            snackBar.dismiss();
-                        }
+                    snackBar.setAction("Dismiss", v12 -> {
+                        // Call your action method here
+                        snackBar.dismiss();
                     });
                     snackBar.show();
                 } else if (Password.matches("")){
@@ -94,12 +88,9 @@ public class RegisterActivity extends AppCompatActivity {
                             "Password must not be empty",
                             Snackbar.LENGTH_SHORT
                     );
-                    snackBar.setAction("Dismiss", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // Call your action method here
-                            snackBar.dismiss();
-                        }
+                    snackBar.setAction("Dismiss", v13 -> {
+                        // Call your action method here
+                        snackBar.dismiss();
                     });
                     snackBar.show();
                 } else if (VerifyPassword.matches("")){
@@ -108,12 +99,9 @@ public class RegisterActivity extends AppCompatActivity {
                             "Verify Password must not be empty",
                             Snackbar.LENGTH_SHORT
                     );
-                    snackBar.setAction("Dismiss", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // Call your action method here
-                            snackBar.dismiss();
-                        }
+                    snackBar.setAction("Dismiss", v14 -> {
+                        // Call your action method here
+                        snackBar.dismiss();
                     });
                     snackBar.show();
                 } else if (Password.length() < 7){
@@ -122,12 +110,9 @@ public class RegisterActivity extends AppCompatActivity {
                             "Password must be longer than 7 characters",
                             Snackbar.LENGTH_SHORT
                     );
-                    snackBar.setAction("Dismiss", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // Call your action method here
-                            snackBar.dismiss();
-                        }
+                    snackBar.setAction("Dismiss", v15 -> {
+                        // Call your action method here
+                        snackBar.dismiss();
                     });
                     snackBar.show();
                 } else if (!Password.matches(VerifyPassword)) {
@@ -136,12 +121,9 @@ public class RegisterActivity extends AppCompatActivity {
                             "Passwords Do Not Match",
                             Snackbar.LENGTH_SHORT
                     );
-                    snackBar.setAction("Dismiss", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // Call your action method here
-                            snackBar.dismiss();
-                        }
+                    snackBar.setAction("Dismiss", v16 -> {
+                        // Call your action method here
+                        snackBar.dismiss();
                     });
                     snackBar.show();
                 } else {

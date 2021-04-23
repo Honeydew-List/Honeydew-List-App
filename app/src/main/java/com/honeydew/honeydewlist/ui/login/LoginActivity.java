@@ -28,52 +28,41 @@ public class LoginActivity extends AppCompatActivity {
         register = (Button) findViewById(R.id.registerButton);
         forgot_password = (Button) findViewById(R.id.forgot_password_Button);
 
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String Username, Password;
-                Username = username_value.getText().toString();
-                Password = password_value.getText().toString();
+        login.setOnClickListener(v -> {
+            String Username, Password;
+            Username = username_value.getText().toString();
+            Password = password_value.getText().toString();
 
-                // TODO: Verify Username and Password match in database
-                if (Username.matches("ABC") && Password.matches("123")) {
-                    Toast.makeText(
-                            getApplicationContext(),
-                            "Login Successful",
-                            Toast.LENGTH_SHORT
-                    ).show();
-
-                    Intent downloadIntent = new Intent(getApplicationContext(), HomeScreen.class);
-                    downloadIntent.putExtra("username", Username);
-                    startActivity(downloadIntent);
-                } else {
-                    Toast.makeText(getApplicationContext(),"Incorrect Username or Password", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String Username, Password;
-                Username = username_value.getText().toString();
-                Password = password_value.getText().toString();
-                Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
-                i.putExtra("username", Username);
-                i.putExtra("password", Password);
-                startActivity(i);
-            }
-        });
-
-        forgot_password.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            // TODO: Verify Username and Password match in database
+            if (Username.matches("ABC") && Password.matches("123")) {
                 Toast.makeText(
                         getApplicationContext(),
-                        "Not yet implemented",
+                        "Login Successful",
                         Toast.LENGTH_SHORT
                 ).show();
+
+                Intent downloadIntent = new Intent(getApplicationContext(), HomeScreen.class);
+                downloadIntent.putExtra("username", Username);
+                startActivity(downloadIntent);
+            } else {
+                Toast.makeText(getApplicationContext(),"Incorrect Username or Password", Toast.LENGTH_SHORT).show();
             }
         });
+
+        register.setOnClickListener(v -> {
+            String Username, Password;
+            Username = username_value.getText().toString();
+            Password = password_value.getText().toString();
+            Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
+            i.putExtra("username", Username);
+            i.putExtra("password", Password);
+            startActivity(i);
+        });
+
+        forgot_password.setOnClickListener(v -> Toast.makeText(
+                getApplicationContext(),
+                "Not yet implemented",
+                Toast.LENGTH_SHORT
+        ).show());
     }
 }
