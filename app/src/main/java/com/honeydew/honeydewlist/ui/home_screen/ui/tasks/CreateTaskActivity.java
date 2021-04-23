@@ -64,11 +64,11 @@ public class CreateTaskActivity extends AppCompatActivity {
             userID = user.getUid();
         }
 
-        db.collection("users").document(userID).get().addOnSuccessListener(
-            documentSnapshot -> username = documentSnapshot.getString("username")
-        ).addOnFailureListener(e -> Toast.makeText(getApplicationContext(),
-                "Could not find username from Firestore",
-                Toast.LENGTH_SHORT).show());
+//        db.collection("users").document(userID).get().addOnSuccessListener(
+//            documentSnapshot -> username = documentSnapshot.getString("username")
+//        ).addOnFailureListener(e -> Toast.makeText(getApplicationContext(),
+//                "Could not find username from Firestore",
+//                Toast.LENGTH_SHORT).show());
 
 
         fab.setOnClickListener(view -> {
@@ -102,6 +102,7 @@ public class CreateTaskActivity extends AppCompatActivity {
     private void addDataToFirestore(String TaskName, String TaskDescription, int TaskReward) {
         // Temp userID for testing
         userID = "ABC#0123";
+        username = "ABC";
 
         // creating a collection reference
         // for our Firebase Firetore database.

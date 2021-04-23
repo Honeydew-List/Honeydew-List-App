@@ -56,6 +56,10 @@ public class TasksFragment extends Fragment {
         if (user != null) {
             userID = user.getUid();
             loadDetailListview();
+        } else {
+            // temp for testing
+            userID = "ABC#0123";
+            loadDetailListview();
         }
 
         // here we are calling a method
@@ -67,7 +71,6 @@ public class TasksFragment extends Fragment {
     private void loadDetailListview() {
         // user is the selected friend
         // Temp userID for testing
-        userID = "ABC#0123";
 
         // below line is use to get data from Firebase
         // firestore using collection in android.
