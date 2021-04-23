@@ -67,11 +67,9 @@ public class TasksLVAdapter extends ArrayAdapter<Task> {
 
         // below line is use to add item click listener
         // for our item of list view.
-        listitemView.setOnClickListener(v -> {
-            // on the item click on our list view.
-            // we are displaying a toast message.
-//            Toast.makeText(v.getContext(), "Item clicked is : " + dataModal.getName(),
-//                    Toast.LENGTH_SHORT).show();
+        card.setOnClickListener(v -> {
+            // Commented out because we are using a check box instead
+            // card.setChecked(!card.isChecked());
             final Snackbar snackBar = Snackbar.make(
                     v,
                     "Item clicked is : " + dataModal.getName(),
@@ -93,12 +91,6 @@ public class TasksLVAdapter extends ArrayAdapter<Task> {
             i.putExtra("itemID", dataModal.getItemID());
             getContext().startActivity(i);
         });
-
-        // Long press to check item. Disabled because we are using a check box
-//        card.setOnLongClickListener(v -> {
-//            card.setChecked(!card.isChecked());
-//            return true;
-//        });
         return listitemView;
     }
 }
