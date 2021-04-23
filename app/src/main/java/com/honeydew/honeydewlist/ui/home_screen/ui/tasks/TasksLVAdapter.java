@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.snackbar.Snackbar;
 import com.honeydew.honeydewlist.R;
 
@@ -52,6 +53,7 @@ public class TasksLVAdapter extends ArrayAdapter<Task> {
         TextView points = listitemView.findViewById(R.id.list_item_melon_count);
         TextView owner = listitemView.findViewById(R.id.list_item_owner);
         CheckBox completionStatus = listitemView.findViewById(R.id.list_item_check_box);
+        MaterialCardView card = listitemView.findViewById(R.id.card_view);
 
         // after initializing our items we are
         // setting data to our view.
@@ -91,6 +93,12 @@ public class TasksLVAdapter extends ArrayAdapter<Task> {
             i.putExtra("itemID", dataModal.getItemID());
             getContext().startActivity(i);
         });
+
+        // Long press to check item. Disabled because we are using a check box
+//        card.setOnLongClickListener(v -> {
+//            card.setChecked(!card.isChecked());
+//            return true;
+//        });
         return listitemView;
     }
 }
