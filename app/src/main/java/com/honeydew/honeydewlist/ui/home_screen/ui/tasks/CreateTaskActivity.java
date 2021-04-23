@@ -25,18 +25,11 @@ public class CreateTaskActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-//        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         toolBarLayout.setTitle(getTitle());
 
         toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_material);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                onBackPressed();
-            }
-        });
+        toolbar.setNavigationOnClickListener(view -> onBackPressed());
 
         EditText name_value, description_value, reward_value;
         FloatingActionButton fab;
@@ -47,20 +40,17 @@ public class CreateTaskActivity extends AppCompatActivity {
         fab = (FloatingActionButton) findViewById(R.id.fab);
 
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String Name, Description;
-                int Reward;
+        fab.setOnClickListener(view -> {
+            String Name, Description;
+            int Reward;
 
-                Name = name_value.getText().toString();
-                Description = description_value.getText().toString();
-                Reward = Integer.parseInt(reward_value.getText().toString());
+            Name = name_value.getText().toString();
+            Description = description_value.getText().toString();
+            Reward = Integer.parseInt(reward_value.getText().toString());
 
-                // TODO: Add data to database
+            // TODO: Add data to database
 
-                finish();
-            }
+            finish();
         });
     }
 }
