@@ -94,8 +94,7 @@ public class TasksFragment extends Fragment {
                             dataModalArrayList.add(dataModel);
                         }
                         // after that we are passing our array list to our adapter class.
-                        TasksLVAdapter adapter = new TasksLVAdapter(requireContext(),
-                                dataModalArrayList);
+                        TasksLVAdapter adapter = new TasksLVAdapter(requireContext(), dataModalArrayList);
 
                         // after passing this array list to our adapter
                         // class we are setting our adapter to our list view.
