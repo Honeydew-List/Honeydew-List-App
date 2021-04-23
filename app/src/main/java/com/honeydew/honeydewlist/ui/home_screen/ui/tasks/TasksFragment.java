@@ -58,7 +58,6 @@ public class TasksFragment extends Fragment {
             loadDetailListview();
         } else {
             // temp for testing
-            userID = "ABC#0123";
             loadDetailListview();
         }
 
@@ -69,6 +68,8 @@ public class TasksFragment extends Fragment {
     }
 
     private void loadDetailListview() {
+        // temp for testing
+        userID = "ABC#0123";
         // user is the selected friend
         // Temp userID for testing
 

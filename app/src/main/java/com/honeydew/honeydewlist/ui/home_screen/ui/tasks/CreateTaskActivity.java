@@ -106,6 +106,7 @@ public class CreateTaskActivity extends AppCompatActivity {
 
         // creating a collection reference
         // for our Firebase Firetore database.
+        db = FirebaseFirestore.getInstance();
         CollectionReference dbTasks = db.collection("users/" + userID + "/tasks");
 
         // adding our data to our courses object class.
