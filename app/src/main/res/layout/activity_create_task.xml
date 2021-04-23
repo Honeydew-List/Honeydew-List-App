@@ -7,6 +7,16 @@
     android:fitsSystemWindows="true"
     tools:context=".ui.home_screen.ui.tasks.CreateTaskActivity">
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/fab_margin"
+        android:contentDescription="@string/done"
+        app:srcCompat="@drawable/ic_baseline_done_outline_24"
+        tools:ignore="VectorDrawableCompat" />
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
@@ -34,16 +44,5 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <include layout="@layout/content_create_task_scrolling" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@drawable/ic_baseline_done_outline_24"
-        android:contentDescription="@string/done"
-        tools:ignore="VectorDrawableCompat" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

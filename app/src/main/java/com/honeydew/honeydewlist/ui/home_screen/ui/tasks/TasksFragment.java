@@ -111,12 +111,6 @@ public class TasksFragment extends Fragment {
         int itemId = item.getItemId();
         if (itemId == R.id.action_add_item) {
             // navigate to add task screen
-            Toast.makeText(
-                    getContext(),
-                    "Not yet implemented",
-                    Toast.LENGTH_SHORT
-            ).show();
-
             Intent i = new Intent(getContext(), CreateTaskActivity.class);
             startActivity(i);
 

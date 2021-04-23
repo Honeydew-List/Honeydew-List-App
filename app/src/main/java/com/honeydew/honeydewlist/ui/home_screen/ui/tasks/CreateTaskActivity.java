@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
+import android.widget.EditText;
 
 import com.honeydew.honeydewlist.R;
 
@@ -24,12 +25,28 @@ public class CreateTaskActivity extends AppCompatActivity {
         CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         toolBarLayout.setTitle(getTitle());
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        EditText name_value, description_value, reward_value;
+        FloatingActionButton fab;
+
+        name_value = (EditText) findViewById(R.id.text_input_edit_text_task_name);
+        description_value = (EditText) findViewById(R.id.text_input_edit_text_task_description);
+        reward_value = (EditText) findViewById(R.id.text_input_edit_text_task_points);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                String Name, Description;
+                int Reward;
+                
+                Name = name_value.getText().toString();
+                Description = description_value.getText().toString();
+                Reward = Integer.parseInt(reward_value.getText().toString());
+
+                // TODO: Add data to database
+
+                finish();
             }
         });
     }
