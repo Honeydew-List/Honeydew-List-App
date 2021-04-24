@@ -1,5 +1,6 @@
 package com.honeydew.honeydewlist.ui.home_screen.ui.tasks;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,13 +10,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -24,7 +28,9 @@ import com.honeydew.honeydewlist.R;
 import com.honeydew.honeydewlist.data.Task;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TasksFragment extends Fragment {
 
@@ -33,6 +39,9 @@ public class TasksFragment extends Fragment {
     FirebaseFirestore db;
     ProgressBar progressBar;
     private String userID;
+    private int checkedItem = 0;
+    private ArrayList<String> friendIds;
+    ArrayList<String> friends;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -60,6 +69,7 @@ public class TasksFragment extends Fragment {
             // to load data in our list view.
             loadDetailListview();
         }
+
         return root;
     }
 
@@ -136,9 +146,62 @@ public class TasksFragment extends Fragment {
                     "Not yet implemented",
                     Toast.LENGTH_SHORT
             ).show();
+
+            showFriendDialog();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showFriendDialog() {
+        friendIds = new ArrayList<>();
+        friends = new ArrayList<>();
+
+        // TODO: Get friends from Firestore
+
+        // Add user to first item
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
+        if (user != null) {
+            friendIds.add(user.getUid());
+            friends.add("Me");
+        }
+        friendIds.add("GVO4PUFOy4VqvRZXoeGigyVQwg12");
+        friendIds.add("ABC#0123");
+        friends.add("richardxd");
+        friends.add("ABC");
+
+
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
+
+        builder.setTitle("Pick a friend");
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Do nothing
+                Log.d("friendDialog", "negative button clicked");
+            }
+        });
+
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Load friend from index chosen
+                Log.d("friendDialog", "positive button clicked");
+                checkedItem = which;
+                dialog.dismiss();
+            }
+        });
+
+        // Single-choice items (initialized with checked item)
+        builder.setSingleChoiceItems(friends.toArray(new CharSequence[0]), checkedItem, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // item selected logic, don't anything until "Ok" is hit
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override
