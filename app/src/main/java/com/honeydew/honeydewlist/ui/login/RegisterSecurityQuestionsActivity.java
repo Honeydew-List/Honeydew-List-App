@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +44,7 @@ import java.util.Map;
 public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    private ProgressBar progressbar;
     private static final String TAG ="EmailPassword";
     private String Question1, Question2, Question3;
     private String Answer1, Answer2, Answer3;
@@ -54,6 +56,7 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register_security_questions);
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+        progressbar = findViewById(R.id.progressBar);
 
         // Get account info from previous page
         Intent intent = getIntent();
@@ -204,6 +207,7 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
     }
 
     private void createAccount(String email, String password) {
+        progressbar.setVisibility(View.VISIBLE);
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
 
@@ -211,11 +215,13 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
+                            progressbar.setVisibility(View.GONE);
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            progressbar.setVisibility(View.GONE);
                             Toast.makeText(RegisterSecurityQuestionsActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
