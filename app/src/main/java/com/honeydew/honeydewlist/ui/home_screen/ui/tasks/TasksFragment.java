@@ -16,13 +16,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.honeydew.honeydewlist.R;
 import com.honeydew.honeydewlist.data.Task;
 
@@ -31,7 +28,7 @@ import java.util.List;
 
 public class TasksFragment extends Fragment {
 
-    ListView coursesLV;
+    ListView tasksLV;
     ArrayList<Task> dataModalArrayList;
     FirebaseFirestore db;
     ProgressBar progressBar;
@@ -42,7 +39,7 @@ public class TasksFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_tasks, container, false);
         setHasOptionsMenu(true);
         // below line is use to initialize our variables
-        coursesLV = root.findViewById(R.id.idLVCourses);
+        tasksLV = root.findViewById(R.id.idLVTasks);
         dataModalArrayList = new ArrayList<>();
         progressBar = root.findViewById(R.id.progressBar);
 
@@ -55,12 +52,10 @@ public class TasksFragment extends Fragment {
         final FirebaseUser user = auth.getCurrentUser();
         if (user != null) {
             userID = user.getUid();
+            // here we are calling a method
+            // to load data in our list view.
             loadDetailListview();
         }
-
-        // here we are calling a method
-        // to load data in our list view.
-
         return root;
     }
 
@@ -69,6 +64,13 @@ public class TasksFragment extends Fragment {
         userID = "ABC#0123";
         // user is the selected friend
         // Temp userID for testing
+
+        // after that we are passing our array list to our adapter class.
+        TasksLVAdapter adapter = new TasksLVAdapter(requireContext(), dataModalArrayList);
+
+        // after passing this array list to our adapter
+        // class we are setting our adapter to our list view.
+        tasksLV.setAdapter(adapter);
 
         // below line is use to get data from Firebase
         // firestore using collection in android.
@@ -94,12 +96,7 @@ public class TasksFragment extends Fragment {
                             // storing that data in our array list
                             dataModalArrayList.add(dataModel);
                         }
-                        // after that we are passing our array list to our adapter class.
-                        TasksLVAdapter adapter = new TasksLVAdapter(requireContext(), dataModalArrayList);
-
-                        // after passing this array list to our adapter
-                        // class we are setting our adapter to our list view.
-                        coursesLV.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
                     } else {
                         // if the snapshot is empty we are displaying a toast message.
                         Toast.makeText(requireContext(), "No data found in Database", Toast.LENGTH_SHORT).show();
@@ -143,6 +140,11 @@ public class TasksFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         if (db != null) {
             db.terminate();
         }

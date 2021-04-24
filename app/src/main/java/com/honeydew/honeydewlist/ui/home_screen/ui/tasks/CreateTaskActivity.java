@@ -62,15 +62,21 @@ public class CreateTaskActivity extends AppCompatActivity {
         // Get current user
         final FirebaseAuth auth = FirebaseAuth.getInstance();
         final FirebaseUser user = auth.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
         if (user != null) {
             userID = user.getUid();
+            db.collection("users").document(userID).get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        username = documentSnapshot.getData().get("username").toString();
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(getApplicationContext(),
+                                "Could not find username from Firestore",
+                                Toast.LENGTH_SHORT).show();
+                    });
         }
 
-//        db.collection("users").document(userID).get().addOnSuccessListener(
-//            documentSnapshot -> username = documentSnapshot.getString("username")
-//        ).addOnFailureListener(e -> Toast.makeText(getApplicationContext(),
-//                "Could not find username from Firestore",
-//                Toast.LENGTH_SHORT).show());
+
 
 
         fab.setOnClickListener(view -> {
@@ -103,13 +109,14 @@ public class CreateTaskActivity extends AppCompatActivity {
 
     private void addDataToFirestore(String TaskName, String TaskDescription, int TaskReward) {
         // Temp username for testing
-        username = "ABC";
+//        username = "ABC";
         userID = "ABC#0123";
 
         // creating a collection reference
         // for our Firebase Firetore database.
-        db = FirebaseFirestore.getInstance();
         CollectionReference dbTasks = db.collection("users/" + userID + "/tasks");
+
+
 
         // adding our data to our courses object class.
         Task task = new Task(TaskName,
@@ -120,28 +127,22 @@ public class CreateTaskActivity extends AppCompatActivity {
                 false, "");
 
         // below method is use to add data to Firebase Firestore.
-        dbTasks.add(task).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                // after the data addition is successful
-                // we are displaying a success toast message.
-                Map<String, Object> itemID = new HashMap<String, Object>() {{
-                   put("itemID", documentReference.getId());
-                }};
-                documentReference.update(itemID);
-                Toast.makeText(getApplicationContext(),
-                        "Your Task has been added to Firebase Firestore",
-                        Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                // this method is called when the data addition process is failed.
-                // displaying a toast message when data addition is failed.
-                Toast.makeText(getApplicationContext(),
-                        "Fail to add course \n" + e,
-                        Toast.LENGTH_SHORT).show();
-            }
+        dbTasks.add(task).addOnSuccessListener(documentReference -> {
+            // after the data addition is successful
+            // we are displaying a success toast message.
+            Map<String, Object> itemID = new HashMap<String, Object>() {{
+               put("itemID", documentReference.getId());
+            }};
+            documentReference.update(itemID);
+            Toast.makeText(getApplicationContext(),
+                    "Your Task has been added to Firebase Firestore",
+                    Toast.LENGTH_SHORT).show();
+        }).addOnFailureListener(e -> {
+            // this method is called when the data addition process is failed.
+            // displaying a toast message when data addition is failed.
+            Toast.makeText(getApplicationContext(),
+                    "Fail to add course \n" + e,
+                    Toast.LENGTH_SHORT).show();
         });
     }
 }

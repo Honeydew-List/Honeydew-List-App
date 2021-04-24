@@ -19,11 +19,15 @@
 
 
     <ListView
-        android:id="@+id/idLVCourses"
+        android:id="@+id/idLVTasks"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@null"
         android:dividerHeight="8.0sp"
-        android:padding="8dp"/>
+        android:padding="8dp"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
