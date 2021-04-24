@@ -46,7 +46,7 @@ public class FriendsLVAdapter extends ArrayAdapter<Friend>{
         Friend dataModal = getItem(position);
 
         TextView userID = listitemView.findViewById(R.id.list_item_userID);
-        userID.setText(dataModal.getUserid());
+        userID.setText(dataModal.getUUID());
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
