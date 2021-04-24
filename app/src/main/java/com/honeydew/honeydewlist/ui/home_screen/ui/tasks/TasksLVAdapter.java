@@ -3,6 +3,7 @@ package com.honeydew.honeydewlist.ui.home_screen.ui.tasks;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,6 +60,11 @@ public class TasksLVAdapter extends ArrayAdapter<Task> {
         TextView owner = listitemView.findViewById(R.id.list_item_owner);
         CheckBox completionStatus = listitemView.findViewById(R.id.list_item_check_box);
         MaterialCardView card = listitemView.findViewById(R.id.card_view);
+
+
+        // If description is empty, don't show the text view
+        if (TextUtils.isEmpty(dataModal.getDescription()))
+            description.setVisibility(View.GONE);
 
         // after initializing our items we are
         // setting data to our view.
