@@ -82,9 +82,9 @@ public class CreateTaskActivity extends AppCompatActivity {
 
             // validating the text fields if empty or not.
             if (TextUtils.isEmpty(TaskName)) {
-                name_value_edt.setError("Please enter Course Name");
+                name_value_edt.setError("Please enter Task Name");
             } else if (TextUtils.isEmpty(TaskReward)) {
-                reward_value_edt.setError("Please enter Course Duration");
+                reward_value_edt.setError("Please enter Task Reward");
             } else {
                 // calling method to add data to Firebase Firestore.
                 try {
