@@ -1,7 +1,7 @@
 package com.honeydew.honeydewlist.ui.home_screen.ui.tasks;
 
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,38 +10,39 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.honeydew.honeydewlist.R;
 import com.honeydew.honeydewlist.data.Task;
-import com.honeydew.honeydewlist.ui.home_screen.ui.rewards.RewardsViewModel;
+import com.honeydew.honeydewlist.ui.home_screen.ui.tasks.inteface.GetFriendCallback;
+import com.honeydew.honeydewlist.ui.home_screen.ui.tasks.inteface.GetTasksCallback;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class TasksFragment extends Fragment {
 
     ListView tasksLV;
     ArrayList<Task> dataModalArrayList;
+    TasksLVAdapter adapter;
+    CollectionReference tasksRef, friendsRef;
     FirebaseFirestore db;
     ProgressBar progressBar;
     private String userID;
-    private int checkedItem = 0;
     private ArrayList<String> friendIds;
     ArrayList<String> friends;
     FirebaseAuth auth;
@@ -72,21 +73,74 @@ public class TasksFragment extends Fragment {
         if (user != null) {
             userID = user.getUid();
             friendIds.add(user.getUid());
+            tasksRef = db.collection("users/" + userID + "/tasks");
+            friendsRef = db.collection("users/" + userID + "/friends");
+
+
+
+
+            // after that we are passing our array list to our adapter class.
+            adapter = new TasksLVAdapter(requireContext(), dataModalArrayList);
+
+            // after passing this array list to our adapter
+            // class we are setting our adapter to our list view.
+            tasksLV.setAdapter(adapter);
+
 
             // here we are calling a method
             // to load data in our list view.
             // Call for each friend
+
+//            new MyAsyncTask().execute();
             getFriends();
+
+            // Load the listview
             for (int i = 0; i < friendIds.size(); i++) {
                 loadDetailListview(i);
             }
+
+//            readFriendData(new GetFriendCallback() {
+//                @Override
+//                public void onCallback(List<String> friendsList) {
+//
+//                     //Do what you need to do with your list
+//                     for (int i = 0; i < friendsList.size(); i++) {
+//                         readTaskData(new GetTasksCallback() {
+//                             @Override
+//                             public void onCallback(List<Task> taskList) {
+//                                 dataModalArrayList.addAll(taskList);
+//                             }
+//                         });
+//                     }
+//
+//                }
+//            });
+
+
         }
 
         return root;
     }
 
+//    private class MyAsyncTask extends AsyncTask<Void, Void, Void>
+//    {
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//            getFriends();
+//            return null;
+//        }
+//        @Override
+//        protected void onPostExecute(Void result) {
+//            // Load the listview
+//            for (int i = 0; i < friendIds.size(); i++) {
+//                loadDetailListview(i);
+//            }
+//        }
+//    }
+
     private void getFriends() {
-        db.collection("users/" + userID + "/friends").get()
+        com.google.android.gms.tasks.Task<QuerySnapshot> task = db.collection("users/" + userID + "/friends").get();
+        Tasks.whenAll(task
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     // after getting the data we are calling on success method
                     // and inside this method we are checking if the received
@@ -112,7 +166,7 @@ public class TasksFragment extends Fragment {
             // when we get any error from Firebase.
             Toast.makeText(requireContext(), "Fail to load data..", Toast.LENGTH_SHORT).show();
             Log.d("Firestore Error", "getFriends: " + e.getMessage());
-        });
+        }));
     }
 
     private void loadDetailListview(int i) {
@@ -121,16 +175,9 @@ public class TasksFragment extends Fragment {
         userID = friendIds.get(i);
         // user is the selected friend
 
-        // after that we are passing our array list to our adapter class.
-        TasksLVAdapter adapter = new TasksLVAdapter(requireContext(), dataModalArrayList);
-
-        // after passing this array list to our adapter
-        // class we are setting our adapter to our list view.
-        tasksLV.setAdapter(adapter);
-
         // below line is use to get data from Firebase
         // firestore using collection in android.
-        db.collection("users/" + userID + "/tasks").get()
+        tasksRef.get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     progressBar.setVisibility(View.GONE);
                     // after getting the data we are calling on success method
@@ -181,72 +228,10 @@ public class TasksFragment extends Fragment {
             startActivity(i);
 
             return true;
-        } // else if (itemId == R.id.action_filter) {
-//            // navigate to screen to choose which friends to show tasks from
-//            Toast.makeText(
-//                    getContext(),
-//                    "Not yet implemented",
-//                    Toast.LENGTH_SHORT
-//            ).show();
-//
-//            showFriendDialog();
-//            loadDetailListview();
-//            return true;
-//        }
+        }
         return super.onOptionsItemSelected(item);
     }
 
-//    private void showFriendDialog() {
-//        friendIds.clear();
-//        friends = new ArrayList<>();
-//
-//        // Add current user to first item
-//        if (user != null) {
-//            friendIds.add(user.getUid());
-//            friends.add("Me");
-//        } else {
-//            return;
-//        }
-//
-//
-//        friendIds.add("GVO4PUFOy4VqvRZXoeGigyVQwg12");
-//        friends.add("richardxd");
-//
-//        friendIds.add("ABC#0123");
-//        friends.add("ABC");
-//
-//
-//        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
-//
-//        builder.setTitle("Pick a friend");
-//        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                // Do nothing
-//                Log.d("friendDialog", "negative button clicked");
-//            }
-//        });
-//
-//        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                // Load friend from index chosen
-//                Log.d("friendDialog", "positive button clicked");
-//                checkedItem = which;
-//                dialog.dismiss();
-//            }
-//        });
-//
-//        // Single-choice items (initialized with checked item)
-//        builder.setSingleChoiceItems(friends.toArray(new CharSequence[0]), checkedItem, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                // item selected logic, don't anything until "Ok" is hit
-//            }
-//        });
-//        AlertDialog dialog = builder.create();
-//        dialog.show();
-//    }
 
     @Override
     public void onStop() {
@@ -259,5 +244,41 @@ public class TasksFragment extends Fragment {
         if (db != null) {
             db.terminate();
         }
+    }
+
+    public void readTaskData(GetTasksCallback myCallback) {
+        tasksRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull com.google.android.gms.tasks.Task<QuerySnapshot> task) {
+                progressBar.setVisibility(View.GONE);
+                if (task.isSuccessful()) {
+                    List<Task> taskList = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Task dataModel = document.toObject(Task.class);
+                        assert dataModel != null;
+                        dataModel.setItemID(document.getId());
+                        Log.i("dataModel ID", "loadDetailListview: " + dataModel.getItemID());
+                        taskList.add(dataModel);
+                    }
+                    myCallback.onCallback(taskList);
+                }
+            }
+        });
+    }
+
+    public void readFriendData(GetFriendCallback myCallback) {
+        friendsRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull com.google.android.gms.tasks.Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    List<String> friendList = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        String userID = document.getId();
+                        friendList.add(userID);
+                    }
+                    myCallback.onCallback(friendList);
+                }
+            }
+        });
     }
 }
