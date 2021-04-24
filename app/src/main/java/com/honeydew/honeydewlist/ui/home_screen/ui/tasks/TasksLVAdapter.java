@@ -1,23 +1,31 @@
 package com.honeydew.honeydewlist.ui.home_screen.ui.tasks;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Parcelable;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.honeydew.honeydewlist.R;
 
 import com.honeydew.honeydewlist.data.Task;
+
 // Credit to https://www.geeksforgeeks.org/how-to-create-dynamic-listview-in-android-using-firebase-firestore/
 public class TasksLVAdapter extends ArrayAdapter<Task> {
     // constructor for our list view adapter.
@@ -27,7 +35,8 @@ public class TasksLVAdapter extends ArrayAdapter<Task> {
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(int position, @Nullable final View convertView,
+                        @NonNull final ViewGroup parent) {
         // below line is use to inflate the
         // layout for our item of list view.
         View listitemView = convertView;
@@ -47,6 +56,12 @@ public class TasksLVAdapter extends ArrayAdapter<Task> {
         TextView points = listitemView.findViewById(R.id.list_item_melon_count);
         TextView owner = listitemView.findViewById(R.id.list_item_owner);
         CheckBox completionStatus = listitemView.findViewById(R.id.list_item_check_box);
+        MaterialCardView card = listitemView.findViewById(R.id.card_view);
+
+
+        // If description is empty, don't show the text view
+        if (TextUtils.isEmpty(dataModal.getDescription()))
+            description.setVisibility(View.GONE);
 
         // after initializing our items we are
         // setting data to our view.
@@ -56,15 +71,39 @@ public class TasksLVAdapter extends ArrayAdapter<Task> {
         points.setText(MessageFormat.format("{0}", "Melons: " + dataModal.getPoints()));
         owner.setText(String.format("%s %s",
                 getContext().getResources().getString(R.string.ownerLabel), dataModal.getOwner()));
+
         completionStatus.setChecked(dataModal.getCompletionStatus());
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        completionStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateFirestore(v);
+            }
+
+            private void updateFirestore(View v) {
+                Map<String, Object> stringObjectMap = new HashMap<String, Object>() {{
+                    put("completionStatus", completionStatus.isChecked());
+                }};
+                db.collection("users/" + dataModal.getUUID() + "/tasks").
+                        document(dataModal.getItemID()).update(stringObjectMap);
+            }
+        });
 
         // below line is use to add item click listener
         // for our item of list view.
-        listitemView.setOnClickListener(v -> {
-            // on the item click on our list view.
-            // we are displaying a toast message.
-            Toast.makeText(getContext(), "Item clicked is : " + dataModal.getName(),
-                    Toast.LENGTH_SHORT).show();
+        card.setOnClickListener(v -> {
+            // Commented out because we are using a check box instead
+            // card.setChecked(!card.isChecked());
+
+            // Use the itemID to load the task details from firestore
+            Log.i("TasksLVAdapter", "getView: " + dataModal.getName());
+            Intent i = new Intent(v.getContext(), TaskDetailActivity.class);
+            i.putExtra("owner", dataModal.getOwner());
+            i.putExtra("ownerUUID", dataModal.getUUID());
+            i.putExtra("itemID", dataModal.getItemID());
+            getContext().startActivity(i);
         });
         return listitemView;
     }
