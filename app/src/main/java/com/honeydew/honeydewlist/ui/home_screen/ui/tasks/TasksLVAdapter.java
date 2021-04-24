@@ -70,19 +70,7 @@ public class TasksLVAdapter extends ArrayAdapter<Task> {
         card.setOnClickListener(v -> {
             // Commented out because we are using a check box instead
             // card.setChecked(!card.isChecked());
-            final Snackbar snackBar = Snackbar.make(
-                    v,
-                    "Item clicked is : " + dataModal.getName(),
-                    Snackbar.LENGTH_SHORT
-            );
-            snackBar.setAction("Dismiss", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Call your action method here
-                    snackBar.dismiss();
-                }
-            });
-            snackBar.show();
+            
             // Use the itemID to load the task details from firestore
             Log.i("TasksLVAdapter", "getView: " + dataModal.getName());
             Intent i = new Intent(v.getContext(), TaskDetailActivity.class);
