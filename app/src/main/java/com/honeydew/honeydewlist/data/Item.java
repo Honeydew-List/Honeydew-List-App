@@ -4,10 +4,11 @@ abstract public class Item extends Owner {
     private String name = "";
     private String description = "";
     private String itemID = "";
-    protected Item(String name, String description, String owner, String uuid) {
+    protected Item(String name, String description, String owner, String uuid, String itemID) {
         super(owner, uuid);
         this.name = name;
         this.description = description;
+        this.itemID = itemID;
     }
 
     // Required for FireStore

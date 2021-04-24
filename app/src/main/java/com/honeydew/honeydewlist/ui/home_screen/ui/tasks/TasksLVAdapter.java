@@ -10,15 +10,20 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.honeydew.honeydewlist.R;
 
 import com.honeydew.honeydewlist.data.Task;
@@ -63,14 +68,32 @@ public class TasksLVAdapter extends ArrayAdapter<Task> {
         points.setText(MessageFormat.format("{0}", "Melons: " + dataModal.getPoints()));
         owner.setText(String.format("%s %s",
                 getContext().getResources().getString(R.string.ownerLabel), dataModal.getOwner()));
+
         completionStatus.setChecked(dataModal.getCompletionStatus());
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        completionStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateFirestore(v);
+            }
+
+            private void updateFirestore(View v) {
+                Map<String, Object> stringObjectMap = new HashMap<String, Object>() {{
+                    put("completionStatus", completionStatus.isChecked());
+                }};
+                db.collection("users/" + dataModal.getUUID() + "/tasks").
+                        document(dataModal.getItemID()).update(stringObjectMap);
+            }
+        });
 
         // below line is use to add item click listener
         // for our item of list view.
         card.setOnClickListener(v -> {
             // Commented out because we are using a check box instead
             // card.setChecked(!card.isChecked());
-            
+
             // Use the itemID to load the task details from firestore
             Log.i("TasksLVAdapter", "getView: " + dataModal.getName());
             Intent i = new Intent(v.getContext(), TaskDetailActivity.class);

@@ -28,6 +28,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.honeydew.honeydewlist.R;
 import com.honeydew.honeydewlist.data.Task;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class CreateTaskActivity extends AppCompatActivity {
@@ -100,9 +102,9 @@ public class CreateTaskActivity extends AppCompatActivity {
     }
 
     private void addDataToFirestore(String TaskName, String TaskDescription, int TaskReward) {
-        // Temp userID for testing
-        userID = "ABC#0123";
+        // Temp username for testing
         username = "ABC";
+        userID = "ABC#0123";
 
         // creating a collection reference
         // for our Firebase Firetore database.
@@ -115,7 +117,7 @@ public class CreateTaskActivity extends AppCompatActivity {
                 username,
                 userID,
                 (long) TaskReward,
-                false);
+                false, "");
 
         // below method is use to add data to Firebase Firestore.
         dbTasks.add(task).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -123,6 +125,10 @@ public class CreateTaskActivity extends AppCompatActivity {
             public void onSuccess(DocumentReference documentReference) {
                 // after the data addition is successful
                 // we are displaying a success toast message.
+                Map<String, Object> itemID = new HashMap<String, Object>() {{
+                   put("itemID", documentReference.getId());
+                }};
+                documentReference.update(itemID);
                 Toast.makeText(getApplicationContext(),
                         "Your Task has been added to Firebase Firestore",
                         Toast.LENGTH_SHORT).show();

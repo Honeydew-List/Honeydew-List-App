@@ -56,9 +56,6 @@ public class TasksFragment extends Fragment {
         if (user != null) {
             userID = user.getUid();
             loadDetailListview();
-        } else {
-            // temp for testing
-            loadDetailListview();
         }
 
         // here we are calling a method

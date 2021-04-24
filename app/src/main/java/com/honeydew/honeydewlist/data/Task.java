@@ -16,8 +16,8 @@ public class Task extends Item {
     }
 
     public Task(String name, String description, String owner, String uuid,
-                Long points, Boolean completionStatus) {
-        super(name, description, owner, uuid);
+                Long points, Boolean completionStatus, String itemID) {
+        super(name, description, owner, uuid, itemID);
         this.points = points;
         this.completionStatus = completionStatus;
     }
