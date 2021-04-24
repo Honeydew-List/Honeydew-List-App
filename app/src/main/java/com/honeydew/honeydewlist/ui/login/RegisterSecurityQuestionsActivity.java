@@ -221,55 +221,55 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
                             updateUI(null);
                         }
                     }
-
-                    private void updateUI(FirebaseUser user) {
-                        if (user != null) {
-                            FirebaseFirestore db = FirebaseFirestore.getInstance();
-                            Map<String,Object> userData = new HashMap<>();
-                            final String uuid = user.getUid();
-                            userData.put("email", Email);
-                            userData.put("username", Username);
-                            userData.put("uuid", uuid);
-                            userData.put("sec_question1", Question1);
-                            userData.put("sec_question2", Question2);
-                            userData.put("sec_question3", Question3);
-                            userData.put("sec_answer1", Answer1);
-                            userData.put("sec_answer2", Answer2);
-                            userData.put("sec_answer3", Answer3);
-                            // Upload user map to database
-                            db.collection("users").document(uuid)
-                                    .set(userData)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            Log.d(TAG, "DocumentSnapshot successfully written.");
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Log.w(TAG, "Error adding document", e);
-                                        }
-                                    });
-
-                            Toast.makeText(
-                                    getApplicationContext(),
-                                    "Account Creation Successful",
-                                    Toast.LENGTH_SHORT
-                            ).show();
-
-                            Intent i = new Intent(
-                                    getApplicationContext(),
-                                    HomeScreen.class
-                            );
-                            finish();
-                            startActivity(i);
-                        } else {
-                            // Go back to register screen
-                            finish();
-                        }
-                    }
                 });
+    }
+
+    private void updateUI(FirebaseUser user) {
+        if (user != null) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            Map<String,Object> userData = new HashMap<>();
+            final String uuid = user.getUid();
+            userData.put("email", Email);
+            userData.put("username", Username);
+            userData.put("uuid", uuid);
+            userData.put("sec_question1", Question1);
+            userData.put("sec_question2", Question2);
+            userData.put("sec_question3", Question3);
+            userData.put("sec_answer1", Answer1);
+            userData.put("sec_answer2", Answer2);
+            userData.put("sec_answer3", Answer3);
+            // Upload user map to database
+            db.collection("users").document(uuid)
+                    .set(userData)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "DocumentSnapshot successfully written.");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error adding document", e);
+                        }
+                    });
+
+            Toast.makeText(
+                    getApplicationContext(),
+                    "Account Creation Successful",
+                    Toast.LENGTH_SHORT
+            ).show();
+
+            Intent i = new Intent(
+                    getApplicationContext(),
+                    HomeScreen.class
+            );
+            finish();
+            startActivity(i);
+        } else {
+            // Go back to register screen
+            finish();
+        }
     }
 
     private void reload() { }

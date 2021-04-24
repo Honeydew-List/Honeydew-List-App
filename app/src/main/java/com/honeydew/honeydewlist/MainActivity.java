@@ -8,6 +8,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.honeydew.honeydewlist.ui.home_screen.HomeScreen;
 import com.honeydew.honeydewlist.ui.login.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
