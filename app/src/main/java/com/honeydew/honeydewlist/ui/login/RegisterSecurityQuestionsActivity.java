@@ -201,25 +201,24 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             progressbar.setVisibility(View.GONE);
                             updateUI(null);
-
-                            if(!task.isSuccessful()) {
-                                try {
-                                    throw task.getException();
-                                } catch(FirebaseAuthInvalidCredentialsException e) {
-                                    Toast.makeText(RegisterSecurityQuestionsActivity.this,
-                                            "Error: Invalid Email Format",
-                                            Toast.LENGTH_LONG).show();
-                                } catch(FirebaseAuthUserCollisionException e) {
-                                    Toast.makeText(RegisterSecurityQuestionsActivity.this,
-                                            "Error: Account already exists",
-                                            Toast.LENGTH_LONG).show();
-                                } catch(Exception e) {
-                                    Toast.makeText(RegisterSecurityQuestionsActivity.this,
-                                            "Error: Account creation failed",
-                                            Toast.LENGTH_LONG).show();
-                                    Log.e(TAG, e.getMessage());
-                                }
+                            
+                            try {
+                                throw task.getException();
+                            } catch(FirebaseAuthInvalidCredentialsException e) {
+                                Toast.makeText(RegisterSecurityQuestionsActivity.this,
+                                        "Error: Invalid Email Format",
+                                        Toast.LENGTH_LONG).show();
+                            } catch(FirebaseAuthUserCollisionException e) {
+                                Toast.makeText(RegisterSecurityQuestionsActivity.this,
+                                        "Error: Account already exists",
+                                        Toast.LENGTH_LONG).show();
+                            } catch(Exception e) {
+                                Toast.makeText(RegisterSecurityQuestionsActivity.this,
+                                        "Error: Account creation failed",
+                                        Toast.LENGTH_LONG).show();
+                                Log.e(TAG, e.getMessage());
                             }
+
                         }
                     }
                 });
