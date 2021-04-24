@@ -3,27 +3,20 @@ package com.honeydew.honeydewlist.ui.login;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NavUtils;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-import android.util.Log;
 
 import com.google.android.material.snackbar.Snackbar;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.honeydew.honeydewlist.R;
-import com.google.firebase.auth.AuthResult;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-
-import com.honeydew.honeydewlist.ui.home_screen.HomeScreen;
 
 public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -41,7 +34,7 @@ public class RegisterActivity extends AppCompatActivity {
         Button next;
 
         email_value = (EditText) findViewById(R.id.email);
-        username_value = (EditText) findViewById(R.id.username);
+        username_value = (EditText) findViewById(R.id.login_email);
         password_value = (EditText) findViewById(R.id.password);
         verify_password_value = (EditText) findViewById(R.id.verify_password);
         next = (Button) findViewById(R.id.nextButton);
@@ -61,89 +54,19 @@ public class RegisterActivity extends AppCompatActivity {
                 VerifyPassword = verify_password_value.getText().toString();
 
                 if (Email.matches("")){
-                    snackBar = Snackbar.make(
-                            findViewById(android.R.id.content),
-                            "Email must not be empty",
-                            Snackbar.LENGTH_SHORT
-                    );
-                    snackBar.setAction("Dismiss", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // Call your action method here
-                            snackBar.dismiss();
-                        }
-                    });
-                    snackBar.show();
+                    email_value.setError("Email cannot be empty");
+                } else if (!Patterns.EMAIL_ADDRESS.matcher(Email).matches()) {
+                    email_value.setError("Enter a valid email");
                 } else if (Username.matches("")){
-                    snackBar = Snackbar.make(
-                            findViewById(android.R.id.content),
-                            "Username must not be empty",
-                            Snackbar.LENGTH_SHORT
-                    );
-                    snackBar.setAction("Dismiss", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // Call your action method here
-                            snackBar.dismiss();
-                        }
-                    });
-                    snackBar.show();
+                    username_value.setError("Username cannot be empty");
                 } else if (Password.matches("")){
-                    snackBar = Snackbar.make(
-                            findViewById(android.R.id.content),
-                            "Password must not be empty",
-                            Snackbar.LENGTH_SHORT
-                    );
-                    snackBar.setAction("Dismiss", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // Call your action method here
-                            snackBar.dismiss();
-                        }
-                    });
-                    snackBar.show();
+                    password_value.setError("Password cannot be empty");
                 } else if (VerifyPassword.matches("")){
-                    snackBar = Snackbar.make(
-                            findViewById(android.R.id.content),
-                            "Verify Password must not be empty",
-                            Snackbar.LENGTH_SHORT
-                    );
-                    snackBar.setAction("Dismiss", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // Call your action method here
-                            snackBar.dismiss();
-                        }
-                    });
-                    snackBar.show();
+                    verify_password_value.setError("Password cannot be empty");
                 } else if (Password.length() < 7){
-                    snackBar = Snackbar.make(
-                            findViewById(android.R.id.content),
-                            "Password must be longer than 7 characters",
-                            Snackbar.LENGTH_SHORT
-                    );
-                    snackBar.setAction("Dismiss", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // Call your action method here
-                            snackBar.dismiss();
-                        }
-                    });
-                    snackBar.show();
+                    password_value.setError("Password must at least be 8 characters");
                 } else if (!Password.matches(VerifyPassword)) {
-                    snackBar = Snackbar.make(
-                            findViewById(android.R.id.content),
-                            "Passwords Do Not Match",
-                            Snackbar.LENGTH_SHORT
-                    );
-                    snackBar.setAction("Dismiss", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // Call your action method here
-                            snackBar.dismiss();
-                        }
-                    });
-                    snackBar.show();
+                    verify_password_value.setError("Passwords do not match");
                 } else {
                     Intent downloadIntent = new Intent(
                             getApplicationContext(),
@@ -176,32 +99,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    private void createAccount(String email, String password) {
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(RegisterActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            updateUI(null);
-                        }
-                    }
-                });
-    }
-
     private void reload() { }
-
-    private void updateUI(FirebaseUser user) {
-
-    }
 
     // For back button
     @Override

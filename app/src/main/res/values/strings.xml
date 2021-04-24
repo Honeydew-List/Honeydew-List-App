@@ -154,4 +154,5 @@
     <string name="reward">Reward</string>
     <string name="description">Description</string>
     <string name="name">Name</string>
+    <string name="emailHint">Email</string>
 </resources>

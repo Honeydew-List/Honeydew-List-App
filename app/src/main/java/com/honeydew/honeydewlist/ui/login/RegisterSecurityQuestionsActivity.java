@@ -17,32 +17,30 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.honeydew.honeydewlist.R;
 import com.honeydew.honeydewlist.ui.home_screen.HomeScreen;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    private ProgressBar progressbar;
     private static final String TAG ="EmailPassword";
     private String Question1, Question2, Question3;
     private String Answer1, Answer2, Answer3;
@@ -54,6 +52,7 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register_security_questions);
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+        progressbar = findViewById(R.id.progressBar);
 
         // Get account info from previous page
         Intent intent = getIntent();
@@ -105,70 +104,52 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
         question3.setAdapter(arrayAdapter_questions);
 
         // Get security questions and answers from user
-        finish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Snackbar snackBar;
+        finish.setOnClickListener(v -> {
+            final Snackbar snackBar;
 
-                Question1 = question1.getText().toString();
-                Question2 = question2.getText().toString();
-                Question3 = question3.getText().toString();
-                Answer1 = answer1_value.getText().toString();
-                Answer2 = answer2_value.getText().toString();
-                Answer3 = answer3_value.getText().toString();
+            Question1 = question1.getText().toString();
+            Question2 = question2.getText().toString();
+            Question3 = question3.getText().toString();
+            Answer1 = answer1_value.getText().toString();
+            Answer2 = answer2_value.getText().toString();
+            Answer3 = answer3_value.getText().toString();
 
-                if (Question1.matches("" )
-                        || Question2.matches("" )
-                        || Question3.matches("" )){
-                    snackBar = Snackbar.make(
-                            findViewById(android.R.id.content),
-                            "Question cannot be be empty",
-                            Snackbar.LENGTH_SHORT
-                    );
-                    snackBar.setAction("Dismiss", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // Call your action method here
-                            snackBar.dismiss();
-                        }
-                    });
-                    snackBar.show();
-                } else if (Question1.equalsIgnoreCase(Question2) || Question1.equalsIgnoreCase(Question3)
-                        || Question2.equalsIgnoreCase(Question3)) {
-                    snackBar = Snackbar.make(
-                            findViewById(android.R.id.content),
-                            "Questions cannot be used more than once",
-                            Snackbar.LENGTH_SHORT
-                    );
-                    snackBar.setAction("Dismiss", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // Call your action method here
-                            snackBar.dismiss();
-                        }
-                    });
-                    snackBar.show();
-                } else if (Answer1.matches("") || Answer2.matches("")
-                        || Answer3.matches("")) {
-                    snackBar = Snackbar.make(
-                            findViewById(android.R.id.content),
-                            "All questions must be answered",
-                            Snackbar.LENGTH_SHORT
-                    );
-                    snackBar.setAction("Dismiss", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // Call your action method here
-                            snackBar.dismiss();
-                        }
-                    });
-                    snackBar.show();
-                } else {
-                    // Send Email, Username,
-                    // Security Questions and their answers to database
-                    // Create account and put fields into user map
-                    createAccount(Email,Password);
-                }
+            if (Question1.matches("" )
+                    || Question2.matches("" )
+                    || Question3.matches("" )){
+                snackBar = Snackbar.make(
+                        findViewById(android.R.id.content),
+                        "Questions cannot be be empty",
+                        Snackbar.LENGTH_SHORT
+                );
+                snackBar.setAction("Dismiss", v12 -> {
+                    // Call your action method here
+                    snackBar.dismiss();
+                });
+                snackBar.show();
+            } else if (Question1.equalsIgnoreCase(Question2) || Question1.equalsIgnoreCase(Question3)
+                    || Question2.equalsIgnoreCase(Question3)) {
+                snackBar = Snackbar.make(
+                        findViewById(android.R.id.content),
+                        "Questions cannot be used more than once",
+                        Snackbar.LENGTH_SHORT
+                );
+                snackBar.setAction("Dismiss", v1 -> {
+                    // Call your action method here
+                    snackBar.dismiss();
+                });
+                snackBar.show();
+            } else if (Answer1.matches("")) {
+                answer1_value.setError("Answer cannot be empty");
+            } else if (Answer2.matches("")) {
+                answer2_value.setError("Answer cannot be empty");
+            } else if (Answer3.matches("")) {
+                answer3_value.setError("Answer cannot be empty");
+            } else {
+                // Send Email, Username,
+                // Security Questions and their answers to database
+                // Create account and put fields into user map
+                createAccount(Email,Password);
             }
         });
 
@@ -204,6 +185,7 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
     }
 
     private void createAccount(String email, String password) {
+        progressbar.setVisibility(View.VISIBLE);
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
 
@@ -211,55 +193,77 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
+                            progressbar.setVisibility(View.GONE);
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(RegisterSecurityQuestionsActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            progressbar.setVisibility(View.GONE);
                             updateUI(null);
-                        }
-                    }
+                            
+                            try {
+                                throw task.getException();
+                            } catch(FirebaseAuthInvalidCredentialsException e) {
+                                Toast.makeText(RegisterSecurityQuestionsActivity.this,
+                                        "Error: Invalid Email Format",
+                                        Toast.LENGTH_LONG).show();
+                            } catch(FirebaseAuthUserCollisionException e) {
+                                Toast.makeText(RegisterSecurityQuestionsActivity.this,
+                                        "Error: Account already exists",
+                                        Toast.LENGTH_LONG).show();
+                            } catch(Exception e) {
+                                Toast.makeText(RegisterSecurityQuestionsActivity.this,
+                                        "Error: Account creation failed",
+                                        Toast.LENGTH_LONG).show();
+                                Log.e(TAG, e.getMessage());
+                            }
 
-                    private void updateUI(FirebaseUser user) {
-                        if (user != null) {
-                            FirebaseFirestore db = FirebaseFirestore.getInstance();
-                            Map<String,Object> userData = new HashMap<>();
-                            final String uuid = user.getUid();
-                            userData.put("email", Email);
-                            userData.put("username", Username);
-                            userData.put("uuid", uuid);
-                            userData.put("sec_question1", Question1);
-                            userData.put("sec_question2", Question2);
-                            userData.put("sec_question3", Question3);
-                            userData.put("sec_answer1", Answer1);
-                            userData.put("sec_answer2", Answer2);
-                            userData.put("sec_answer3", Answer3);
-                            // Upload user map to database
-                            db.collection("users").document(uuid)
-                                    .set(userData)
-                                    .addOnSuccessListener(aVoid -> Log.d(TAG, "DocumentSnapshot successfully written."))
-                                    .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
-
-                            Toast.makeText(
-                                    getApplicationContext(),
-                                    "Account Creation Successful",
-                                    Toast.LENGTH_SHORT
-                            ).show();
-
-                            Intent i = new Intent(
-                                    getApplicationContext(),
-                                    HomeScreen.class
-                            );
-                            finish();
-                            startActivity(i);
-                        } else {
-                            // Go back to register screen
-                            finish();
                         }
                     }
                 });
+    }
+
+    private void updateUI(FirebaseUser user) {
+        if (user != null) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            Map<String,Object> userData = new HashMap<>();
+            final String uuid = user.getUid();
+            userData.put("email", Email);
+            userData.put("username", Username);
+            userData.put("uuid", uuid);
+            userData.put("sec_question1", Question1);
+            userData.put("sec_question2", Question2);
+            userData.put("sec_question3", Question3);
+            userData.put("sec_answer1", Answer1);
+            userData.put("sec_answer2", Answer2);
+            userData.put("sec_answer3", Answer3);
+            // Upload user map to database
+            db.collection("users").document(uuid)
+                    .set(userData)
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d(TAG, "DocumentSnapshot successfully written.");
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.w(TAG, "Error adding document", e);
+                    });
+
+            Toast.makeText(
+                    getApplicationContext(),
+                    "Account Creation Successful",
+                    Toast.LENGTH_SHORT
+            ).show();
+
+            Intent i = new Intent(
+                    getApplicationContext(),
+                    HomeScreen.class
+            );
+            finish();
+            startActivity(i);
+        } else {
+            // Go back to register screen
+            finish();
+        }
     }
 
     private void reload() { }
