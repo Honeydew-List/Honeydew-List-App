@@ -45,6 +45,7 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
     private String Question1, Question2, Question3;
     private String Answer1, Answer2, Answer3;
     private String Email, Username, Password;
+    private int melons;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -238,6 +239,7 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
             userData.put("sec_answer1", Answer1);
             userData.put("sec_answer2", Answer2);
             userData.put("sec_answer3", Answer3);
+            userData.put("melon_count", melons);
             // Upload user map to database
             db.collection("users").document(uuid)
                     .set(userData)
