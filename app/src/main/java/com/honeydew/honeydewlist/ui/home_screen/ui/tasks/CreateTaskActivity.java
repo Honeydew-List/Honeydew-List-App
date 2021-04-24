@@ -110,7 +110,7 @@ public class CreateTaskActivity extends AppCompatActivity {
     private void addDataToFirestore(String TaskName, String TaskDescription, int TaskReward) {
         // TODO: Remove temp id and add friend picker
         // Temp userid for testing
-        userID = "ABC#0123";
+//        userID = "ABC#0123";
 
         // creating a collection reference
         // for our Firebase Firetore database.
