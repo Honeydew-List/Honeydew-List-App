@@ -54,15 +54,15 @@ public class RewardsFragment extends Fragment {
                     Toast.LENGTH_SHORT
             ).show();
             return true;
-        } else if (itemId == R.id.action_filter) {
-            // navigate to screen to choose which friends to show tasks from
-            Toast.makeText(
-                    getContext(),
-                    "Not yet implemented",
-                    Toast.LENGTH_SHORT
-            ).show();
-            return true;
-        }
+        } // else if (itemId == R.id.action_filter) {
+//            // navigate to screen to choose which friends to show tasks from
+//            Toast.makeText(
+//                    getContext(),
+//                    "Not yet implemented",
+//                    Toast.LENGTH_SHORT
+//            ).show();
+//            return true;
+//        }
         return super.onOptionsItemSelected(item);
     }
 }
