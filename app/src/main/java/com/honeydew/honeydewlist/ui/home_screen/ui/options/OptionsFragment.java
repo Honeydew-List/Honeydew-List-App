@@ -20,16 +20,15 @@ public class OptionsFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        optionsViewModel =
-                new ViewModelProvider(this).get(OptionsViewModel.class);
+        optionsViewModel = new ViewModelProvider(this).get(OptionsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_options, container, false);
         final TextView textView = root.findViewById(R.id.text_options);
-        optionsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+
+
+        optionsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+
+        
+
         return root;
     }
 }
