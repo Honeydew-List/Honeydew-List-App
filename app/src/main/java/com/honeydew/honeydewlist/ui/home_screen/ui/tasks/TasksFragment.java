@@ -109,6 +109,7 @@ public class TasksFragment extends Fragment {
                         Log.i("Firebase", "loadDetailListview: No data found in Database");
                     }
                 }).addOnFailureListener(e -> {
+                    progressBar.setVisibility(View.GONE);
                     // we are displaying a toast message
                     // when we get any error from Firebase.
                     Toast.makeText(requireContext(), "Fail to load data..", Toast.LENGTH_SHORT).show();
