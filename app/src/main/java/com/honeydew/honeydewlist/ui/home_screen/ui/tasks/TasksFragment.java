@@ -64,10 +64,10 @@ public class TasksFragment extends Fragment {
     }
 
     private void loadDetailListview() {
-        // temp for testing
+        // TODO: Remove temp id and add friend picker
+        // Temp userID for testing
         userID = "ABC#0123";
         // user is the selected friend
-        // Temp userID for testing
 
         // after that we are passing our array list to our adapter class.
         TasksLVAdapter adapter = new TasksLVAdapter(requireContext(), dataModalArrayList);

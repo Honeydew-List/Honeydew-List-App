@@ -108,8 +108,8 @@ public class CreateTaskActivity extends AppCompatActivity {
     }
 
     private void addDataToFirestore(String TaskName, String TaskDescription, int TaskReward) {
-        // Temp username for testing
-//        username = "ABC";
+        // TODO: Remove temp id and add friend picker
+        // Temp userid for testing
         userID = "ABC#0123";
 
         // creating a collection reference
