@@ -30,6 +30,10 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -204,9 +208,26 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             progressbar.setVisibility(View.GONE);
-                            Toast.makeText(RegisterSecurityQuestionsActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
                             updateUI(null);
+
+                            if(!task.isSuccessful()) {
+                                try {
+                                    throw task.getException();
+                                } catch(FirebaseAuthInvalidCredentialsException e) {
+                                    Toast.makeText(RegisterSecurityQuestionsActivity.this,
+                                            "Error: Invalid Email Format",
+                                            Toast.LENGTH_LONG).show();
+                                } catch(FirebaseAuthUserCollisionException e) {
+                                    Toast.makeText(RegisterSecurityQuestionsActivity.this,
+                                            "Error: Account already exists",
+                                            Toast.LENGTH_LONG).show();
+                                } catch(Exception e) {
+                                    Toast.makeText(RegisterSecurityQuestionsActivity.this,
+                                            "Error: Account creation failed",
+                                            Toast.LENGTH_LONG).show();
+                                    Log.e(TAG, e.getMessage());
+                                }
+                            }
                         }
                     }
                 });
