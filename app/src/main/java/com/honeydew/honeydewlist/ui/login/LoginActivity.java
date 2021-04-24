@@ -1,21 +1,18 @@
 package com.honeydew.honeydewlist.ui.login;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.honeydew.honeydewlist.ui.home_screen.HomeScreen;
@@ -36,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_login);
 
-        email_value = (EditText) findViewById(R.id.username);
+        email_value = (EditText) findViewById(R.id.login_email);
         password_value = (EditText) findViewById(R.id.password);
         login = (Button) findViewById(R.id.loginButton);
         register = (Button) findViewById(R.id.registerButton);
@@ -76,11 +73,15 @@ public class LoginActivity extends AppCompatActivity {
         // validations for input email and password
         if (TextUtils.isEmpty(email)) {
             email_value.setError("Email cannot be empty");
+            progressbar.setVisibility(View.GONE);
             return;
-        }
-
-        if (TextUtils.isEmpty(password)) {
-            password_value.setError("Password cannot be empty");
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            email_value.setError("Enter a valid email");
+            progressbar.setVisibility(View.GONE);
+            return;
+        } else if (password.length() < 7) {
+            password_value.setError("Password must at least be 8 characters");
+            progressbar.setVisibility(View.GONE);
             return;
         }
 
@@ -95,8 +96,9 @@ public class LoginActivity extends AppCompatActivity {
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithEmail:failure", task.getException());
+                        Log.i(TAG, "signInWithEmail:failure" + task.getException().getMessage());
                         progressbar.setVisibility(View.GONE);
-                        Toast.makeText(LoginActivity.this, "Authentication failed.",
+                        Toast.makeText(LoginActivity.this, "Incorrect Email or Password",
                                 Toast.LENGTH_SHORT).show();
                         updateUI(null);
                     }

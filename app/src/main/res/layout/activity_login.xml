@@ -53,10 +53,10 @@
                 app:layout_constraintTop_toBottomOf="@+id/loginText">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/username"
+                    android:id="@+id/login_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/usernameHint" />
+                    android:hint="@string/emailHint" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout

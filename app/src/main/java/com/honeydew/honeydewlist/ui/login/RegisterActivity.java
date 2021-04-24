@@ -3,7 +3,6 @@ package com.honeydew.honeydewlist.ui.login;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NavUtils;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,19 +11,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-import android.util.Log;
 
 import com.google.android.material.snackbar.Snackbar;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.honeydew.honeydewlist.R;
-import com.google.firebase.auth.AuthResult;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-
-import com.honeydew.honeydewlist.ui.home_screen.HomeScreen;
 
 public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -42,7 +34,7 @@ public class RegisterActivity extends AppCompatActivity {
         Button next;
 
         email_value = (EditText) findViewById(R.id.email);
-        username_value = (EditText) findViewById(R.id.username);
+        username_value = (EditText) findViewById(R.id.login_email);
         password_value = (EditText) findViewById(R.id.password);
         verify_password_value = (EditText) findViewById(R.id.verify_password);
         next = (Button) findViewById(R.id.nextButton);
@@ -72,7 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
                 } else if (VerifyPassword.matches("")){
                     verify_password_value.setError("Password cannot be empty");
                 } else if (Password.length() < 7){
-                    password_value.setError("Password must at least than 8 characters");
+                    password_value.setError("Password must at least be 8 characters");
                 } else if (!Password.matches(VerifyPassword)) {
                     verify_password_value.setError("Passwords do not match");
                 } else {
