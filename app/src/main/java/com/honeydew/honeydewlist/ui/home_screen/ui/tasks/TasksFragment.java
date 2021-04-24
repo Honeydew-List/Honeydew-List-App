@@ -16,8 +16,12 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,6 +30,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.honeydew.honeydewlist.R;
 import com.honeydew.honeydewlist.data.Task;
+import com.honeydew.honeydewlist.ui.home_screen.ui.rewards.RewardsViewModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,13 +38,13 @@ import java.util.List;
 import java.util.Map;
 
 public class TasksFragment extends Fragment {
-
+    private TasksViewModel tasksViewModel;
     ListView tasksLV;
     ArrayList<Task> dataModalArrayList;
     FirebaseFirestore db;
     ProgressBar progressBar;
     private String userID;
-    private int checkedItem = 0;
+    private int checkedItem;
     private ArrayList<String> friendIds;
     ArrayList<String> friends;
 
@@ -47,6 +52,9 @@ public class TasksFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_tasks, container, false);
         setHasOptionsMenu(true);
+        tasksViewModel =
+                new ViewModelProvider(this).get(TasksViewModel.class);
+
         // below line is use to initialize our variables
         tasksLV = root.findViewById(R.id.idLVTasks);
         dataModalArrayList = new ArrayList<>();
@@ -63,20 +71,32 @@ public class TasksFragment extends Fragment {
         // Get current user
         final FirebaseAuth auth = FirebaseAuth.getInstance();
         final FirebaseUser user = auth.getCurrentUser();
+        friendIds = new ArrayList<>();
         if (user != null) {
             userID = user.getUid();
+            friendIds.add(user.getUid());
             // here we are calling a method
             // to load data in our list view.
-            loadDetailListview();
+            tasksViewModel.setCheckedItem(new MutableLiveData<>(0));
+
+            checkedItem = tasksViewModel.getCheckedItem().getValue();
+
+            tasksViewModel.getCheckedItem().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+                @Override
+                public void onChanged(@Nullable Integer i) {
+                    checkedItem = i;
+                    loadDetailListview(i);
+                }
+            });
         }
 
         return root;
     }
 
-    private void loadDetailListview() {
+    private void loadDetailListview(Integer i) {
         // TODO: Remove temp id and add friend picker
         // Temp userID for testing
-        userID = "ABC#0123";
+        userID = friendIds.get(i);
         // user is the selected friend
 
         // after that we are passing our array list to our adapter class.
@@ -148,24 +168,27 @@ public class TasksFragment extends Fragment {
             ).show();
 
             showFriendDialog();
+//            loadDetailListview();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void showFriendDialog() {
-        friendIds = new ArrayList<>();
+        friendIds.clear();
         friends = new ArrayList<>();
 
-        // TODO: Get friends from Firestore
-
-        // Add user to first item
+        // Add current user to first item
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseUser user = auth.getCurrentUser();
         if (user != null) {
             friendIds.add(user.getUid());
             friends.add("Me");
+        } else {
+            return;
         }
+
+        // TODO: Get friends from Firestore
         friendIds.add("GVO4PUFOy4VqvRZXoeGigyVQwg12");
         friendIds.add("ABC#0123");
         friends.add("richardxd");
@@ -189,6 +212,7 @@ public class TasksFragment extends Fragment {
                 // Load friend from index chosen
                 Log.d("friendDialog", "positive button clicked");
                 checkedItem = which;
+                tasksViewModel.setCheckedItem(new MutableLiveData<>(which));
                 dialog.dismiss();
             }
         });
