@@ -250,17 +250,11 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
             // Upload user map to database
             db.collection("users").document(uuid)
                     .set(userData)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d(TAG, "DocumentSnapshot successfully written.");
-                        }
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d(TAG, "DocumentSnapshot successfully written.");
                     })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w(TAG, "Error adding document", e);
-                        }
+                    .addOnFailureListener(e -> {
+                        Log.w(TAG, "Error adding document", e);
                     });
 
             Toast.makeText(
