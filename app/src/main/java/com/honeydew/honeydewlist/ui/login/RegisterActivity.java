@@ -7,6 +7,7 @@ import androidx.core.app.NavUtils;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -61,71 +62,19 @@ public class RegisterActivity extends AppCompatActivity {
                 VerifyPassword = verify_password_value.getText().toString();
 
                 if (Email.matches("")){
-                    snackBar = Snackbar.make(
-                            findViewById(android.R.id.content),
-                            "Email must not be empty",
-                            Snackbar.LENGTH_SHORT
-                    );
-                    snackBar.setAction("Dismiss", v1 -> {
-                        // Call your action method here
-                        snackBar.dismiss();
-                    });
-                    snackBar.show();
+                    email_value.setError("Email cannot be empty");
+                } else if (!Patterns.EMAIL_ADDRESS.matcher(Email).matches()) {
+                    email_value.setError("Enter a valid email");
                 } else if (Username.matches("")){
-                    snackBar = Snackbar.make(
-                            findViewById(android.R.id.content),
-                            "Username must not be empty",
-                            Snackbar.LENGTH_SHORT
-                    );
-                    snackBar.setAction("Dismiss", v12 -> {
-                        // Call your action method here
-                        snackBar.dismiss();
-                    });
-                    snackBar.show();
+                    username_value.setError("Username cannot be empty");
                 } else if (Password.matches("")){
-                    snackBar = Snackbar.make(
-                            findViewById(android.R.id.content),
-                            "Password must not be empty",
-                            Snackbar.LENGTH_SHORT
-                    );
-                    snackBar.setAction("Dismiss", v13 -> {
-                        // Call your action method here
-                        snackBar.dismiss();
-                    });
-                    snackBar.show();
+                    password_value.setError("Password cannot be empty");
                 } else if (VerifyPassword.matches("")){
-                    snackBar = Snackbar.make(
-                            findViewById(android.R.id.content),
-                            "Verify Password must not be empty",
-                            Snackbar.LENGTH_SHORT
-                    );
-                    snackBar.setAction("Dismiss", v14 -> {
-                        // Call your action method here
-                        snackBar.dismiss();
-                    });
-                    snackBar.show();
+                    verify_password_value.setError("Password cannot be empty");
                 } else if (Password.length() < 7){
-                    snackBar = Snackbar.make(
-                            findViewById(android.R.id.content),
-                            "Password must be longer than 7 characters",
-                            Snackbar.LENGTH_SHORT
-                    );
-                    snackBar.setAction("Dismiss", v15 -> {
-                        // Call your action method here
-                        snackBar.dismiss();
-                    });
-                    snackBar.show();
+                    password_value.setError("Password must at least than 8 characters");
                 } else if (!Password.matches(VerifyPassword)) {
-                    snackBar = Snackbar.make(
-                            findViewById(android.R.id.content),
-                            "Passwords Do Not Match",
-                            Snackbar.LENGTH_SHORT
-                    );
-                    snackBar.setAction("Dismiss", v16 -> {
-                        // Call your action method here
-                        snackBar.dismiss();
-                    });
-                    snackBar.show();
+                    verify_password_value.setError("Passwords do not match");
                 } else {
                     Intent downloadIntent = new Intent(
                             getApplicationContext(),

@@ -108,70 +108,52 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
         question3.setAdapter(arrayAdapter_questions);
 
         // Get security questions and answers from user
-        finish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Snackbar snackBar;
+        finish.setOnClickListener(v -> {
+            final Snackbar snackBar;
 
-                Question1 = question1.getText().toString();
-                Question2 = question2.getText().toString();
-                Question3 = question3.getText().toString();
-                Answer1 = answer1_value.getText().toString();
-                Answer2 = answer2_value.getText().toString();
-                Answer3 = answer3_value.getText().toString();
+            Question1 = question1.getText().toString();
+            Question2 = question2.getText().toString();
+            Question3 = question3.getText().toString();
+            Answer1 = answer1_value.getText().toString();
+            Answer2 = answer2_value.getText().toString();
+            Answer3 = answer3_value.getText().toString();
 
-                if (Question1.matches("" )
-                        || Question2.matches("" )
-                        || Question3.matches("" )){
-                    snackBar = Snackbar.make(
-                            findViewById(android.R.id.content),
-                            "Question cannot be be empty",
-                            Snackbar.LENGTH_SHORT
-                    );
-                    snackBar.setAction("Dismiss", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // Call your action method here
-                            snackBar.dismiss();
-                        }
-                    });
-                    snackBar.show();
-                } else if (Question1.equalsIgnoreCase(Question2) || Question1.equalsIgnoreCase(Question3)
-                        || Question2.equalsIgnoreCase(Question3)) {
-                    snackBar = Snackbar.make(
-                            findViewById(android.R.id.content),
-                            "Questions cannot be used more than once",
-                            Snackbar.LENGTH_SHORT
-                    );
-                    snackBar.setAction("Dismiss", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // Call your action method here
-                            snackBar.dismiss();
-                        }
-                    });
-                    snackBar.show();
-                } else if (Answer1.matches("") || Answer2.matches("")
-                        || Answer3.matches("")) {
-                    snackBar = Snackbar.make(
-                            findViewById(android.R.id.content),
-                            "All questions must be answered",
-                            Snackbar.LENGTH_SHORT
-                    );
-                    snackBar.setAction("Dismiss", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // Call your action method here
-                            snackBar.dismiss();
-                        }
-                    });
-                    snackBar.show();
-                } else {
-                    // Send Email, Username,
-                    // Security Questions and their answers to database
-                    // Create account and put fields into user map
-                    createAccount(Email,Password);
-                }
+            if (Question1.matches("" )
+                    || Question2.matches("" )
+                    || Question3.matches("" )){
+                snackBar = Snackbar.make(
+                        findViewById(android.R.id.content),
+                        "Questions cannot be be empty",
+                        Snackbar.LENGTH_SHORT
+                );
+                snackBar.setAction("Dismiss", v12 -> {
+                    // Call your action method here
+                    snackBar.dismiss();
+                });
+                snackBar.show();
+            } else if (Question1.equalsIgnoreCase(Question2) || Question1.equalsIgnoreCase(Question3)
+                    || Question2.equalsIgnoreCase(Question3)) {
+                snackBar = Snackbar.make(
+                        findViewById(android.R.id.content),
+                        "Questions cannot be used more than once",
+                        Snackbar.LENGTH_SHORT
+                );
+                snackBar.setAction("Dismiss", v1 -> {
+                    // Call your action method here
+                    snackBar.dismiss();
+                });
+                snackBar.show();
+            } else if (Answer1.matches("")) {
+                answer1_value.setError("Answer cannot be empty");
+            } else if (Answer2.matches("")) {
+                answer2_value.setError("Answer cannot be empty");
+            } else if (Answer3.matches("")) {
+                answer3_value.setError("Answer cannot be empty");
+            } else {
+                // Send Email, Username,
+                // Security Questions and their answers to database
+                // Create account and put fields into user map
+                createAccount(Email,Password);
             }
         });
 
