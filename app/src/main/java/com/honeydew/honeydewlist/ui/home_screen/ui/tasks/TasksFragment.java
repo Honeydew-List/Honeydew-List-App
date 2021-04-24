@@ -43,6 +43,10 @@ public class TasksFragment extends Fragment {
         dataModalArrayList = new ArrayList<>();
         progressBar = root.findViewById(R.id.progressBar);
 
+        LayoutInflater layoutInflater = getLayoutInflater();
+        ViewGroup footer = (ViewGroup) layoutInflater.inflate(R.layout.lv_footer, tasksLV, false);
+        tasksLV.addFooterView(footer);
+
         // initializing our variable for firebase
         // firestore and getting its instance.
         db = FirebaseFirestore.getInstance();
