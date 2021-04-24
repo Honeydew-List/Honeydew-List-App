@@ -88,7 +88,6 @@ public class TasksFragment extends Fragment {
     private void getFriends() {
         db.collection("users/" + userID + "/friends").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    progressBar.setVisibility(View.GONE);
                     // after getting the data we are calling on success method
                     // and inside this method we are checking if the received
                     // query snapshot is empty or not.
@@ -109,7 +108,6 @@ public class TasksFragment extends Fragment {
                         Log.i("Firebase", "getFriends: No data found in Database");
                     }
                 }).addOnFailureListener(e -> {
-            progressBar.setVisibility(View.GONE);
             // we are displaying a toast message
             // when we get any error from Firebase.
             Toast.makeText(requireContext(), "Fail to load data..", Toast.LENGTH_SHORT).show();
