@@ -23,8 +23,21 @@ public class TaskDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        String taskName, taskDescription, taskOwner, taskOwnerUUID, taskID, melonReward;
+
         Intent i = getIntent();
-        String taskName = i.getStringExtra("name");
+        taskName = i.getStringExtra("name");
+        taskDescription = i.getStringExtra("description");
+        taskOwner = i.getStringExtra("owner");
+        taskOwnerUUID = i.getStringExtra("ownerUUID");
+        taskID = i.getStringExtra("itemID");
+        melonReward = i.getStringExtra("points");
+
+        // Check status against database when "Verify Completion" button is pressed
+        Boolean completionStatus = i.getBooleanExtra("completionStatus", false);
+        Boolean verifiedStatus = i.getBooleanExtra("verifiedStatus", false);
+
+
         CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         toolBarLayout.setTitle(taskName == null ? getTitle() : taskName);
 
