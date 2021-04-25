@@ -66,7 +66,7 @@ public class TasksFragment extends Fragment {
     private void loadDetailListview() {
         // TODO: Remove temp id and add friend picker
         // Temp userID for testing
-        userID = "ABC#0123";
+        String userID = "ABC#0123";
         // user is the selected friend
 
         // after that we are passing our array list to our adapter class.
