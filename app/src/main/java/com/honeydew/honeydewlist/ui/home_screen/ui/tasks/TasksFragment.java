@@ -1,7 +1,6 @@
 package com.honeydew.honeydewlist.ui.home_screen.ui.tasks;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,19 +16,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.honeydew.honeydewlist.R;
 import com.honeydew.honeydewlist.data.Task;
 import com.honeydew.honeydewlist.ui.home_screen.ui.tasks.inteface.GetFriendCallback;
-import com.honeydew.honeydewlist.ui.home_screen.ui.tasks.inteface.GetTasksCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,12 +34,10 @@ public class TasksFragment extends Fragment {
     ListView tasksLV;
     ArrayList<Task> dataModalArrayList;
     TasksLVAdapter adapter;
-    CollectionReference tasksRef, friendsRef;
+    CollectionReference friendsRef;
     FirebaseFirestore db;
     ProgressBar progressBar;
-    private String userID;
-    private ArrayList<String> friendIds;
-    ArrayList<String> friends;
+    private ArrayList<String> foundFriendIds;
     FirebaseAuth auth;
     FirebaseUser user;
 
@@ -69,11 +62,10 @@ public class TasksFragment extends Fragment {
         // Get current user
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
-        friendIds = new ArrayList<>();
+        foundFriendIds = new ArrayList<>();
         if (user != null) {
-            userID = user.getUid();
-            friendIds.add(user.getUid());
-            tasksRef = db.collection("users/" + userID + "/tasks");
+            String userID = user.getUid();
+            foundFriendIds.add(user.getUid());
             friendsRef = db.collection("users/" + userID + "/friends");
 
 
@@ -92,29 +84,14 @@ public class TasksFragment extends Fragment {
             // Call for each friend
 
 //            new MyAsyncTask().execute();
-            getFriends();
-
-            // Load the listview
-            for (int i = 0; i < friendIds.size(); i++) {
-                loadDetailListview(i);
-            }
-
-//            readFriendData(new GetFriendCallback() {
-//                @Override
-//                public void onCallback(List<String> friendsList) {
-//
-//                     //Do what you need to do with your list
-//                     for (int i = 0; i < friendsList.size(); i++) {
-//                         readTaskData(new GetTasksCallback() {
-//                             @Override
-//                             public void onCallback(List<Task> taskList) {
-//                                 dataModalArrayList.addAll(taskList);
-//                             }
-//                         });
-//                     }
-//
-//                }
-//            });
+//            getFriends();
+            readFriendData(friendIds -> {
+                foundFriendIds.addAll(friendIds);
+                // Load the listview
+                for (int i = 0; i < foundFriendIds.size(); i++) {
+                    loadDetailListview(foundFriendIds.get(i));
+                }
+            });
 
 
         }
@@ -122,62 +99,11 @@ public class TasksFragment extends Fragment {
         return root;
     }
 
-//    private class MyAsyncTask extends AsyncTask<Void, Void, Void>
-//    {
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//            getFriends();
-//            return null;
-//        }
-//        @Override
-//        protected void onPostExecute(Void result) {
-//            // Load the listview
-//            for (int i = 0; i < friendIds.size(); i++) {
-//                loadDetailListview(i);
-//            }
-//        }
-//    }
-
-    private void getFriends() {
-        com.google.android.gms.tasks.Task<QuerySnapshot> task = db.collection("users/" + userID + "/friends").get();
-        Tasks.whenAll(task
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    // after getting the data we are calling on success method
-                    // and inside this method we are checking if the received
-                    // query snapshot is empty or not.
-                    if (!queryDocumentSnapshots.isEmpty()) {
-                        // if the snapshot is not empty we are hiding
-                        // our progress bar and adding our data in a list.
-                        List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
-                        for (DocumentSnapshot d : list) {
-                            // after getting this list we are passing
-                            // that list to our object class.
-                            friendIds.add(d.getId());
-
-                            Log.i("friendID", "getFriends: " + d.getId());
-                        }
-                    } else {
-                        // if the snapshot is empty we are displaying a toast message.
-                        // Toast.makeText(requireContext(), "No data found in Database", Toast.LENGTH_SHORT).show();
-                        Log.i("Firebase", "getFriends: No data found in Database");
-                    }
-                }).addOnFailureListener(e -> {
-            // we are displaying a toast message
-            // when we get any error from Firebase.
-            Toast.makeText(requireContext(), "Fail to load data..", Toast.LENGTH_SHORT).show();
-            Log.d("Firestore Error", "getFriends: " + e.getMessage());
-        }));
-    }
-
-    private void loadDetailListview(int i) {
-        // TODO: Remove temp id and add friend picker
-        // Temp userID for testing
-        userID = friendIds.get(i);
-        // user is the selected friend
+    private void loadDetailListview(String userID) {
 
         // below line is use to get data from Firebase
         // firestore using collection in android.
-        tasksRef.get()
+        db.collection("users/" + userID + "/tasks").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     progressBar.setVisibility(View.GONE);
                     // after getting the data we are calling on success method
@@ -202,7 +128,7 @@ public class TasksFragment extends Fragment {
                         adapter.notifyDataSetChanged();
                     } else {
                         // if the snapshot is empty we are displaying a toast message.
-                        // Toast.makeText(requireContext(), "No data found in Database", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), "No data found in Database for " + userID, Toast.LENGTH_SHORT).show();
                         Log.i("Firebase", "loadDetailListview: No data found in Database");
                     }
                 }).addOnFailureListener(e -> {
@@ -232,12 +158,6 @@ public class TasksFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -246,38 +166,15 @@ public class TasksFragment extends Fragment {
         }
     }
 
-    public void readTaskData(GetTasksCallback myCallback) {
-        tasksRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull com.google.android.gms.tasks.Task<QuerySnapshot> task) {
-                progressBar.setVisibility(View.GONE);
-                if (task.isSuccessful()) {
-                    List<Task> taskList = new ArrayList<>();
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Task dataModel = document.toObject(Task.class);
-                        assert dataModel != null;
-                        dataModel.setItemID(document.getId());
-                        Log.i("dataModel ID", "loadDetailListview: " + dataModel.getItemID());
-                        taskList.add(dataModel);
-                    }
-                    myCallback.onCallback(taskList);
-                }
-            }
-        });
-    }
-
     public void readFriendData(GetFriendCallback myCallback) {
-        friendsRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull com.google.android.gms.tasks.Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    List<String> friendList = new ArrayList<>();
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        String userID = document.getId();
-                        friendList.add(userID);
-                    }
-                    myCallback.onCallback(friendList);
+        friendsRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                List<String> friendList = new ArrayList<>();
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    String userID = document.getId().trim();
+                    friendList.add(userID);
                 }
+                myCallback.onCallback(friendList);
             }
         });
     }
