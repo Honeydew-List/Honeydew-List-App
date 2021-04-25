@@ -65,22 +65,22 @@ public class RewardsLVAdapter extends ArrayAdapter<Reward> {
         points.setText(MessageFormat.format("{0}", dataModal.getPoints() + "🍈")); //"Melon Cost: " +
         owner.setText(String.format("%s %s",
                 getContext().getResources().getString(R.string.ownerLabel), dataModal.getOwner()));
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        card.setChecked(dataModal.getRedeemed());
 
         // below line is use to add item click listener
         // for our item of list view.
-        card.setOnClickListener(v -> {
-            // Commented out because we are using a check box instead
-            // card.setChecked(!card.isChecked());
-
-            // Use the itemID to load the task details from firestore
-            Log.i("RewardsLVAdapter", "getView: " + dataModal.getName());
-            Intent i = new Intent(v.getContext(), CreateRewardActivity.class);
-            i.putExtra("owner", dataModal.getOwner());
-            i.putExtra("ownerUUID", dataModal.getUUID());
-            i.putExtra("itemID", dataModal.getItemID());
-            getContext().startActivity(i);
+        card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Use the itemID to load the task details from firestore
+                Log.i("RewardsLVAdapter", "getView: " + dataModal.getName());
+                Intent i = new Intent(v.getContext(), RewardDetailActivity.class);
+                i.putExtra("owner", dataModal.getOwner());
+                i.putExtra("ownerUUID", dataModal.getUUID());
+                i.putExtra("itemID", dataModal.getItemID());
+                i.putExtra("name", dataModal.getName());
+                getContext().startActivity(i);
+            }
         });
         return listitemView;
     }

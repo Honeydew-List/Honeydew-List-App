@@ -43,6 +43,6 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_create_reward_scrolling" />
+    <include layout="@layout/content_create_task_scrolling" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

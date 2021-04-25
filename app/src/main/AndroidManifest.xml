@@ -13,6 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HoneydewList">
         <activity
+            android:name=".ui.home_screen.ui.rewards.RewardDetailActivity"
+            android:label="@string/title_activity_reward_detail"
+            android:theme="@style/Theme.HoneydewList.NoActionBar"></activity>
+        <activity
             android:name=".ui.home_screen.ui.tasks.TaskDetailActivity"
             android:label="@string/title_activity_task_detail"
             android:theme="@style/Theme.HoneydewList.NoActionBar" />

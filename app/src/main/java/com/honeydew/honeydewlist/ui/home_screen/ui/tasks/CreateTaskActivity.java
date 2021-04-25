@@ -98,12 +98,12 @@ public class CreateTaskActivity extends AppCompatActivity {
                 try {
                     TaskRewardInt = Integer.parseInt(TaskReward);
                     addDataToFirestore(TaskName, TaskDescription, TaskRewardInt);
+                    finish();
                 } catch (NumberFormatException e) {
                     reward_value_edt.setError("Please enter only numbers for the reward");
                 }
             }
 
-            finish();
         });
     }
 
@@ -144,5 +144,13 @@ public class CreateTaskActivity extends AppCompatActivity {
                     "Fail to add course \n" + e,
                     Toast.LENGTH_SHORT).show();
         });
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (db != null) {
+            db.terminate();
+        }
     }
 }

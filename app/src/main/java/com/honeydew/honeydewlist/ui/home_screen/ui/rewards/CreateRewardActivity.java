@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.honeydew.honeydewlist.R;
+import com.honeydew.honeydewlist.data.Reward;
 import com.honeydew.honeydewlist.data.Task;
 
 import java.util.HashMap;
@@ -64,34 +65,34 @@ public class CreateRewardActivity extends AppCompatActivity {
 
 
         fab.setOnClickListener(view -> {
-            String TaskName, TaskDescription, TaskReward;
+            String RewardName, RewardDescription, MelonCost;
 
-            TaskName = name_value_edt.getText().toString();
-            TaskDescription = description_value_edt.getText().toString();
-            TaskReward = reward_value_edt.getText().toString();
+            RewardName = name_value_edt.getText().toString();
+            RewardDescription = description_value_edt.getText().toString();
+            MelonCost = reward_value_edt.getText().toString();
 
-            int TaskRewardInt;
+            int MelonCostInt;
 
             // validating the text fields if empty or not.
-            if (TextUtils.isEmpty(TaskName)) {
-                name_value_edt.setError("Please enter Task Name");
-            } else if (TextUtils.isEmpty(TaskReward)) {
-                reward_value_edt.setError("Please enter Task Reward");
+            if (TextUtils.isEmpty(RewardName)) {
+                name_value_edt.setError("Please enter Reward Name");
+            } else if (TextUtils.isEmpty(MelonCost)) {
+                reward_value_edt.setError("Please enter Melon cost");
             } else {
                 // calling method to add data to Firebase Firestore.
                 try {
-                    TaskRewardInt = Integer.parseInt(TaskReward);
-                    addDataToFirestore(TaskName, TaskDescription, TaskRewardInt);
+                    MelonCostInt = Integer.parseInt(MelonCost);
+                    addDataToFirestore(RewardName, RewardDescription, MelonCostInt);
+                    finish();
                 } catch (NumberFormatException e) {
                     reward_value_edt.setError("Please enter only numbers for the reward");
                 }
             }
 
-            finish();
         });
     }
 
-    private void addDataToFirestore(String TaskName, String TaskDescription, int TaskReward) {
+    private void addDataToFirestore(String RewardName, String RewardDescription, int MelonCost) {
 
         // creating a collection reference
         // for our Firebase Firetore database.
@@ -100,15 +101,15 @@ public class CreateRewardActivity extends AppCompatActivity {
 
 
         // adding our data to our courses object class.
-        Task task = new Task(TaskName,
-                TaskDescription,
+        Reward reward = new Reward(RewardName,
+                RewardDescription,
                 username,
                 userID,
-                (long) TaskReward,
+                (long) MelonCost,
                 false, "");
 
         // below method is use to add data to Firebase Firestore.
-        dbTasks.add(task).addOnSuccessListener(documentReference -> {
+        dbTasks.add(reward).addOnSuccessListener(documentReference -> {
             // after the data addition is successful
             // we are displaying a success toast message.
             Map<String, Object> itemID = new HashMap<String, Object>() {{
@@ -125,5 +126,13 @@ public class CreateRewardActivity extends AppCompatActivity {
                     "Fail to add course \n" + e,
                     Toast.LENGTH_SHORT).show();
         });
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (db != null) {
+            db.terminate();
+        }
     }
 }

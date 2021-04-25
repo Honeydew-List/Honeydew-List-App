@@ -165,6 +165,9 @@ public class RewardsFragment extends Fragment {
         int itemId = item.getItemId();
         if (itemId == R.id.action_add_item) {
             // navigate to add task screen
+            if (db != null) {
+                db.terminate();
+            }
             Intent i = new Intent(getContext(), CreateRewardActivity.class);
             startActivity(i);
             return true;
