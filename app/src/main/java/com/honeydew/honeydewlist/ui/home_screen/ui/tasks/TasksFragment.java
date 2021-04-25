@@ -1,6 +1,7 @@
 package com.honeydew.honeydewlist.ui.home_screen.ui.tasks;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +32,7 @@ import java.util.List;
 
 public class TasksFragment extends Fragment {
 
+    private static final String TAG = "DB ERROR";
     private ListView tasksLV;
     private ArrayList<Task> dataModalArrayList;
     private TasksLVAdapter adapter;
@@ -74,7 +76,7 @@ public class TasksFragment extends Fragment {
 
 
             // after that we are passing our array list to our adapter class.
-            adapter = new TasksLVAdapter(requireContext(), dataModalArrayList);
+            adapter = new TasksLVAdapter(requireContext(), dataModalArrayList, db);
 
             // after passing this array list to our adapter
             // class we are setting our adapter to our list view.
@@ -91,7 +93,16 @@ public class TasksFragment extends Fragment {
                 foundFriendIds.addAll(friendIds);
                 // Load the listview
                 for (int i = 0; i < foundFriendIds.size(); i++) {
-                    loadDetailListview(foundFriendIds.get(i));
+                    try {
+                        loadDetailListview(foundFriendIds.get(i));
+                    } catch (SQLiteDatabaseLockedException e) {
+                        Log.e(TAG, "onCreateView: Database already in use", e);
+                    } catch (RuntimeException e) {
+                        Log.e(TAG, "onCreate: RuntimeException", e);
+                    } catch (Exception e) {
+                        Log.e(TAG, "onCreateView: Something happened", e);
+                    }
+
                 }
             });
 

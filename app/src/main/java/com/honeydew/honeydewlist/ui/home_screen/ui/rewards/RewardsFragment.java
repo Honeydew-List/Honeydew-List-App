@@ -1,6 +1,7 @@
 package com.honeydew.honeydewlist.ui.home_screen.ui.rewards;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -95,7 +96,13 @@ public class RewardsFragment extends Fragment {
                 foundFriendIds.addAll(friendIds);
                 // Load the listview
                 for (int i = 0; i < foundFriendIds.size(); i++) {
-                    loadDetailListview(foundFriendIds.get(i));
+                    try {
+                        loadDetailListview(foundFriendIds.get(i));
+                    } catch (SQLiteDatabaseLockedException e) {
+                        Log.e("DB ERROR", "onCreateView: Database already in use", e);
+                    } catch (Exception e) {
+                        Log.e("DB ERROR", "onCreateView: Something happened", e);
+                    }
                 }
             });
         }

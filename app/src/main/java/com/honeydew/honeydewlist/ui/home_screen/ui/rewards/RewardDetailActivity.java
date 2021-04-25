@@ -1,6 +1,7 @@
 package com.honeydew.honeydewlist.ui.home_screen.ui.rewards;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.os.Bundle;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -10,6 +11,7 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.View;
 
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -19,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RewardDetailActivity extends AppCompatActivity {
+    private static final String TAG = "DB ERROR";
     FirebaseFirestore db;
 
     @Override
@@ -41,7 +44,15 @@ public class RewardDetailActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // updateFirestore();
+                try {
+                    // updateFirestore();
+                } catch (SQLiteDatabaseLockedException e) {
+                    Log.e(TAG, "onCreateView: Database already in use", e);
+                } catch (RuntimeException e) {
+                    Log.e(TAG, "onCreate: RuntimeException", e);
+                } catch (Exception e) {
+                    Log.e(TAG, "onCreateView: Something happened", e);
+                }
                 finish();
             }
 
