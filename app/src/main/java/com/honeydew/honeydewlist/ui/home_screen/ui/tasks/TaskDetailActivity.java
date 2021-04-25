@@ -67,7 +67,7 @@ public class TaskDetailActivity extends AppCompatActivity {
 
         // Set text views to data from intent extras
         reward_tv.setText(MessageFormat.format("{0}🍈", melonReward));
-        owner_tv.setText(String.format("%s", taskOwner));
-        description_tv.setText(String.format("Description:\n%s", taskDescription));
+        owner_tv.setText(taskOwner);
+        description_tv.setText(taskDescription);
     }
 }

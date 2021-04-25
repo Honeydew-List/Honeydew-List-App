@@ -161,4 +161,6 @@
     <string name="title_activity_create_reward">Create Reward</string>
     <string name="cost">Melon Cost</string>
     <string name="title_activity_reward_detail">Reward Details</string>
+    <string name="owner">Owner</string>
+    <string name="status">Status</string>
 </resources>
