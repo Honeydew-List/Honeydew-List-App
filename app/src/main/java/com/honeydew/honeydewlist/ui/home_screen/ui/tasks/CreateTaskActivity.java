@@ -124,7 +124,9 @@ public class CreateTaskActivity extends AppCompatActivity {
                 username,
                 userID,
                 (long) TaskReward,
-                false, "");
+                false,
+                false,
+                "temp");
 
         // below method is use to add data to Firebase Firestore.
         dbTasks.add(task).addOnSuccessListener(documentReference -> {

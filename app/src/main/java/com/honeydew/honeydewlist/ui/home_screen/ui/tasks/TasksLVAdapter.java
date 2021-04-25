@@ -103,6 +103,11 @@ public class TasksLVAdapter extends ArrayAdapter<Task> {
             i.putExtra("owner", dataModal.getOwner());
             i.putExtra("ownerUUID", dataModal.getUUID());
             i.putExtra("itemID", dataModal.getItemID());
+            i.putExtra("name", dataModal.getName());
+            i.putExtra("description", dataModal.getDescription());
+            i.putExtra("points", dataModal.getPoints());
+            i.putExtra("completionStatus", dataModal.getCompletionStatus());
+            i.putExtra("verifiedStatus", dataModal.getVerifiedStatus());
             getContext().startActivity(i);
         });
         return listitemView;
