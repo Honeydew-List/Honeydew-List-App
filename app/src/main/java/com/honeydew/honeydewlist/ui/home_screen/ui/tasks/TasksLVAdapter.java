@@ -71,8 +71,10 @@ public class TasksLVAdapter extends ArrayAdapter<Task> {
         points.setText(MessageFormat.format("{0}", "Reward: " + dataModal.getPoints() + "🍈"));
         owner.setText(String.format("%s %s",
                 getContext().getResources().getString(R.string.ownerLabel), dataModal.getOwner()));
-
         completionStatus.setChecked(dataModal.getCompletionStatus());
+        // Only mark as verified if it is completed
+        if (dataModal.getCompletionStatus())
+            card.setChecked(dataModal.getVerifiedStatus());
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
