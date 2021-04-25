@@ -158,4 +158,9 @@
     <string name="log_out_home">Log Out</string>
     <string name="melonText">%s &#127816;</string>
     <string name="menuUser">%s</string>
+    <string name="redeem">Redeem</string>
+    <string name="title_activity_create_reward">Create Reward</string>
+    <string name="cost">Melon Cost</string>
+    <string name="title_activity_reward_detail">Reward Details</string>
+
 </resources>

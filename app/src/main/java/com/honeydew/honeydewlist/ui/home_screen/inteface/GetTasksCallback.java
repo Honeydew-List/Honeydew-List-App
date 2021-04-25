@@ -1,4 +1,4 @@
-package com.honeydew.honeydewlist.ui.home_screen.ui.tasks.inteface;
+package com.honeydew.honeydewlist.ui.home_screen.inteface;
 
 import com.honeydew.honeydewlist.data.Task;
 
