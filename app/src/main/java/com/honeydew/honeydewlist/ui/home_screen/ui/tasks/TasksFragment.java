@@ -18,10 +18,13 @@ import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.honeydew.honeydewlist.R;
 import com.honeydew.honeydewlist.data.Task;
+import com.honeydew.honeydewlist.ui.home_screen.ui.tasks.inteface.GetFriendCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,14 +33,19 @@ public class TasksFragment extends Fragment {
 
     ListView tasksLV;
     ArrayList<Task> dataModalArrayList;
+    TasksLVAdapter adapter;
+    CollectionReference friendsRef;
     FirebaseFirestore db;
     ProgressBar progressBar;
-    private String userID;
+    private ArrayList<String> foundFriendIds;
+    FirebaseAuth auth;
+    FirebaseUser user;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_tasks, container, false);
         setHasOptionsMenu(true);
+
         // below line is use to initialize our variables
         tasksLV = root.findViewById(R.id.idLVTasks);
         dataModalArrayList = new ArrayList<>();
@@ -52,29 +60,46 @@ public class TasksFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
 
         // Get current user
-        final FirebaseAuth auth = FirebaseAuth.getInstance();
-        final FirebaseUser user = auth.getCurrentUser();
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        foundFriendIds = new ArrayList<>();
         if (user != null) {
-            userID = user.getUid();
+            String userID = user.getUid();
+            foundFriendIds.add(user.getUid());
+            friendsRef = db.collection("users/" + userID + "/friends");
+
+
+
+
+            // after that we are passing our array list to our adapter class.
+            adapter = new TasksLVAdapter(requireContext(), dataModalArrayList);
+
+            // after passing this array list to our adapter
+            // class we are setting our adapter to our list view.
+            tasksLV.setAdapter(adapter);
+
+
             // here we are calling a method
             // to load data in our list view.
-            loadDetailListview();
+            // Call for each friend
+
+//            new MyAsyncTask().execute();
+//            getFriends();
+            readFriendData(friendIds -> {
+                foundFriendIds.addAll(friendIds);
+                // Load the listview
+                for (int i = 0; i < foundFriendIds.size(); i++) {
+                    loadDetailListview(foundFriendIds.get(i));
+                }
+            });
+
+
         }
+
         return root;
     }
 
-    private void loadDetailListview() {
-        // TODO: Remove temp id and add friend picker
-        // Temp userID for testing
-        String userID = "ABC#0123";
-        // user is the selected friend
-
-        // after that we are passing our array list to our adapter class.
-        TasksLVAdapter adapter = new TasksLVAdapter(requireContext(), dataModalArrayList);
-
-        // after passing this array list to our adapter
-        // class we are setting our adapter to our list view.
-        tasksLV.setAdapter(adapter);
+    private void loadDetailListview(String userID) {
 
         // below line is use to get data from Firebase
         // firestore using collection in android.
@@ -103,7 +128,7 @@ public class TasksFragment extends Fragment {
                         adapter.notifyDataSetChanged();
                     } else {
                         // if the snapshot is empty we are displaying a toast message.
-                        Toast.makeText(requireContext(), "No data found in Database", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), "No data found in Database for " + userID, Toast.LENGTH_SHORT).show();
                         Log.i("Firebase", "loadDetailListview: No data found in Database");
                     }
                 }).addOnFailureListener(e -> {
@@ -129,21 +154,8 @@ public class TasksFragment extends Fragment {
             startActivity(i);
 
             return true;
-        } else if (itemId == R.id.action_filter) {
-            // navigate to screen to choose which friends to show tasks from
-            Toast.makeText(
-                    getContext(),
-                    "Not yet implemented",
-                    Toast.LENGTH_SHORT
-            ).show();
-            return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
     }
 
     @Override
@@ -152,5 +164,18 @@ public class TasksFragment extends Fragment {
         if (db != null) {
             db.terminate();
         }
+    }
+
+    public void readFriendData(GetFriendCallback myCallback) {
+        friendsRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                List<String> friendList = new ArrayList<>();
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    String userID = document.getId().trim();
+                    friendList.add(userID);
+                }
+                myCallback.onCallback(friendList);
+            }
+        });
     }
 }
