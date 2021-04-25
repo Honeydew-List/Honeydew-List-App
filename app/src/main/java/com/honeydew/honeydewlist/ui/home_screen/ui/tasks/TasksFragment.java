@@ -31,15 +31,15 @@ import java.util.List;
 
 public class TasksFragment extends Fragment {
 
-    ListView tasksLV;
-    ArrayList<Task> dataModalArrayList;
-    TasksLVAdapter adapter;
-    CollectionReference friendsRef;
-    FirebaseFirestore db;
-    ProgressBar progressBar;
+    private ListView tasksLV;
+    private ArrayList<Task> dataModalArrayList;
+    private TasksLVAdapter adapter;
+    private CollectionReference friendsRef;
+    private FirebaseFirestore db;
+    private ProgressBar progressBar;
     private ArrayList<String> foundFriendIds;
-    FirebaseAuth auth;
-    FirebaseUser user;
+    private FirebaseAuth auth;
+    private FirebaseUser user;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -159,8 +159,8 @@ public class TasksFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onStop() {
+        super.onStop();
         if (db != null) {
             db.terminate();
         }
