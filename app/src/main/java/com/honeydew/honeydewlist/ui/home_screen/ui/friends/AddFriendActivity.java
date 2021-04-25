@@ -35,6 +35,8 @@ public class AddFriendActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private String userID;
     private String username;
+    FirebaseAuth auth = FirebaseAuth.getInstance();
+    FirebaseUser user = auth.getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +60,6 @@ public class AddFriendActivity extends AppCompatActivity {
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
 
-        final FirebaseAuth auth = FirebaseAuth.getInstance();
-        final FirebaseUser user = auth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
         if (user != null) {
             userID = user.getUid();
@@ -100,7 +100,7 @@ public class AddFriendActivity extends AppCompatActivity {
 
     private void addDatatoFirestore(String friendName, String friendID){
 
-        CollectionReference dbFriends = db.collection(userID);
+        CollectionReference dbFriends = db.collection("users/" + userID + "/friends");
 
         Friend friend = new Friend(friendName, friendID);
 
