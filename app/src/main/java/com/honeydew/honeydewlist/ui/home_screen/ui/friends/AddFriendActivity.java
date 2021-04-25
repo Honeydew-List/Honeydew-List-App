@@ -100,7 +100,7 @@ public class AddFriendActivity extends AppCompatActivity {
 
     private void addDatatoFirestore(String friendName, String friendID){
 
-        CollectionReference dbFriends = db.collection("users/" + userID);
+        CollectionReference dbFriends = db.collection(userID);
 
         Friend friend = new Friend(friendName, friendID);
 

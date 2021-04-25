@@ -72,7 +72,7 @@ public class FriendsFragment extends Fragment {
 
         friendsLV.setAdapter(adapter);
 
-        db.collection("users/" + userID).get()
+        db.collection(userID).get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (!queryDocumentSnapshots.isEmpty()) {
                         // if the snapshot is not empty we are hiding
