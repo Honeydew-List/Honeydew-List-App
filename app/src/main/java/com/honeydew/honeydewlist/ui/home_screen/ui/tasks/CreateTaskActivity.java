@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -101,6 +102,10 @@ public class CreateTaskActivity extends AppCompatActivity {
                     finish();
                 } catch (NumberFormatException e) {
                     reward_value_edt.setError("Please enter only numbers for the reward");
+                } catch (RuntimeException e) {
+                    Log.e("DB ERROR", "onCreate: RuntimeException", e);
+                } catch (Exception e) {
+                    Log.e("DB ERROR", "onCreate: Something happened", e);
                 }
             }
 
