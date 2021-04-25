@@ -61,7 +61,7 @@ public class TasksLVAdapter extends ArrayAdapter<Task> {
         TextView description = listitemView.findViewById(R.id.list_item_description);
         TextView points = listitemView.findViewById(R.id.list_item_melon_count);
         TextView owner = listitemView.findViewById(R.id.list_item_owner);
-        CheckBox completionStatus = listitemView.findViewById(R.id.list_item_check_box);
+//        CheckBox completionStatus = listitemView.findViewById(R.id.list_item_check_box);
         MaterialCardView card = listitemView.findViewById(R.id.card_view);
 
 
@@ -77,39 +77,39 @@ public class TasksLVAdapter extends ArrayAdapter<Task> {
         points.setText(MessageFormat.format("Reward: {0}🍈", dataModal.getPoints()));
         owner.setText(String.format("%s %s",
                 getContext().getResources().getString(R.string.ownerLabel), dataModal.getOwner()));
-        completionStatus.setChecked(dataModal.getCompletionStatus());
+//        completionStatus.setChecked(dataModal.getCompletionStatus());
         // Only mark as verified if it is completed
         if (dataModal.getCompletionStatus())
             card.setChecked(dataModal.getVerifiedStatus());
 
-        completionStatus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    updateFirestore(v);
-                } catch (IllegalStateException e) {
-                    Log.w(TAG, "onClick: db is terminated, reinitializing now", e);
-                    db = FirebaseFirestore.getInstance();
-                    updateFirestore(v);
-                } catch (SQLiteDatabaseLockedException e) {
-                    Log.e(TAG, "onCreateView: Database already in use", e);
-                } catch (RuntimeException e) {
-                    Log.e(TAG, "onCreate: RuntimeException", e);
-                } catch (Exception e) {
-                    Log.e(TAG, "onCreateView: Something happened", e);
-                }
-
-
-            }
-            private void updateFirestore(View v){
-                Map<String, Object> stringObjectMap = new HashMap<String, Object>() {{
-                    put("completionStatus", completionStatus.isChecked());
-                }};
-                db.collection("users/" + dataModal.getUUID() + "/tasks").
-                        document(dataModal.getItemID()).update(stringObjectMap);
-            }
-
-        });
+//        completionStatus.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                try {
+//                    updateFirestore(v);
+//                } catch (IllegalStateException e) {
+//                    Log.w(TAG, "onClick: db is terminated, reinitializing now", e);
+//                    db = FirebaseFirestore.getInstance();
+//                    updateFirestore(v);
+//                } catch (SQLiteDatabaseLockedException e) {
+//                    Log.e(TAG, "onCreateView: Database already in use", e);
+//                } catch (RuntimeException e) {
+//                    Log.e(TAG, "onCreate: RuntimeException", e);
+//                } catch (Exception e) {
+//                    Log.e(TAG, "onCreateView: Something happened", e);
+//                }
+//
+//
+//            }
+//            private void updateFirestore(View v){
+//                Map<String, Object> stringObjectMap = new HashMap<String, Object>() {{
+//                    put("completionStatus", completionStatus.isChecked());
+//                }};
+//                db.collection("users/" + dataModal.getUUID() + "/tasks").
+//                        document(dataModal.getItemID()).update(stringObjectMap);
+//            }
+//
+//        });
 
         // below line is use to add item click listener
         // for our item of list view.
@@ -130,6 +130,8 @@ public class TasksLVAdapter extends ArrayAdapter<Task> {
             i.putExtra("description", dataModal.getDescription());
             i.putExtra("points", dataModal.getPoints());
             i.putExtra("completionStatus", dataModal.getCompletionStatus());
+            i.putExtra("completionDoer", dataModal.getCompletionDoer());
+            i.putExtra("completionDoerUUID", dataModal.getCompletionDoerUUID());
             i.putExtra("verifiedStatus", dataModal.getVerifiedStatus());
             getContext().startActivity(i);
         });

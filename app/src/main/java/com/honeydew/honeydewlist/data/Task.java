@@ -9,6 +9,8 @@ import java.util.List;
 public class Task extends Item {
     private Long points;
     private Boolean completionStatus = false;
+    private String completionDoer;
+    private String completionDoerUUID;
     private Boolean verifiedStatus = false;
 
     // Required for FireStore
@@ -17,10 +19,12 @@ public class Task extends Item {
     }
 
     public Task(String name, String description, String owner, String uuid,
-                Long points, Boolean completionStatus, Boolean verifiedStatus, String itemID) {
+                Long points, Boolean completionStatus, String completionDoer, String completionDoerUUID, Boolean verifiedStatus, String itemID) {
         super(name, description, owner, uuid, itemID);
         this.points = points;
         this.completionStatus = completionStatus;
+        this.completionDoer = completionDoer;
+        this.completionDoerUUID = completionDoerUUID;
     }
 
     public Long getPoints() {
@@ -45,5 +49,21 @@ public class Task extends Item {
 
     public void setVerifiedStatus(Boolean verifiedStatus) {
         this.verifiedStatus = verifiedStatus;
+    }
+
+    public String getCompletionDoer() {
+        return completionDoer;
+    }
+
+    public void setCompletionDoer(String completionDoer) {
+        this.completionDoer = completionDoer;
+    }
+
+    public String getCompletionDoerUUID() {
+        return completionDoerUUID;
+    }
+
+    public void setCompletionDoerUUID(String completionDoerUUID) {
+        this.completionDoerUUID = completionDoerUUID;
     }
 }

@@ -18,20 +18,27 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.honeydew.honeydewlist.R;
 
 import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TaskDetailActivity extends AppCompatActivity {
     private static final String TAG = "Firestore";
     private FirebaseFirestore db;
     private Boolean completionStatus, verifiedStatus;
     private String taskName, taskDescription, taskOwner, taskOwnerUUID, taskID;
+    private String uuid, username;
+    private String taskCompletionDoerUUID, taskCompletionDoer;
     private long melonReward;
+    private Chip complete_chip, verify_chip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +49,6 @@ public class TaskDetailActivity extends AppCompatActivity {
 
         // Declare variables
         TextView reward_tv, owner_tv, description_tv;
-        Chip complete_chip, verify_chip;
         FirebaseAuth auth;
         FirebaseUser user;
         db = FirebaseFirestore.getInstance();
@@ -69,7 +75,8 @@ public class TaskDetailActivity extends AppCompatActivity {
         taskID = i.getStringExtra("itemID");
         melonReward = i.getLongExtra("points", -1);
 
-        // Note: Check status against database when "Verify Completion" button is pressed
+        taskCompletionDoerUUID = i.getStringExtra("completionDoerUUID");
+        taskCompletionDoer = i.getStringExtra("completionDoer");
         completionStatus = i.getBooleanExtra("completionStatus", false);
         verifiedStatus = i.getBooleanExtra("verifiedStatus", false);
 
@@ -102,6 +109,28 @@ public class TaskDetailActivity extends AppCompatActivity {
         } else {
             complete_chip.setChecked(false);
             verify_chip.setChecked(false);
+        }
+
+        // Get current user id and username
+        if (user != null) {
+            uuid = user.getUid();
+            try {
+                db.collection("users").document(uuid).get()
+                        .addOnSuccessListener(documentSnapshot -> {
+                            username = documentSnapshot.getData().get("username").toString();
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(getApplicationContext(),
+                                    "Could not find username from Firestore",
+                                    Toast.LENGTH_SHORT).show();
+                        });
+            } catch (SQLiteDatabaseLockedException e) {
+                Log.e(TAG, "onCreateView: Database already in use", e);
+            } catch (RuntimeException e) {
+                Log.e(TAG, "onCreate: Maybe document field is not the right type?", e);
+            } catch (Exception e) {
+                Log.e(TAG, "onCreateView: Something happened", e);
+            }
         }
 
         reward_tv.setText(MessageFormat.format("{0}🍈", melonReward));
@@ -156,9 +185,9 @@ public class TaskDetailActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // Don't let owner mark it as completed
                 if (user != null) {
-                    if (user.getUid().equals(taskOwnerUUID)) {
+                    if (isChecked && user.getUid().equals(taskOwnerUUID)) {
                         // NonOwner, can only set completed, ignore input
-                        complete_chip.setChecked(!isChecked);
+                        complete_chip.setChecked(false);
                         Snackbar snackBar = Snackbar.make(
                                 findViewById(android.R.id.content),
                                 "The owner of a task cannot mark it as completed",
@@ -169,8 +198,34 @@ public class TaskDetailActivity extends AppCompatActivity {
                             snackBar.dismiss();
                         });
                         snackBar.show();
+                    } else if (!isChecked && !taskCompletionDoerUUID.equals("") && !user.getUid().equals(taskCompletionDoerUUID)) {
+                        // Unchecked, and someone else has already completed this task
+                        complete_chip.setChecked(true);
+                        Snackbar snackBar = Snackbar.make(
+                                findViewById(android.R.id.content),
+                                "Someone else has completed this task",
+                                Snackbar.LENGTH_SHORT
+                        );
+                        snackBar.setAction("Dismiss", v12 -> {
+                            // Call your action method here
+                            snackBar.dismiss();
+                        });
+                        snackBar.show();
                     } else {
-                        // Sync with firestore here
+                        // Sync with firestore
+                        try {
+                            // Database call here
+                            if (isChecked)
+                                updateCompletionFirestore(true, uuid, username);
+                            else
+                                updateCompletionFirestore(false, "", "");
+                        } catch (SQLiteDatabaseLockedException e) {
+                            Log.e(TAG, "onCreateView: Database already in use", e);
+                        } catch (RuntimeException e) {
+                            Log.e(TAG, "onCreate: RuntimeException", e);
+                        } catch (Exception e) {
+                            Log.e(TAG, "onCreateView: Something happened", e);
+                        }
                     }
                 } else {
                     // If user is not logged in, don't allow input
@@ -198,8 +253,21 @@ public class TaskDetailActivity extends AppCompatActivity {
                             snackBar.dismiss();
                         });
                         snackBar.show();
-                    } else {
-                        // Sync with firestore here
+                    } else{
+                        // Sync with firestore
+                        try {
+                            // Database call here
+                            if (isChecked)
+                                updateVerifiedFirestore(true, taskCompletionDoerUUID, melonReward);
+                            else
+                                updateVerifiedFirestore(false, taskCompletionDoerUUID, -1 * melonReward);
+                        } catch (SQLiteDatabaseLockedException e) {
+                            Log.e(TAG, "onCreateView: Database already in use", e);
+                        } catch (RuntimeException e) {
+                            Log.e(TAG, "onCreate: RuntimeException", e);
+                        } catch (Exception e) {
+                            Log.e(TAG, "onCreateView: Something happened", e);
+                        }
                     }
                 } else {
                     // If user is not logged in, don't allow input
@@ -208,6 +276,33 @@ public class TaskDetailActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    // Mark task as completed in Firestore
+    private void updateCompletionFirestore(Boolean isChecked, String taskCompletionDoerUUID, String taskCompletionDoer){
+        Map<String, Object> completionStatusMap = new HashMap<String, Object>() {{
+            put("completionStatus", isChecked);
+            put("completionDoer", taskCompletionDoer);
+            put("completionDoerUUID", taskCompletionDoerUUID);
+        }};
+        db.collection("users/" + taskOwnerUUID + "/tasks").
+                document(taskID).update(completionStatusMap);
+    }
+
+    // Mark a completed task as verified, add Melon reward to completed user's count
+    private void updateVerifiedFirestore(Boolean isChecked, String completionDoerUUID, long melonReward){
+        Map<String, Object> verifiedStatusMap = new HashMap<String, Object>() {{
+            put("verifiedStatus", isChecked);
+        }};
+        db.collection("users/" + taskOwnerUUID + "/tasks").
+                document(taskID).update(verifiedStatusMap);
+
+        // Add melons to user who completed the task
+        Map<String, Object> melonCountMap = new HashMap<String, Object>() {{
+            put("melon_count", FieldValue.increment(melonReward));
+        }};
+        db.collection("users").
+                document(completionDoerUUID).update(melonCountMap);
     }
 
     @Override

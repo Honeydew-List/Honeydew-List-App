@@ -19,20 +19,21 @@
         android:orientation="horizontal"
         android:padding="4dp" >
 
-        <CheckBox
-            android:id="@+id/list_item_check_box"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:textIsSelectable="false"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+<!--        <CheckBox-->
+<!--            android:id="@+id/list_item_check_box"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:minWidth="0dp"-->
+<!--            android:minHeight="0dp"-->
+<!--            android:textIsSelectable="false"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
             android:orientation="vertical" >
 
             <TextView

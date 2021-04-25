@@ -142,6 +142,8 @@ public class CreateTaskActivity extends AppCompatActivity {
                 userID,
                 (long) TaskReward,
                 false,
+                "",
+                "",
                 false,
                 "temp");
 
