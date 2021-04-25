@@ -1,6 +1,7 @@
 package com.honeydew.honeydewlist.ui.home_screen.ui.tasks;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.os.Bundle;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -34,6 +35,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class CreateTaskActivity extends AppCompatActivity {
+    private static final String TAG = "DB ERROR";
     private FirebaseFirestore db;
     private String userID;
     private String username;
@@ -66,15 +68,23 @@ public class CreateTaskActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         if (user != null) {
             userID = user.getUid();
-            db.collection("users").document(userID).get()
-                    .addOnSuccessListener(documentSnapshot -> {
-                        username = documentSnapshot.getData().get("username").toString();
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(getApplicationContext(),
-                                "Could not find username from Firestore",
-                                Toast.LENGTH_SHORT).show();
-                    });
+            try {
+                db.collection("users").document(userID).get()
+                        .addOnSuccessListener(documentSnapshot -> {
+                            username = documentSnapshot.getData().get("username").toString();
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(getApplicationContext(),
+                                    "Could not find username from Firestore",
+                                    Toast.LENGTH_SHORT).show();
+                        });
+            } catch (SQLiteDatabaseLockedException e) {
+                Log.e(TAG, "onCreateView: Database already in use", e);
+            } catch (RuntimeException e) {
+                Log.e(TAG, "onCreate: Maybe document field is not the right type?", e);
+            } catch (Exception e) {
+                Log.e(TAG, "onCreateView: Something happened", e);
+            }
         }
 
 
@@ -102,10 +112,12 @@ public class CreateTaskActivity extends AppCompatActivity {
                     finish();
                 } catch (NumberFormatException e) {
                     reward_value_edt.setError("Please enter only numbers for the reward");
+                } catch (SQLiteDatabaseLockedException e) {
+                    Log.e(TAG, "onCreateView: Database already in use", e);
                 } catch (RuntimeException e) {
-                    Log.e("DB ERROR", "onCreate: RuntimeException", e);
+                    Log.e(TAG, "onCreate: Maybe document field is not the right type?", e);
                 } catch (Exception e) {
-                    Log.e("DB ERROR", "onCreate: Something happened", e);
+                    Log.e(TAG, "onCreateView: Something happened", e);
                 }
             }
 

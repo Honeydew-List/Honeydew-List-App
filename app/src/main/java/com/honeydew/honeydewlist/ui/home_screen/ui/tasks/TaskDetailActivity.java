@@ -1,6 +1,7 @@
 package com.honeydew.honeydewlist.ui.home_screen.ui.tasks;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.os.Bundle;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -85,9 +86,8 @@ public class TaskDetailActivity extends AppCompatActivity {
         reward_tv.setText(MessageFormat.format("{0}🍈", melonReward));
         owner_tv.setText(taskOwner);
         description_tv.setText(taskDescription);
-
-        db.collection("users").document(taskOwnerUUID).collection("tasks").document(taskID).addSnapshotListener((value, error) -> {
-            try {
+        try {
+            db.collection("users").document(taskOwnerUUID).collection("tasks").document(taskID).addSnapshotListener((value, error) -> {
                 completionStatus = value.getBoolean("completionStatus");
                 verifiedStatus = value.getBoolean("verifiedStatus");
                 taskDescription = value.getData().get("description").toString();
@@ -109,12 +109,14 @@ public class TaskDetailActivity extends AppCompatActivity {
                 reward_tv.setText(MessageFormat.format("{0}🍈", melonReward));
                 owner_tv.setText(taskOwner);
                 description_tv.setText(taskDescription);
-            } catch (RuntimeException e) {
-                Log.e(TAG, "onCreate: Maybe document field is not the right type?", e);
-            } catch (Exception e) {
-                Log.e(TAG, "onCreate: Something happened", e);
-            }
-        });
+            });
+        } catch (SQLiteDatabaseLockedException e) {
+            Log.e(TAG, "onCreateView: Database already in use", e);
+        } catch (RuntimeException e) {
+            Log.e(TAG, "onCreate: RuntimeException", e);
+        } catch (Exception e) {
+            Log.e(TAG, "onCreateView: Something happened", e);
+        }
     }
 
     @Override

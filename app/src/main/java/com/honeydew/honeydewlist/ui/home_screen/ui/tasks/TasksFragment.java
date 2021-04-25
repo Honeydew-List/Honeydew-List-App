@@ -32,6 +32,7 @@ import java.util.List;
 
 public class TasksFragment extends Fragment {
 
+    private static final String TAG = "DB ERROR";
     private ListView tasksLV;
     private ArrayList<Task> dataModalArrayList;
     private TasksLVAdapter adapter;
@@ -93,9 +94,11 @@ public class TasksFragment extends Fragment {
                     try {
                         loadDetailListview(foundFriendIds.get(i));
                     } catch (SQLiteDatabaseLockedException e) {
-                        Log.e("DB ERROR", "onCreateView: Database already in use", e);
+                        Log.e(TAG, "onCreateView: Database already in use", e);
+                    } catch (RuntimeException e) {
+                        Log.e(TAG, "onCreate: RuntimeException", e);
                     } catch (Exception e) {
-                        Log.e("DB ERROR", "onCreateView: Something happened", e);
+                        Log.e(TAG, "onCreateView: Something happened", e);
                     }
 
                 }

@@ -2,6 +2,7 @@ package com.honeydew.honeydewlist.ui.home_screen.ui.tasks;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
@@ -30,6 +31,7 @@ import com.honeydew.honeydewlist.data.Task;
 
 // Credit to https://www.geeksforgeeks.org/how-to-create-dynamic-listview-in-android-using-firebase-firestore/
 public class TasksLVAdapter extends ArrayAdapter<Task> {
+    private static final String TAG = "DB ERROR";
     private FirebaseFirestore db;
     // constructor for our list view adapter.
     public TasksLVAdapter(@NonNull Context context, ArrayList<Task> dataModalArrayList, FirebaseFirestore db) {
@@ -86,11 +88,15 @@ public class TasksLVAdapter extends ArrayAdapter<Task> {
                 try {
                     updateFirestore(v);
                 } catch (IllegalStateException e) {
-                    Log.w("NULL Firestore", "onClick: db is terminated, reinitializing now", e);
+                    Log.w(TAG, "onClick: db is terminated, reinitializing now", e);
                     db = FirebaseFirestore.getInstance();
                     updateFirestore(v);
+                } catch (SQLiteDatabaseLockedException e) {
+                    Log.e(TAG, "onCreateView: Database already in use", e);
+                } catch (RuntimeException e) {
+                    Log.e(TAG, "onCreate: RuntimeException", e);
                 } catch (Exception e) {
-                    Log.e("NULL Firestore", "onClick: Something happened", e);
+                    Log.e(TAG, "onCreateView: Something happened", e);
                 }
 
 
