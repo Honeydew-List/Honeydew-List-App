@@ -3,19 +3,26 @@ package com.honeydew.honeydewlist.data;
 import java.util.List;
 
 public class Reward extends Item {
-    private Long cost;
+    private Long points;
     private Long quantity; // TODO: Add quantity restriction, for now set quantity to 1
-    private Boolean completed;
-    protected Reward(String name, String description, String owner, String uuid, String itemID) {
+    private Boolean redeemed;
+
+    public Reward() {
+        super();
+    }
+
+    public Reward(String name, String description, String owner, String uuid, Long points, Boolean redeemed, String itemID) {
         super(name, description, owner, uuid, itemID);
+        this.redeemed = redeemed;
+        this.points = points;
     }
 
-    public Long getCost() {
-        return cost;
+    public Long getPoints() {
+        return points;
     }
 
-    public void setCost(Long cost) {
-        this.cost = cost;
+    public void setCost(Long points) {
+        this.points = points;
     }
 
     public Long getQuantity() {
@@ -26,11 +33,11 @@ public class Reward extends Item {
         this.quantity = quantity;
     }
 
-    public Boolean getCompleted() {
-        return completed;
+    public Boolean getRedeemed() {
+        return redeemed;
     }
 
-    public void setCompleted(Boolean completed) {
-        this.completed = completed;
+    public void setRedeemed(Boolean redeemed) {
+        this.redeemed = redeemed;
     }
 }

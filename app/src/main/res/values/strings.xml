@@ -157,5 +157,17 @@
     <string name="name">Name</string>
     <string name="emailHint">Email</string>
     <string name="log_out_home">Log Out</string>
-    <string name="melonText">Current Melons: %1$s</string>
+    <string name="melonText">%s &#127816;</string>
+    <string name="menuUser">%s</string>
+    <string name="redeem">Redeem</string>
+    <string name="title_activity_create_reward">Create Reward</string>
+    <string name="cost">Melon Cost</string>
+    <string name="title_activity_reward_detail">Reward Details</string>
+    <string name="owner">Owner</string>
+    <string name="status">Status</string>
+    <string name="CompletedStatusText">Completed, Not Verified</string>
+    <string name="VerifiedStatusText">Completed and Verified</string>
+    <string name="NotCompletedText">Not Completed</string>
+    <string name="complete">Complete</string>
+    <string name="verify">Verify</string>
 </resources>

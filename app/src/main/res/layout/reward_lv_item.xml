@@ -23,23 +23,12 @@
             android:id="@+id/list_item_melon_count"
             android:textAppearance="?attr/textAppearanceBody2"
             android:textColor="?android:attr/textColorSecondary"
+            android:layout_width="wrap_content"
             android:textSize="24sp"
             android:layout_gravity="center_vertical"
             android:paddingHorizontal="8dp"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/defaultTextViewValue" />
-
-<!--        <CheckBox-->
-<!--            android:id="@+id/list_item_check_box"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:minWidth="0dp"-->
-<!--            android:minHeight="0dp"-->
-<!--            android:textIsSelectable="false"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -71,6 +60,8 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/defaultTextViewValue" />
         </LinearLayout>
+
+
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

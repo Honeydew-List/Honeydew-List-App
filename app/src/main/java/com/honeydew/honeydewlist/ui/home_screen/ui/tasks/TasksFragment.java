@@ -1,6 +1,7 @@
 package com.honeydew.honeydewlist.ui.home_screen.ui.tasks;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,26 +19,37 @@ import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.honeydew.honeydewlist.R;
 import com.honeydew.honeydewlist.data.Task;
+import com.honeydew.honeydewlist.ui.home_screen.inteface.GetFriendCallback;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TasksFragment extends Fragment {
 
-    ListView tasksLV;
-    ArrayList<Task> dataModalArrayList;
-    FirebaseFirestore db;
-    ProgressBar progressBar;
+    private static final String TAG = "DB ERROR";
+    private ListView tasksLV;
+    private ArrayList<Task> dataModalArrayList;
+    private TasksLVAdapter adapter;
+    private CollectionReference friendsRef;
+    private FirebaseFirestore db;
+    private ProgressBar progressBar;
+    private ArrayList<String> foundFriendIds;
+    private FirebaseAuth auth;
+    private FirebaseUser user;
     private String userID;
+    private String username,melons;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_tasks, container, false);
         setHasOptionsMenu(true);
+
         // below line is use to initialize our variables
         tasksLV = root.findViewById(R.id.idLVTasks);
         dataModalArrayList = new ArrayList<>();
@@ -52,29 +64,55 @@ public class TasksFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
 
         // Get current user
-        final FirebaseAuth auth = FirebaseAuth.getInstance();
-        final FirebaseUser user = auth.getCurrentUser();
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        foundFriendIds = new ArrayList<>();
         if (user != null) {
             userID = user.getUid();
+            foundFriendIds.add(user.getUid());
+            friendsRef = db.collection("users/" + userID + "/friends");
+
+
+
+
+            // after that we are passing our array list to our adapter class.
+            adapter = new TasksLVAdapter(requireContext(), dataModalArrayList, db);
+
+            // after passing this array list to our adapter
+            // class we are setting our adapter to our list view.
+            tasksLV.setAdapter(adapter);
+
+
             // here we are calling a method
             // to load data in our list view.
-            loadDetailListview();
+            // Call for each friend
+
+//            new MyAsyncTask().execute();
+//            getFriends();
+            readFriendData(friendIds -> {
+                foundFriendIds.addAll(friendIds);
+                // Load the listview
+                for (int i = 0; i < foundFriendIds.size(); i++) {
+                    try {
+                        loadDetailListview(foundFriendIds.get(i));
+                    } catch (SQLiteDatabaseLockedException e) {
+                        Log.e(TAG, "onCreateView: Database already in use", e);
+                    } catch (RuntimeException e) {
+                        Log.e(TAG, "onCreate: RuntimeException", e);
+                    } catch (Exception e) {
+                        Log.e(TAG, "onCreateView: Something happened", e);
+                    }
+
+                }
+            });
+
+
         }
+
         return root;
     }
 
-    private void loadDetailListview() {
-        // TODO: Remove temp id and add friend picker
-        // Temp userID for testing
-        //userID = "ABC#0123";
-        // user is the selected friend
-
-        // after that we are passing our array list to our adapter class.
-        TasksLVAdapter adapter = new TasksLVAdapter(requireContext(), dataModalArrayList);
-
-        // after passing this array list to our adapter
-        // class we are setting our adapter to our list view.
-        tasksLV.setAdapter(adapter);
+    private void loadDetailListview(String userID) {
 
         // below line is use to get data from Firebase
         // firestore using collection in android.
@@ -103,7 +141,7 @@ public class TasksFragment extends Fragment {
                         adapter.notifyDataSetChanged();
                     } else {
                         // if the snapshot is empty we are displaying a toast message.
-                        Toast.makeText(requireContext(), "No data found in Database", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), "No data found in Database for " + userID, Toast.LENGTH_SHORT).show();
                         Log.i("Firebase", "loadDetailListview: No data found in Database");
                     }
                 }).addOnFailureListener(e -> {
@@ -117,7 +155,23 @@ public class TasksFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        userID = user.getUid();
         inflater.inflate(R.menu.app_bar_menu, menu);
+
+        db.collection("users").document(userID).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    username = documentSnapshot.getData().get("username").toString();
+                    menu.findItem(R.id.menuUsername).setTitle(getString(R.string.menuUser, username));
+                })
+                .addOnFailureListener(e -> Toast.makeText(requireContext(),
+                        "Could not find username from Firestore",
+                        Toast.LENGTH_SHORT).show());
+
+        db.collection("users").document(userID).addSnapshotListener((value, error) -> {
+            melons = value.getData().get("melon_count").toString();
+            menu.findItem(R.id.melon_stats).setTitle(getString(R.string.melonText, melons));
+        });
+
     }
 
     @Override
@@ -125,25 +179,15 @@ public class TasksFragment extends Fragment {
         int itemId = item.getItemId();
         if (itemId == R.id.action_add_item) {
             // navigate to add task screen
+            if (db != null) {
+                db.terminate();
+            }
             Intent i = new Intent(getContext(), CreateTaskActivity.class);
             startActivity(i);
 
             return true;
-        } else if (itemId == R.id.action_filter) {
-            // navigate to screen to choose which friends to show tasks from
-            Toast.makeText(
-                    getContext(),
-                    "Not yet implemented",
-                    Toast.LENGTH_SHORT
-            ).show();
-            return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
     }
 
     @Override
@@ -152,5 +196,26 @@ public class TasksFragment extends Fragment {
         if (db != null) {
             db.terminate();
         }
+    }
+
+    @Override
+    public void onDestroyOptionsMenu() {
+        super.onDestroyOptionsMenu();
+        if (db != null) {
+            db.terminate();
+        }
+    }
+
+    public void readFriendData(GetFriendCallback myCallback) {
+        friendsRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                List<String> friendList = new ArrayList<>();
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    String userID = document.getId().trim();
+                    friendList.add(userID);
+                }
+                myCallback.onCallback(friendList);
+            }
+        });
     }
 }

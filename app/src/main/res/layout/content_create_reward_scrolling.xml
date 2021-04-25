@@ -17,12 +17,12 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_input_layout_1"
             android:layout_width="match_parent"
-            app:helperText="The name of the task that needs to be done."
+            app:helperText="The name of the reward that can be redeemed by others."
             android:paddingBottom="16dp"
             android:layout_height="match_parent">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/text_input_edit_text_task_name"
+                android:id="@+id/text_input_edit_text_reward_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/name"
@@ -33,29 +33,29 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_input_layout_2"
             app:suffixText="Melons"
-            app:helperText="The reward to be given to person who completes the task."
+            app:helperText="The cost of the reward."
             android:paddingBottom="16dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/text_input_edit_text_task_points"
+                android:id="@+id/text_input_edit_text_reward_cost"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:hint="@string/reward"
+                android:hint="@string/cost"
                 android:singleLine="true" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_input_layout_3"
             android:paddingBottom="16dp"
-            app:helperText="Optional, any additional details needed to complete the task"
+            app:helperText="Optional, any additional details about the reward"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/text_input_edit_text_task_description"
+                android:id="@+id/text_input_edit_text_reward_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/description"
