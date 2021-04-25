@@ -25,23 +25,24 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.honeydew.honeydewlist.R;
 import com.honeydew.honeydewlist.data.Task;
-import com.honeydew.honeydewlist.ui.home_screen.ui.tasks.inteface.GetFriendCallback;
+import com.honeydew.honeydewlist.ui.home_screen.inteface.GetFriendCallback;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TasksFragment extends Fragment {
 
-    ListView tasksLV;
-    ArrayList<Task> dataModalArrayList;
-    TasksLVAdapter adapter;
-    CollectionReference friendsRef;
-    FirebaseFirestore db;
-    ProgressBar progressBar;
+    private ListView tasksLV;
+    private ArrayList<Task> dataModalArrayList;
+    private TasksLVAdapter adapter;
+    private CollectionReference friendsRef;
+    private FirebaseFirestore db;
+    private ProgressBar progressBar;
     private ArrayList<String> foundFriendIds;
-    FirebaseAuth auth;
-    FirebaseUser user;
     private String melons,userID,username;
+    private FirebaseAuth auth;
+    private FirebaseUser user;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -168,6 +169,9 @@ public class TasksFragment extends Fragment {
         int itemId = item.getItemId();
         if (itemId == R.id.action_add_item) {
             // navigate to add task screen
+            if (db != null) {
+                db.terminate();
+            }
             Intent i = new Intent(getContext(), CreateTaskActivity.class);
             startActivity(i);
 
@@ -177,8 +181,8 @@ public class TasksFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onStop() {
+        super.onStop();
         if (db != null) {
             db.terminate();
         }
