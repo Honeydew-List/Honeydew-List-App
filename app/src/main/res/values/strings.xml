@@ -163,4 +163,7 @@
     <string name="title_activity_reward_detail">Reward Details</string>
     <string name="owner">Owner</string>
     <string name="status">Status</string>
+    <string name="CompletedStatusText">Completed, Not Verified</string>
+    <string name="VerifiedStatusText">Completed and Verified</string>
+    <string name="NotCompletedText">Not Completed</string>
 </resources>
