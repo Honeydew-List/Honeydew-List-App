@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.honeydew.honeydewlist.R;
 
@@ -28,9 +30,11 @@ import com.honeydew.honeydewlist.data.Task;
 
 // Credit to https://www.geeksforgeeks.org/how-to-create-dynamic-listview-in-android-using-firebase-firestore/
 public class TasksLVAdapter extends ArrayAdapter<Task> {
+    private FirebaseFirestore db;
     // constructor for our list view adapter.
-    public TasksLVAdapter(@NonNull Context context, ArrayList<Task> dataModalArrayList) {
+    public TasksLVAdapter(@NonNull Context context, ArrayList<Task> dataModalArrayList, FirebaseFirestore db) {
         super(context, 0, dataModalArrayList);
+        this.db = db;
     }
 
     @NonNull
@@ -76,21 +80,29 @@ public class TasksLVAdapter extends ArrayAdapter<Task> {
         if (dataModal.getCompletionStatus())
             card.setChecked(dataModal.getVerifiedStatus());
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
         completionStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateFirestore(v);
-            }
+                try {
+                    updateFirestore(v);
+                } catch (IllegalStateException e) {
+                    Log.w("NULL Firestore", "onClick: db is terminated, reinitializing now", e);
+                    db = FirebaseFirestore.getInstance();
+                    updateFirestore(v);
+                } catch (Exception e) {
+                    Log.e("NULL Firestore", "onClick: Something happened", e);
+                }
 
-            private void updateFirestore(View v) {
+
+            }
+            private void updateFirestore(View v){
                 Map<String, Object> stringObjectMap = new HashMap<String, Object>() {{
                     put("completionStatus", completionStatus.isChecked());
                 }};
                 db.collection("users/" + dataModal.getUUID() + "/tasks").
                         document(dataModal.getItemID()).update(stringObjectMap);
             }
+
         });
 
         // below line is use to add item click listener
@@ -99,6 +111,9 @@ public class TasksLVAdapter extends ArrayAdapter<Task> {
             // Commented out because we are using a check box instead
             // card.setChecked(!card.isChecked());
 
+            if (db != null) {
+                db.terminate();
+            }
             // Use the itemID to load the task details from firestore
             Log.i("TasksLVAdapter", "getView: " + dataModal.getName());
             Intent i = new Intent(v.getContext(), TaskDetailActivity.class);
