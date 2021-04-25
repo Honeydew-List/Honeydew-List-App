@@ -16,9 +16,16 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.honeydew.honeydewlist.R;
 
 public class RewardsFragment extends Fragment {
+    FirebaseFirestore db;
+    FirebaseAuth auth;
+    FirebaseUser user;
+    private String melons,userID,username;
 
     private RewardsViewModel rewardsViewModel;
 
@@ -28,6 +35,11 @@ public class RewardsFragment extends Fragment {
                 new ViewModelProvider(this).get(RewardsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_rewards, container, false);
         setHasOptionsMenu(true);
+
+        db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+
         final TextView textView = root.findViewById(R.id.text_rewards);
         rewardsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
@@ -40,7 +52,22 @@ public class RewardsFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        userID = user.getUid();
         inflater.inflate(R.menu.app_bar_menu, menu);
+
+        db.collection("users").document(userID).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    username = documentSnapshot.getData().get("username").toString();
+                    menu.findItem(R.id.menuUsername).setTitle(getString(R.string.menuUser, username));
+                })
+                .addOnFailureListener(e -> Toast.makeText(requireContext(),
+                        "Could not find username from Firestore",
+                        Toast.LENGTH_SHORT).show());
+
+        db.collection("users").document(userID).addSnapshotListener((value, error) -> {
+            melons = value.getData().get("melon_count").toString();
+            menu.findItem(R.id.melon_stats).setTitle(getString(R.string.melonText, melons));
+        });
     }
 
     @Override
