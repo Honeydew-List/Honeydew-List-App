@@ -19,6 +19,17 @@
         android:orientation="horizontal"
         android:padding="4dp" >
 
+        <TextView
+            android:id="@+id/list_item_melon_count"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="24sp"
+            android:layout_gravity="center_vertical"
+            android:paddingHorizontal="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/defaultTextViewValue" />
+
 <!--        <CheckBox-->
 <!--            android:id="@+id/list_item_check_box"-->
 <!--            android:layout_width="wrap_content"-->
@@ -33,7 +44,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="8dp"
             android:orientation="vertical" >
 
             <TextView
@@ -45,14 +55,6 @@
 
             <TextView
                 android:id="@+id/list_item_owner"
-                android:textAppearance="?attr/textAppearanceBody2"
-                android:textColor="?android:attr/textColorSecondary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/defaultTextViewValue" />
-
-            <TextView
-                android:id="@+id/list_item_melon_count"
                 android:textAppearance="?attr/textAppearanceBody2"
                 android:textColor="?android:attr/textColorSecondary"
                 android:layout_width="wrap_content"

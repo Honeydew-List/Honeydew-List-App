@@ -74,7 +74,7 @@ public class TasksLVAdapter extends ArrayAdapter<Task> {
         // below line is use to set data to our text view.
         name.setText(dataModal.getName());
         description.setText(dataModal.getDescription());
-        points.setText(MessageFormat.format("Reward: {0}🍈", dataModal.getPoints()));
+        points.setText(MessageFormat.format("{0}🍈", dataModal.getPoints()));
         owner.setText(String.format("%s %s",
                 getContext().getResources().getString(R.string.ownerLabel), dataModal.getOwner()));
 //        completionStatus.setChecked(dataModal.getCompletionStatus());
