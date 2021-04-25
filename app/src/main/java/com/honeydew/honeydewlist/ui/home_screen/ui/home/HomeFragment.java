@@ -17,7 +17,10 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.honeydew.honeydewlist.R;
 import com.honeydew.honeydewlist.ui.login.LoginActivity;
 
@@ -64,6 +67,11 @@ public class HomeFragment extends Fragment {
 
         }
 
+        db.collection("users").document(userID).addSnapshotListener((value, error) -> {
+            melons = value.getData().get("melon_count").toString();
+            Melons.setText(getString(R.string.melonText, melons));
+        });
+
         logout.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
             Intent i = new Intent(getContext(), LoginActivity.class);
@@ -71,5 +79,10 @@ public class HomeFragment extends Fragment {
             getActivity().finish();
         });
         return root;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 }
