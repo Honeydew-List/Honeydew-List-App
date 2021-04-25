@@ -24,7 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.honeydew.honeydewlist.R;
 import com.honeydew.honeydewlist.data.Task;
-import com.honeydew.honeydewlist.ui.home_screen.ui.tasks.inteface.GetFriendCallback;
+import com.honeydew.honeydewlist.ui.home_screen.inteface.GetFriendCallback;
 
 import java.util.ArrayList;
 import java.util.List;

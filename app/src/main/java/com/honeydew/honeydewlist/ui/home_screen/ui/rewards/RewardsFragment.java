@@ -24,17 +24,8 @@ public class RewardsFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        rewardsViewModel =
-                new ViewModelProvider(this).get(RewardsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_rewards, container, false);
         setHasOptionsMenu(true);
-        final TextView textView = root.findViewById(R.id.text_rewards);
-        rewardsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
         return root;
     }
 
@@ -54,15 +45,7 @@ public class RewardsFragment extends Fragment {
                     Toast.LENGTH_SHORT
             ).show();
             return true;
-        } // else if (itemId == R.id.action_filter) {
-//            // navigate to screen to choose which friends to show tasks from
-//            Toast.makeText(
-//                    getContext(),
-//                    "Not yet implemented",
-//                    Toast.LENGTH_SHORT
-//            ).show();
-//            return true;
-//        }
+        }
         return super.onOptionsItemSelected(item);
     }
 }
