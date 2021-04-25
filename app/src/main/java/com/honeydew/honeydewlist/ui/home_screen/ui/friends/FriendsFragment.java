@@ -24,9 +24,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.honeydew.honeydewlist.R;
-import com.honeydew.honeydewlist.data.Task;
-import com.honeydew.honeydewlist.ui.home_screen.ui.tasks.CreateTaskActivity;
-import com.honeydew.honeydewlist.ui.home_screen.ui.tasks.TasksLVAdapter;
+import com.honeydew.honeydewlist.data.Friend;
+import com.honeydew.honeydewlist.ui.home_screen.ui.friends.AddFriendActivity;
+import com.honeydew.honeydewlist.ui.home_screen.ui.friends.FriendsLVAdapter;
 import com.honeydew.honeydewlist.data.Friend;
 
 import java.util.ArrayList;
@@ -112,7 +112,7 @@ public class FriendsFragment extends Fragment {
         int itemId = item.getItemId();
         if (itemId == R.id.action_add_item) {
             // navigate to add friend screen
-            Intent i = new Intent(getContext(), CreateTaskActivity.class);
+            Intent i = new Intent(getContext(), AddFriendActivity.class);
             startActivity(i);
 
             return true;
