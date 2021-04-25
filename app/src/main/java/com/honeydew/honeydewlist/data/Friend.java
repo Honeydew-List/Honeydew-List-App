@@ -1,6 +1,6 @@
 package com.honeydew.honeydewlist.data;
 
-public abstract class Friend extends Owner{
+public class Friend extends Owner{
 
         // Required for FireStore
         public Friend() {
