@@ -22,24 +22,24 @@
             android:layout_margin="@dimen/text_margin"
             android:text="@string/defaultTextViewValue" />
 
-        <TextView
-            android:id="@+id/status_label"
-            android:textAppearance="?attr/textAppearanceBody2"
-            android:textColor="?android:attr/textColorSecondary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/text_margin"
-            android:layout_marginHorizontal="@dimen/text_margin"
-            android:text="@string/status" />
+<!--        <TextView-->
+<!--            android:id="@+id/status_label"-->
+<!--            android:textAppearance="?attr/textAppearanceBody2"-->
+<!--            android:textColor="?android:attr/textColorSecondary"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="@dimen/text_margin"-->
+<!--            android:layout_marginHorizontal="@dimen/text_margin"-->
+<!--            android:text="@string/status" />-->
 
-        <TextView
-            android:id="@+id/status"
-            android:textAppearance="?attr/textAppearanceBody1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/text_margin"
-            android:layout_marginBottom="@dimen/text_margin"
-            android:text="@string/defaultTextViewValue" />
+<!--        <TextView-->
+<!--            android:id="@+id/status"-->
+<!--            android:textAppearance="?attr/textAppearanceBody1"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginHorizontal="@dimen/text_margin"-->
+<!--            android:layout_marginBottom="@dimen/text_margin"-->
+<!--            android:text="@string/defaultTextViewValue" />-->
 
         <TextView
             android:id="@+id/owner_label"
@@ -79,23 +79,36 @@
             android:layout_marginBottom="@dimen/text_margin"
             android:text="@string/defaultTextViewValue" />
 
+        <TextView
+            android:id="@+id/status_label"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textColor="?android:attr/textColorSecondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_margin"
+            android:layout_marginHorizontal="@dimen/text_margin"
+            android:text="@string/status" />
+
         <com.google.android.material.chip.ChipGroup
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/text_margin" >
+
             <com.google.android.material.chip.Chip
-                android:id="@+id/chip_1"
+                android:id="@+id/complete_chip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checkable="true"
-                android:checked="true"
-                android:text="Complete"/>
+                android:checked="false"
+                android:text="@string/complete"/>
+
             <com.google.android.material.chip.Chip
-                android:id="@+id/chip_2"
+                android:id="@+id/verify_chip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checkable="true"
-                android:checked="true"
-                android:text="Verify"/>
+                android:checked="false"
+                android:text="@string/verify"/>
         </com.google.android.material.chip.ChipGroup>
 
     </LinearLayout>

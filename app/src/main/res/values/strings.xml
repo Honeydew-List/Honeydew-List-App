@@ -166,4 +166,6 @@
     <string name="CompletedStatusText">Completed, Not Verified</string>
     <string name="VerifiedStatusText">Completed and Verified</string>
     <string name="NotCompletedText">Not Completed</string>
+    <string name="complete">Complete</string>
+    <string name="verify">Verify</string>
 </resources>

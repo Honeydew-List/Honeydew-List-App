@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -17,6 +18,8 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.honeydew.honeydewlist.R;
 
@@ -37,7 +40,10 @@ public class TaskDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // Declare variables
-        TextView status_tv, reward_tv, owner_tv, description_tv;
+        TextView reward_tv, owner_tv, description_tv;
+        Chip complete_chip, verify_chip;
+        FirebaseAuth auth;
+        FirebaseUser user;
         db = FirebaseFirestore.getInstance();
 
         Intent i = getIntent();
@@ -67,20 +73,35 @@ public class TaskDetailActivity extends AppCompatActivity {
         verifiedStatus = i.getBooleanExtra("verifiedStatus", false);
 
         // Find text views
-        status_tv = findViewById(R.id.status);
+//        status_tv = findViewById(R.id.status);
         reward_tv = findViewById(R.id.reward);
         owner_tv = findViewById(R.id.owner);
         description_tv = findViewById(R.id.description);
+        complete_chip = findViewById(R.id.complete_chip);
+        verify_chip = findViewById(R.id.verify_chip);
 
-        // Set text views to data from intent extras
+        // Set chips to data from intent extras
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
         if (completionStatus) {
-            if (verifiedStatus) {
-                status_tv.setText(R.string.VerifiedStatusText);
+            complete_chip.setChecked(true);
+            // Set checkable
+            if (user != null) {
+                if (user.getUid().equals(taskOwnerUUID)) {
+                    // Owner, can only set verified
+                    verify_chip.setCheckable(true);
+                }
             } else {
-                status_tv.setText(R.string.CompletedStatusText);
+                // If user is not logged in, don't allow input
+                complete_chip.setCheckable(false);
+                verify_chip.setCheckable(false);
             }
+
+            // Set checked
+            verify_chip.setChecked(verifiedStatus);
         } else {
-            status_tv.setText(R.string.NotCompletedText);
+            complete_chip.setChecked(false);
+            verify_chip.setChecked(false);
         }
 
         reward_tv.setText(MessageFormat.format("{0}🍈", melonReward));
@@ -88,27 +109,37 @@ public class TaskDetailActivity extends AppCompatActivity {
         description_tv.setText(taskDescription);
         try {
             db.collection("users").document(taskOwnerUUID).collection("tasks").document(taskID).addSnapshotListener((value, error) -> {
-                completionStatus = value.getBoolean("completionStatus");
-                verifiedStatus = value.getBoolean("verifiedStatus");
-                taskDescription = value.getData().get("description").toString();
-                taskOwner = value.getData().get("owner").toString();
-                taskOwnerUUID = value.getData().get("uuid").toString();
-                melonReward = value.getLong("points");
+                if (value != null) {
+                    completionStatus = value.getBoolean("completionStatus");
+                    verifiedStatus = value.getBoolean("verifiedStatus");
+                    taskDescription = value.getData().get("description").toString();
+                    melonReward = value.getLong("points");
 
-                // Update text views
-                if (completionStatus) {
-                    if (verifiedStatus) {
-                        status_tv.setText(R.string.VerifiedStatusText);
+                    // Update chips
+                    if (completionStatus) {
+                        complete_chip.setChecked(true);
+                        // Set checkable
+                        if (user != null) {
+                            if (user.getUid().equals(taskOwnerUUID)) {
+                                // Owner, can only set verified
+                                verify_chip.setCheckable(true);
+                            }
+                        } else {
+                            // If user is not logged in, don't allow input
+                            complete_chip.setCheckable(false);
+                            verify_chip.setCheckable(false);
+                        }
+
+                        // Set checked
+                        verify_chip.setChecked(verifiedStatus);
                     } else {
-                        status_tv.setText(R.string.CompletedStatusText);
+                        complete_chip.setChecked(false);
+                        verify_chip.setChecked(false);
                     }
-                } else {
-                    status_tv.setText(R.string.NotCompletedText);
-                }
 
-                reward_tv.setText(MessageFormat.format("{0}🍈", melonReward));
-                owner_tv.setText(taskOwner);
-                description_tv.setText(taskDescription);
+                    reward_tv.setText(MessageFormat.format("{0}🍈", melonReward));
+                    description_tv.setText(taskDescription);
+                }
             });
         } catch (SQLiteDatabaseLockedException e) {
             Log.e(TAG, "onCreateView: Database already in use", e);
