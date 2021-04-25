@@ -4,11 +4,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/menuUsername"
+        android:title="@string/menuUser"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/melon_stats"
+        android:title="@string/melonText"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/action_add_item"
         android:icon="@drawable/ic_baseline_add_box_24"
         android:title="@string/add_task"
         app:showAsAction="ifRoom"/>
-<!--    <item-->
+    <!--    <item-->
 <!--        android:id="@+id/action_filter"-->
 <!--        android:icon="@drawable/ic_baseline_filter_alt_24"-->
 <!--        android:title="@string/filter"-->

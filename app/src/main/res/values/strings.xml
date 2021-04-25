@@ -156,5 +156,6 @@
     <string name="name">Name</string>
     <string name="emailHint">Email</string>
     <string name="log_out_home">Log Out</string>
-    <string name="melonText">Current Melons: %1$s</string>
+    <string name="melonText">%s &#127816;</string>
+    <string name="menuUser">%s</string>
 </resources>
