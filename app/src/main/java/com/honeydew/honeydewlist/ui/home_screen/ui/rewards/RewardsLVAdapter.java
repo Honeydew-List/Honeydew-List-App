@@ -18,12 +18,9 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.honeydew.honeydewlist.R;
 import com.honeydew.honeydewlist.data.Reward;
-import com.honeydew.honeydewlist.ui.home_screen.ui.tasks.TaskDetailActivity;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class RewardsLVAdapter extends ArrayAdapter<Reward> {
     // constructor for our list view adapter.
@@ -53,7 +50,6 @@ public class RewardsLVAdapter extends ArrayAdapter<Reward> {
         TextView description = listitemView.findViewById(R.id.list_item_description);
         TextView points = listitemView.findViewById(R.id.list_item_melon_count);
         TextView owner = listitemView.findViewById(R.id.list_item_owner);
-        CheckBox completionStatus = listitemView.findViewById(R.id.list_item_check_box);
         MaterialCardView card = listitemView.findViewById(R.id.card_view);
 
 
@@ -66,7 +62,7 @@ public class RewardsLVAdapter extends ArrayAdapter<Reward> {
         // below line is use to set data to our text view.
         name.setText(dataModal.getName());
         description.setText(dataModal.getDescription());
-        points.setText(MessageFormat.format("{0}", "Melons: " + dataModal.getCost()));
+        points.setText(MessageFormat.format("{0}", dataModal.getPoints() + "🍈")); //"Melon Cost: " +
         owner.setText(String.format("%s %s",
                 getContext().getResources().getString(R.string.ownerLabel), dataModal.getOwner()));
 
@@ -80,7 +76,7 @@ public class RewardsLVAdapter extends ArrayAdapter<Reward> {
 
             // Use the itemID to load the task details from firestore
             Log.i("RewardsLVAdapter", "getView: " + dataModal.getName());
-            Intent i = new Intent(v.getContext(), TaskDetailActivity.class);
+            Intent i = new Intent(v.getContext(), CreateRewardActivity.class);
             i.putExtra("owner", dataModal.getOwner());
             i.putExtra("ownerUUID", dataModal.getUUID());
             i.putExtra("itemID", dataModal.getItemID());

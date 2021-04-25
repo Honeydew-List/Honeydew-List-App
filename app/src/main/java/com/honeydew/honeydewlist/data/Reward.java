@@ -3,7 +3,7 @@ package com.honeydew.honeydewlist.data;
 import java.util.List;
 
 public class Reward extends Item {
-    private Long cost;
+    private Long points;
     private Long quantity; // TODO: Add quantity restriction, for now set quantity to 1
     private Boolean completed;
 
@@ -15,12 +15,12 @@ public class Reward extends Item {
         super(name, description, owner, uuid, itemID);
     }
 
-    public Long getCost() {
-        return cost;
+    public Long getPoints() {
+        return points;
     }
 
-    public void setCost(Long cost) {
-        this.cost = cost;
+    public void setCost(Long points) {
+        this.points = points;
     }
 
     public Long getQuantity() {

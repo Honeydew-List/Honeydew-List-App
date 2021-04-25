@@ -21,6 +21,10 @@
             android:label="@string/title_activity_create_task"
             android:theme="@style/Theme.HoneydewList.NoActionBar" />
         <activity
+            android:name=".ui.home_screen.ui.rewards.CreateRewardActivity"
+            android:label="@string/title_activity_create_reward"
+            android:theme="@style/Theme.HoneydewList.NoActionBar" />
+        <activity
             android:name=".ui.login.RegisterSecurityQuestionsActivity"
             android:label="Security Questions">
             <meta-data

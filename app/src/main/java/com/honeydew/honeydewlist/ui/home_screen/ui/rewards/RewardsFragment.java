@@ -1,5 +1,6 @@
 package com.honeydew.honeydewlist.ui.home_screen.ui.rewards;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +30,7 @@ import com.honeydew.honeydewlist.R;
 import com.honeydew.honeydewlist.data.Reward;
 import com.honeydew.honeydewlist.data.Task;
 import com.honeydew.honeydewlist.ui.home_screen.inteface.GetFriendCallback;
+import com.honeydew.honeydewlist.ui.home_screen.ui.tasks.CreateTaskActivity;
 import com.honeydew.honeydewlist.ui.home_screen.ui.tasks.TasksLVAdapter;
 
 import java.util.ArrayList;
@@ -163,11 +165,8 @@ public class RewardsFragment extends Fragment {
         int itemId = item.getItemId();
         if (itemId == R.id.action_add_item) {
             // navigate to add task screen
-            Toast.makeText(
-                    getContext(),
-                    "Not yet implemented",
-                    Toast.LENGTH_SHORT
-            ).show();
+            Intent i = new Intent(getContext(), CreateRewardActivity.class);
+            startActivity(i);
             return true;
         }
         return super.onOptionsItemSelected(item);
