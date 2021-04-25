@@ -40,6 +40,8 @@ public class TasksFragment extends Fragment {
     private ArrayList<String> foundFriendIds;
     private FirebaseAuth auth;
     private FirebaseUser user;
+    private String userID;
+    private String username,melons;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -64,7 +66,7 @@ public class TasksFragment extends Fragment {
         user = auth.getCurrentUser();
         foundFriendIds = new ArrayList<>();
         if (user != null) {
-            String userID = user.getUid();
+            userID = user.getUid();
             foundFriendIds.add(user.getUid());
             friendsRef = db.collection("users/" + userID + "/friends");
 
@@ -142,7 +144,23 @@ public class TasksFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        userID = user.getUid();
         inflater.inflate(R.menu.app_bar_menu, menu);
+
+        db.collection("users").document(userID).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    username = documentSnapshot.getData().get("username").toString();
+                    menu.findItem(R.id.menuUsername).setTitle(getString(R.string.menuUser, username));
+                })
+                .addOnFailureListener(e -> Toast.makeText(requireContext(),
+                        "Could not find username from Firestore",
+                        Toast.LENGTH_SHORT).show());
+
+        db.collection("users").document(userID).addSnapshotListener((value, error) -> {
+            melons = value.getData().get("melon_count").toString();
+            menu.findItem(R.id.melon_stats).setTitle(getString(R.string.melonText, melons));
+        });
+
     }
 
     @Override
@@ -162,8 +180,16 @@ public class TasksFragment extends Fragment {
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onDestroy() {
+        super.onDestroy();
+        if (db != null) {
+            db.terminate();
+        }
+    }
+
+    @Override
+    public void onDestroyOptionsMenu() {
+        super.onDestroyOptionsMenu();
         if (db != null) {
             db.terminate();
         }
