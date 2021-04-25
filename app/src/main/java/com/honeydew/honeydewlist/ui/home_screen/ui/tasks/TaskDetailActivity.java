@@ -16,6 +16,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -58,8 +59,8 @@ public class TaskDetailActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(view -> onBackPressed());
 
         // Add FAB button click listener
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(view -> finish());
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(view -> finish());
 
         // Get data from intent extras
         taskDescription = i.getStringExtra("description");
@@ -73,7 +74,6 @@ public class TaskDetailActivity extends AppCompatActivity {
         verifiedStatus = i.getBooleanExtra("verifiedStatus", false);
 
         // Find text views
-//        status_tv = findViewById(R.id.status);
         reward_tv = findViewById(R.id.reward);
         owner_tv = findViewById(R.id.owner);
         description_tv = findViewById(R.id.description);
@@ -148,6 +148,66 @@ public class TaskDetailActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.e(TAG, "onCreateView: Something happened", e);
         }
+
+
+
+        complete_chip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // Don't let owner mark it as completed
+                if (user != null) {
+                    if (user.getUid().equals(taskOwnerUUID)) {
+                        // NonOwner, can only set completed, ignore input
+                        complete_chip.setChecked(!isChecked);
+                        Snackbar snackBar = Snackbar.make(
+                                findViewById(android.R.id.content),
+                                "The owner of a task cannot mark it as completed",
+                                Snackbar.LENGTH_SHORT
+                        );
+                        snackBar.setAction("Dismiss", v12 -> {
+                            // Call your action method here
+                            snackBar.dismiss();
+                        });
+                        snackBar.show();
+                    } else {
+                        // Sync with firestore here
+                    }
+                } else {
+                    // If user is not logged in, don't allow input
+                    complete_chip.setCheckable(false);
+                    verify_chip.setCheckable(false);
+                }
+            }
+        });
+
+        verify_chip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // Don't let non owner mark it as verified
+                if (user != null) {
+                    if (!user.getUid().equals(taskOwnerUUID)) {
+                        // Owner can only set verified, ignore input
+                        verify_chip.setChecked(!isChecked);
+                        Snackbar snackBar = Snackbar.make(
+                                findViewById(android.R.id.content),
+                                "Only the owner of a task can mark it as verified",
+                                Snackbar.LENGTH_SHORT
+                        );
+                        snackBar.setAction("Dismiss", v12 -> {
+                            // Call your action method here
+                            snackBar.dismiss();
+                        });
+                        snackBar.show();
+                    } else {
+                        // Sync with firestore here
+                    }
+                } else {
+                    // If user is not logged in, don't allow input
+                    complete_chip.setCheckable(false);
+                    verify_chip.setCheckable(false);
+                }
+            }
+        });
     }
 
     @Override
