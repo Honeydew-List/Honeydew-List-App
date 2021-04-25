@@ -24,8 +24,10 @@ import java.util.ArrayList;
 
 public class RewardsLVAdapter extends ArrayAdapter<Reward> {
     // constructor for our list view adapter.
-    public RewardsLVAdapter(@NonNull Context context, ArrayList<Reward> dataModalArrayList) {
+    private FirebaseFirestore db;
+    public RewardsLVAdapter(@NonNull Context context, ArrayList<Reward> dataModalArrayList, FirebaseFirestore db) {
         super(context, 0, dataModalArrayList);
+        this.db = db;
     }
 
     @NonNull
@@ -72,6 +74,9 @@ public class RewardsLVAdapter extends ArrayAdapter<Reward> {
         card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (db != null) {
+                    db.terminate();
+                }
                 // Use the itemID to load the task details from firestore
                 Log.i("RewardsLVAdapter", "getView: " + dataModal.getName());
                 Intent i = new Intent(v.getContext(), RewardDetailActivity.class);

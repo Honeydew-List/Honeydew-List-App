@@ -80,7 +80,7 @@ public class RewardsFragment extends Fragment {
 
 
             // after that we are passing our array list to our adapter class.
-            adapter = new RewardsLVAdapter(requireContext(), dataModalArrayList);
+            adapter = new RewardsLVAdapter(requireContext(), dataModalArrayList, db);
 
             // after passing this array list to our adapter
             // class we are setting our adapter to our list view.

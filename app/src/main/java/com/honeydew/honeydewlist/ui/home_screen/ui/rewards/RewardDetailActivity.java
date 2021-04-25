@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RewardDetailActivity extends AppCompatActivity {
+    FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,14 +35,31 @@ public class RewardDetailActivity extends AppCompatActivity {
         toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_material);
         toolbar.setNavigationOnClickListener(view -> onBackPressed());
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // updateFirestore();
                 finish();
             }
+
+            private void updateFirestore() {
+                Map<String, Object> stringObjectMap = new HashMap<String, Object>() {{
+                    put("redeemed", true);
+                }};
+                db.collection("users/" + intent.getStringExtra("ownerUUID") + "/rewards").
+                        document(intent.getStringExtra("itemID")).update(stringObjectMap);
+            }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (db != null) {
+            db.terminate();
+        }
     }
 }
