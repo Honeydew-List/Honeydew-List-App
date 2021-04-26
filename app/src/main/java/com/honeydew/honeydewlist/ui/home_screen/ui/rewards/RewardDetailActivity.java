@@ -33,6 +33,7 @@ public class RewardDetailActivity extends AppCompatActivity {
     String username, uuid;
     private long melonCost;
     private Boolean redeemedStatus;
+    private long currentMelonCount;
     private Snackbar snackBar;
     FirebaseFirestore db;
 
@@ -210,7 +211,7 @@ public class RewardDetailActivity extends AppCompatActivity {
                         document(itemID).update(redeemedMap);
 
                 Map<String, Object> costMap = new HashMap<String, Object>() {{
-                    put("points", FieldValue.increment(-1 * melonCost));
+                    put("melon_count", FieldValue.increment(-1 * melonCost));
                 }};
                 db.collection("users").
                         document(redeemerUUID).update(costMap);
