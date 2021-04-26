@@ -45,11 +45,11 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         register.setOnClickListener(v -> {
-            String Username, Password;
-            Username = email_value.getText().toString();
+            String Email, Password;
+            Email = email_value.getText().toString();
             Password = password_value.getText().toString();
             Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
-            i.putExtra("username", Username);
+            i.putExtra("email", Email);
             i.putExtra("password", Password);
             startActivity(i);
         });

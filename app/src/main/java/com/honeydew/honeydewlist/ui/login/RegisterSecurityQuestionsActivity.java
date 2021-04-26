@@ -21,6 +21,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
@@ -29,6 +31,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.honeydew.honeydewlist.R;
 import com.honeydew.honeydewlist.ui.home_screen.HomeScreen;
@@ -240,6 +243,7 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
             userData.put("sec_answer2", Answer2);
             userData.put("sec_answer3", Answer3);
             userData.put("melon_count", melons);
+
             // Upload user map to database
             db.collection("users").document(uuid)
                     .set(userData)
@@ -249,6 +253,13 @@ public class RegisterSecurityQuestionsActivity extends AppCompatActivity {
                     .addOnFailureListener(e -> {
                         Log.w(TAG, "Error adding document", e);
                     });
+
+
+            // Upload user to user list
+            db.collection("data").document("emailToUid")
+                    .update(FieldPath.of(Email), uuid)
+                    .addOnSuccessListener(aVoid -> Log.d(TAG, "DocumentSnapshot emailToUid successfully updated!"))
+                    .addOnFailureListener(e -> Log.w(TAG, "Error updating document emailToUid", e));
 
             Toast.makeText(
                     getApplicationContext(),

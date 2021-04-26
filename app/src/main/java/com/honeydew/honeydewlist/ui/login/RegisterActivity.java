@@ -34,49 +34,44 @@ public class RegisterActivity extends AppCompatActivity {
         Button next;
 
         email_value = (EditText) findViewById(R.id.email);
-        username_value = (EditText) findViewById(R.id.login_email);
+        username_value = (EditText) findViewById(R.id.login_username);
         password_value = (EditText) findViewById(R.id.password);
         verify_password_value = (EditText) findViewById(R.id.verify_password);
         next = (Button) findViewById(R.id.nextButton);
 
-        username_value.setText(intent.getStringExtra("username"));
+        email_value.setText(intent.getStringExtra("email"));
         password_value.setText(intent.getStringExtra("password"));
 
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Snackbar snackBar;
+        next.setOnClickListener(v -> {
+            String Email, Username, Password, VerifyPassword;
+            Email = email_value.getText().toString();
+            Username = username_value.getText().toString();
+            Password = password_value.getText().toString();
+            VerifyPassword = verify_password_value.getText().toString();
 
-                String Email, Username, Password, VerifyPassword;
-                Email = email_value.getText().toString();
-                Username = username_value.getText().toString();
-                Password = password_value.getText().toString();
-                VerifyPassword = verify_password_value.getText().toString();
-
-                if (Email.matches("")){
-                    email_value.setError("Email cannot be empty");
-                } else if (!Patterns.EMAIL_ADDRESS.matcher(Email).matches()) {
-                    email_value.setError("Enter a valid email");
-                } else if (Username.matches("")){
-                    username_value.setError("Username cannot be empty");
-                } else if (Password.matches("")){
-                    password_value.setError("Password cannot be empty");
-                } else if (VerifyPassword.matches("")){
-                    verify_password_value.setError("Password cannot be empty");
-                } else if (Password.length() < 7){
-                    password_value.setError("Password must at least be 8 characters");
-                } else if (!Password.matches(VerifyPassword)) {
-                    verify_password_value.setError("Passwords do not match");
-                } else {
-                    Intent downloadIntent = new Intent(
-                            getApplicationContext(),
-                            RegisterSecurityQuestionsActivity.class
-                    );
-                    downloadIntent.putExtra("email", Email);
-                    downloadIntent.putExtra("username", Username);
-                    downloadIntent.putExtra("password", Password);
-                    startActivity(downloadIntent);
-                }
+            if (Email.matches("")){
+                email_value.setError("Email cannot be empty");
+            } else if (!Patterns.EMAIL_ADDRESS.matcher(Email).matches()) {
+                email_value.setError("Enter a valid email");
+            } else if (Username.matches("")){
+                username_value.setError("Username cannot be empty");
+            } else if (Password.matches("")){
+                password_value.setError("Password cannot be empty");
+            } else if (VerifyPassword.matches("")){
+                verify_password_value.setError("Password cannot be empty");
+            } else if (Password.length() < 7){
+                password_value.setError("Password must at least be 8 characters");
+            } else if (!Password.matches(VerifyPassword)) {
+                verify_password_value.setError("Passwords do not match");
+            } else {
+                Intent downloadIntent = new Intent(
+                        getApplicationContext(),
+                        RegisterSecurityQuestionsActivity.class
+                );
+                downloadIntent.putExtra("email", Email);
+                downloadIntent.putExtra("username", Username);
+                downloadIntent.putExtra("password", Password);
+                startActivity(downloadIntent);
             }
         });
 

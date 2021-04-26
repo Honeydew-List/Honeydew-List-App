@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.honeydew.honeydewlist.R;
 import com.honeydew.honeydewlist.data.Friend;
@@ -45,10 +47,13 @@ public class FriendsLVAdapter extends ArrayAdapter<Friend>{
 
         Friend dataModal = getItem(position);
 
-        TextView userID = listitemView.findViewById(R.id.list_item_userID);
-        userID.setText(dataModal.getUUID());
+        TextView userEmail = listitemView.findViewById(R.id.list_item_userEmail);
+        TextView userName = listitemView.findViewById(R.id.list_item_username);
+        userEmail.setText(dataModal.getEmail());
+        userName.setText(dataModal.getOwner());
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+
 
         return listitemView;
     }

@@ -13,34 +13,18 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
         android:orientation="vertical">
-
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/text_input_layout_1"
+            android:id="@+id/text_input_layout"
             android:layout_width="match_parent"
-            app:helperText="The username of the friend."
+            app:helperText="The email of the friend."
             android:paddingBottom="16dp"
             android:layout_height="match_parent">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/text_input_edit_text_friend_name"
+                android:id="@+id/text_input_edit_text_friend_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/name"
-                android:singleLine="true" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/text_input_layout_2"
-            android:layout_width="match_parent"
-            app:helperText="The userID of the friend."
-            android:paddingBottom="16dp"
-            android:layout_height="match_parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/text_input_edit_text_friend_id"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/name"
+                android:hint="@string/email"
                 android:singleLine="true" />
 
         </com.google.android.material.textfield.TextInputLayout>
