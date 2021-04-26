@@ -29,6 +29,7 @@ import com.honeydew.honeydewlist.ui.home_screen.inteface.GetFriendCallback;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class TasksFragment extends Fragment {
 
@@ -210,8 +211,8 @@ public class TasksFragment extends Fragment {
         friendsRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 List<String> friendList = new ArrayList<>();
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    String userID = document.getId().trim();
+                for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                    String userID = document.getString("uuid");
                     friendList.add(userID);
                 }
                 myCallback.onCallback(friendList);

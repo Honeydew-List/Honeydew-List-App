@@ -156,7 +156,7 @@ public class RewardsFragment extends Fragment {
             if (task.isSuccessful()) {
                 List<String> friendList = new ArrayList<>();
                 for (QueryDocumentSnapshot document : task.getResult()) {
-                    String userID = document.getId().trim();
+                    String userID = document.getString("uuid");
                     friendList.add(userID);
                 }
                 myCallback.onCallback(friendList);
