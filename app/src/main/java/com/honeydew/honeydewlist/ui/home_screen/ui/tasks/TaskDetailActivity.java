@@ -89,6 +89,8 @@ public class TaskDetailActivity extends AppCompatActivity {
         complete_chip = findViewById(R.id.complete_chip);
         verify_chip = findViewById(R.id.verify_chip);
 
+        // TODO: Add textview with who completed the task
+
         // Set chips to data from intent extras
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
