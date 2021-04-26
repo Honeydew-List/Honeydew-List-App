@@ -23,6 +23,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.honeydew.honeydewlist.R;
 import com.honeydew.honeydewlist.data.Task;
 import com.honeydew.honeydewlist.ui.home_screen.inteface.GetFriendCallback;
@@ -90,6 +91,7 @@ public class TasksFragment extends Fragment {
 
 //            new MyAsyncTask().execute();
 //            getFriends();
+
             readFriendData(friendIds -> {
                 foundFriendIds.addAll(friendIds);
                 // Load the listview
@@ -97,17 +99,27 @@ public class TasksFragment extends Fragment {
                     try {
                         loadDetailListview(foundFriendIds.get(i));
                     } catch (SQLiteDatabaseLockedException e) {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(requireContext(),
+                                "SQLiteDatabaseLockedException",
+                                Toast.LENGTH_SHORT).show();
                         Log.e(TAG, "onCreateView: Database already in use", e);
                     } catch (RuntimeException e) {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(requireContext(),
+                                "RuntimeException",
+                                Toast.LENGTH_SHORT).show();
                         Log.e(TAG, "onCreate: RuntimeException", e);
                     } catch (Exception e) {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(requireContext(),
+                                "Exception",
+                                Toast.LENGTH_SHORT).show();
                         Log.e(TAG, "onCreateView: Something happened", e);
                     }
-
                 }
+                progressBar.setVisibility(View.GONE);
             });
-
-
         }
 
         return root;
@@ -208,15 +220,36 @@ public class TasksFragment extends Fragment {
     }
 
     public void readFriendData(GetFriendCallback myCallback) {
-        friendsRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                List<String> friendList = new ArrayList<>();
-                for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                    String userID = document.getString("uuid");
-                    friendList.add(userID);
+        try {
+            com.google.android.gms.tasks.Task<QuerySnapshot> queryTask = friendsRef.get();
+            queryTask.addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    List<String> friendList = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                        String userID = document.getString("uuid");
+                        friendList.add(userID);
+                    }
+                    myCallback.onCallback(friendList);
                 }
-                myCallback.onCallback(friendList);
-            }
-        });
+            });
+        } catch (SQLiteDatabaseLockedException e) {
+            progressBar.setVisibility(View.GONE);
+            Toast.makeText(requireContext(),
+                    "SQLiteDatabaseLockedException",
+                    Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "onCreateView: Database already in use", e);
+        } catch (RuntimeException e) {
+            progressBar.setVisibility(View.GONE);
+            Toast.makeText(requireContext(),
+                    "RuntimeException",
+                    Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "onCreate: RuntimeException", e);
+        } catch (Exception e) {
+            progressBar.setVisibility(View.GONE);
+            Toast.makeText(requireContext(),
+                    "Exception",
+                    Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "onCreateView: Something happened", e);
+        }
     }
 }

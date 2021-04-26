@@ -82,11 +82,11 @@ public class HomeFragment extends Fragment {
         }
     }
 
-@Override
-public void onDestroyOptionsMenu() {
-    super.onDestroyOptionsMenu();
-    if (db != null) {
-        db.terminate();
+    @Override
+    public void onDestroyOptionsMenu() {
+        super.onDestroyOptionsMenu();
+        if (db != null) {
+            db.terminate();
+        }
     }
-}
 }
