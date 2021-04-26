@@ -174,39 +174,50 @@ public class RewardDetailActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    // Only allow it to be redeemed if it is not redeemed yet
-                    if (redeemedStatus) {
-                        snackBar = Snackbar.make(
-                                findViewById(android.R.id.content),
-                                "This reward has alreay been redeemed",
-                                Snackbar.LENGTH_SHORT
-                        );
-                        snackBar.setAction("Dismiss", v12 -> {
-                            // Call your action method here
-                            snackBar.dismiss();
-                        });
-                        snackBar.show();
-                    } else if (ownerUUID.equals(uuid)) {
-                        snackBar = Snackbar.make(
-                                findViewById(android.R.id.content),
-                                "You cannot redeem your own reward",
-                                Snackbar.LENGTH_SHORT
-                        );
-                        snackBar.setAction("Dismiss", v12 -> {
-                            // Call your action method here
-                            snackBar.dismiss();
-                        });
-                        snackBar.show();
-                    } else {
+                // Only allow it to be redeemed if it is not redeemed yet
+                if (redeemedStatus) {
+                    snackBar = Snackbar.make(
+                            findViewById(android.R.id.content),
+                            "This reward has alreay been redeemed",
+                            Snackbar.LENGTH_SHORT
+                    );
+                    snackBar.setAction("Dismiss", v12 -> {
+                        // Call your action method here
+                        snackBar.dismiss();
+                    });
+                    snackBar.show();
+                } else if (ownerUUID.equals(uuid)) {
+                    snackBar = Snackbar.make(
+                            findViewById(android.R.id.content),
+                            "You cannot redeem your own reward",
+                            Snackbar.LENGTH_SHORT
+                    );
+                    snackBar.setAction("Dismiss", v12 -> {
+                        // Call your action method here
+                        snackBar.dismiss();
+                    });
+                    snackBar.show();
+                }  else if (currentMelonCount < melonCost) {
+                    snackBar = Snackbar.make(
+                            findViewById(android.R.id.content),
+                            "You don't have enough Melons for this reward",
+                            Snackbar.LENGTH_SHORT
+                    );
+                    snackBar.setAction("Dismiss", v12 -> {
+                        // Call your action method here
+                        snackBar.dismiss();
+                    });
+                    snackBar.show();
+                } else {
+                    try {
                         updateFirestore(username, uuid, melonCost);
+                    } catch (SQLiteDatabaseLockedException e) {
+                        Log.e(TAG, "onCreateView: Database already in use", e);
+                    } catch (RuntimeException e) {
+                        Log.e(TAG, "onCreate: RuntimeException", e);
+                    } catch (Exception e) {
+                        Log.e(TAG, "onCreateView: Something happened", e);
                     }
-                } catch (SQLiteDatabaseLockedException e) {
-                    Log.e(TAG, "onCreateView: Database already in use", e);
-                } catch (RuntimeException e) {
-                    Log.e(TAG, "onCreate: RuntimeException", e);
-                } catch (Exception e) {
-                    Log.e(TAG, "onCreateView: Something happened", e);
                 }
                 // finish();
             }
