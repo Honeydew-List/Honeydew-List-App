@@ -68,9 +68,9 @@ public class RewardDetailActivity extends AppCompatActivity {
         itemID = i.getStringExtra("itemID");
         melonCost = i.getLongExtra("points", -1);
 
-        redeemerUUID = i.getStringExtra("completionDoerUUID");
-        redeemer = i.getStringExtra("completionDoer");
-        redeemedStatus = i.getBooleanExtra("completionStatus", false);
+        redeemerUUID = i.getStringExtra("redeemerUUID");
+        redeemer = i.getStringExtra("redeemer");
+        redeemedStatus = i.getBooleanExtra("redeemed", false);
 
         // Find text views
         cost_tv = findViewById(R.id.cost);
