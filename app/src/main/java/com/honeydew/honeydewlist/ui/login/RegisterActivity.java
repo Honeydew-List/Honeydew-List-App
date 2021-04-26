@@ -39,7 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
         verify_password_value = (EditText) findViewById(R.id.verify_password);
         next = (Button) findViewById(R.id.nextButton);
 
-        username_value.setText(intent.getStringExtra("username"));
+        email_value.setText(intent.getStringExtra("email"));
         password_value.setText(intent.getStringExtra("password"));
 
         next.setOnClickListener(new View.OnClickListener() {

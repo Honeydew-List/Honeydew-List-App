@@ -23,14 +23,17 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.honeydew.honeydewlist.R;
 import com.honeydew.honeydewlist.data.Friend;
+import com.honeydew.honeydewlist.ui.home_screen.inteface.GetFriendCallback;
 import com.honeydew.honeydewlist.ui.home_screen.ui.friends.AddFriendActivity;
 import com.honeydew.honeydewlist.ui.home_screen.ui.friends.FriendsLVAdapter;
 import com.honeydew.honeydewlist.data.Friend;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class FriendsFragment extends Fragment {
 
