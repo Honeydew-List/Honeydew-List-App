@@ -108,6 +108,14 @@ public class RewardDetailActivity extends AppCompatActivity {
                                 if (username_obj != null)
                                     username = username_obj.toString();
                             }
+                            try {
+                                //noinspection ConstantConditions
+                                currentMelonCount = documentSnapshot.getLong("melon_count");
+                            } catch (RuntimeException e) {
+                                Log.e(TAG, "onCreate: RuntimeException", e);
+                            } catch (Exception e) {
+                                Log.e(TAG, "onCreate: Something happened", e);
+                            }
                         })
                         .addOnFailureListener(e -> Toast.makeText(getApplicationContext(),
                                 "Could not find username from Firestore",
@@ -141,6 +149,8 @@ public class RewardDetailActivity extends AppCompatActivity {
                         melonCost = value.getLong("points");
                     } catch (RuntimeException e) {
                         Log.e(TAG, "onCreate: RuntimeException", e);
+                    } catch (Exception e) {
+                        Log.e(TAG, "onCreate: Something happened", e);
                     }
                     cost_tv.setText(MessageFormat.format("{0}🍈", melonCost));
                     description_tv.setText(description);

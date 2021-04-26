@@ -169,6 +169,8 @@ public class TaskDetailActivity extends AppCompatActivity {
                         melonReward = value.getLong("points");
                     } catch (RuntimeException e) {
                         Log.e(TAG, "onCreate: RuntimeException", e);
+                    } catch (Exception e) {
+                        Log.e(TAG, "onCreate: Something happened", e);
                     }
 
                     // Update chips
