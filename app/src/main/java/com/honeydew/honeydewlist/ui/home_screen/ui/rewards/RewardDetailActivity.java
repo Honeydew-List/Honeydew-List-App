@@ -114,6 +114,32 @@ public class RewardDetailActivity extends AppCompatActivity {
             }
         }
 
+        try {
+            db.collection("users").document(ownerUUID).collection("rewards").document(itemID).addSnapshotListener((value, error) -> {
+                if (value != null) {
+                    redeemedStatus = value.getBoolean("redeemed");
+                    description = value.getData().get("description").toString();
+                    redeemer = value.getData().get("redeemer").toString();
+                    redeemerUUID = value.getData().get("redeemerUUID").toString();
+                    melonCost = value.getLong("points");
+
+                    cost_tv.setText(MessageFormat.format("{0}🍈", melonCost));
+                    description_tv.setText(description);
+                    if (redeemedStatus) {
+                        redeemed_tv.setText(String.format("Redeemed by: %s", redeemer));
+                    } else {
+                        redeemed_tv.setText(R.string.NotRedeemed);
+                    }
+                }
+            });
+        } catch (SQLiteDatabaseLockedException e) {
+            Log.e(TAG, "onCreateView: Database already in use", e);
+        } catch (RuntimeException e) {
+            Log.e(TAG, "onCreate: RuntimeException", e);
+        } catch (Exception e) {
+            Log.e(TAG, "onCreateView: Something happened", e);
+        }
+
         // Buy button, only works for non owners and if user has enough melons
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

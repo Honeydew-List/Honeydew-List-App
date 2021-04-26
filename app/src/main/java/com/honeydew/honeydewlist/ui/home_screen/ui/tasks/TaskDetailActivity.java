@@ -146,6 +146,8 @@ public class TaskDetailActivity extends AppCompatActivity {
             db.collection("users").document(taskOwnerUUID).collection("tasks").document(taskID).addSnapshotListener((value, error) -> {
                 if (value != null) {
                     completionStatus = value.getBoolean("completionStatus");
+                    taskCompletionDoer = value.getData().get("completionDoer").toString();
+                    taskCompletionDoerUUID = value.getData().get("completionDoerUUID").toString();
                     verifiedStatus = value.getBoolean("verifiedStatus");
                     taskDescription = value.getData().get("description").toString();
                     melonReward = value.getLong("points");
