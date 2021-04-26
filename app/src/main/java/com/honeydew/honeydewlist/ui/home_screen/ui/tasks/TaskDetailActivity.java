@@ -13,6 +13,7 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
@@ -48,7 +49,7 @@ public class TaskDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // Declare variables
-        TextView reward_tv, owner_tv, description_tv;
+        TextView reward_tv, owner_tv, description_tv, description_label_tv;
         FirebaseAuth auth;
         FirebaseUser user;
         db = FirebaseFirestore.getInstance();
@@ -57,7 +58,7 @@ public class TaskDetailActivity extends AppCompatActivity {
 
         // Set app bar title
         taskName = i.getStringExtra("name");
-        CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        CollapsingToolbarLayout toolBarLayout = findViewById(R.id.toolbar_layout);
         toolBarLayout.setTitle(taskName == null ? getTitle() : taskName);
 
         // Add back button
@@ -83,9 +84,12 @@ public class TaskDetailActivity extends AppCompatActivity {
         // Find text views
         reward_tv = findViewById(R.id.reward);
         owner_tv = findViewById(R.id.owner);
+        description_label_tv = findViewById(R.id.description_label);
         description_tv = findViewById(R.id.description);
         complete_chip = findViewById(R.id.complete_chip);
         verify_chip = findViewById(R.id.verify_chip);
+
+        // TODO: Add textview with who completed the task
 
         // Set chips to data from intent extras
         auth = FirebaseAuth.getInstance();
@@ -117,13 +121,17 @@ public class TaskDetailActivity extends AppCompatActivity {
             try {
                 db.collection("users").document(uuid).get()
                         .addOnSuccessListener(documentSnapshot -> {
-                            username = documentSnapshot.getData().get("username").toString();
+                            Map<String, Object> data = documentSnapshot.getData();
+                            Object username_obj;
+                            if (data != null) {
+                                username_obj = data.get("username");
+                                if (username_obj != null)
+                                    username = username_obj.toString();
+                            }
                         })
-                        .addOnFailureListener(e -> {
-                            Toast.makeText(getApplicationContext(),
-                                    "Could not find username from Firestore",
-                                    Toast.LENGTH_SHORT).show();
-                        });
+                        .addOnFailureListener(e -> Toast.makeText(getApplicationContext(),
+                                "Could not find username from Firestore",
+                                Toast.LENGTH_SHORT).show());
             } catch (SQLiteDatabaseLockedException e) {
                 Log.e(TAG, "onCreateView: Database already in use", e);
             } catch (RuntimeException e) {
@@ -136,13 +144,34 @@ public class TaskDetailActivity extends AppCompatActivity {
         reward_tv.setText(MessageFormat.format("{0}🍈", melonReward));
         owner_tv.setText(taskOwner);
         description_tv.setText(taskDescription);
+        if (TextUtils.isEmpty(taskDescription)) {
+            description_label_tv.setVisibility(View.GONE);
+            description_tv.setVisibility(View.GONE);
+        }
         try {
             db.collection("users").document(taskOwnerUUID).collection("tasks").document(taskID).addSnapshotListener((value, error) -> {
                 if (value != null) {
+                    Map<String, Object> data  = value.getData();
+                    if (data != null) {
+                        Object taskDescription_obj, taskCompletionDoer_obj, taskCompletionDoerUUID_obj;
+                        taskDescription_obj = data.get("description");
+                        taskCompletionDoer_obj = data.get("completionDoer");
+                        taskCompletionDoerUUID_obj = data.get("completionDoerUUID");
+
+                        if (taskDescription_obj != null) taskDescription = taskDescription_obj.toString();
+                        if (taskCompletionDoer_obj != null) taskCompletionDoer = taskCompletionDoer_obj.toString();
+                        if (taskCompletionDoerUUID_obj != null) taskCompletionDoerUUID = taskCompletionDoerUUID_obj.toString();
+                    }
                     completionStatus = value.getBoolean("completionStatus");
                     verifiedStatus = value.getBoolean("verifiedStatus");
-                    taskDescription = value.getData().get("description").toString();
-                    melonReward = value.getLong("points");
+                    try {
+                        //noinspection ConstantConditions
+                        melonReward = value.getLong("points");
+                    } catch (RuntimeException e) {
+                        Log.e(TAG, "onCreate: RuntimeException", e);
+                    } catch (Exception e) {
+                        Log.e(TAG, "onCreate: Something happened", e);
+                    }
 
                     // Update chips
                     if (completionStatus) {
@@ -180,100 +209,94 @@ public class TaskDetailActivity extends AppCompatActivity {
 
 
 
-        complete_chip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                // Don't let owner mark it as completed
-                if (user != null) {
-                    if (isChecked && user.getUid().equals(taskOwnerUUID)) {
-                        // NonOwner, can only set completed, ignore input
-                        complete_chip.setChecked(false);
-                        Snackbar snackBar = Snackbar.make(
-                                findViewById(android.R.id.content),
-                                "The owner of a task cannot mark it as completed",
-                                Snackbar.LENGTH_SHORT
-                        );
-                        snackBar.setAction("Dismiss", v12 -> {
-                            // Call your action method here
-                            snackBar.dismiss();
-                        });
-                        snackBar.show();
-                    } else if (!isChecked && !taskCompletionDoerUUID.equals("") && !user.getUid().equals(taskCompletionDoerUUID)) {
-                        // Unchecked, and someone else has already completed this task
-                        complete_chip.setChecked(true);
-                        Snackbar snackBar = Snackbar.make(
-                                findViewById(android.R.id.content),
-                                "Someone else has completed this task",
-                                Snackbar.LENGTH_SHORT
-                        );
-                        snackBar.setAction("Dismiss", v12 -> {
-                            // Call your action method here
-                            snackBar.dismiss();
-                        });
-                        snackBar.show();
-                    } else {
-                        // Sync with firestore
-                        try {
-                            // Database call here
-                            if (isChecked)
-                                updateCompletionFirestore(true, uuid, username);
-                            else
-                                updateCompletionFirestore(false, "", "");
-                        } catch (SQLiteDatabaseLockedException e) {
-                            Log.e(TAG, "onCreateView: Database already in use", e);
-                        } catch (RuntimeException e) {
-                            Log.e(TAG, "onCreate: RuntimeException", e);
-                        } catch (Exception e) {
-                            Log.e(TAG, "onCreateView: Something happened", e);
-                        }
-                    }
+        complete_chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            // Don't let owner mark it as completed
+            if (user != null) {
+                if (isChecked && user.getUid().equals(taskOwnerUUID)) {
+                    // NonOwner, can only set completed, ignore input
+                    complete_chip.setChecked(false);
+                    Snackbar snackBar = Snackbar.make(
+                            findViewById(android.R.id.content),
+                            "The owner of a task cannot mark it as completed",
+                            Snackbar.LENGTH_SHORT
+                    );
+                    snackBar.setAction("Dismiss", v12 -> {
+                        // Call your action method here
+                        snackBar.dismiss();
+                    });
+                    snackBar.show();
+                } else if (!isChecked && !taskCompletionDoerUUID.equals("") && !user.getUid().equals(taskCompletionDoerUUID)) {
+                    // Unchecked, and someone else has already completed this task
+                    complete_chip.setChecked(true);
+                    Snackbar snackBar = Snackbar.make(
+                            findViewById(android.R.id.content),
+                            "Someone else has completed this task",
+                            Snackbar.LENGTH_SHORT
+                    );
+                    snackBar.setAction("Dismiss", v12 -> {
+                        // Call your action method here
+                        snackBar.dismiss();
+                    });
+                    snackBar.show();
                 } else {
-                    // If user is not logged in, don't allow input
-                    complete_chip.setCheckable(false);
-                    verify_chip.setCheckable(false);
+                    // Sync with firestore
+                    try {
+                        // Database call here
+                        if (isChecked)
+                            updateCompletionFirestore(true, uuid, username);
+                        else
+                            updateCompletionFirestore(false, "", "");
+                    } catch (SQLiteDatabaseLockedException e) {
+                        Log.e(TAG, "onCreateView: Database already in use", e);
+                    } catch (RuntimeException e) {
+                        Log.e(TAG, "onCreate: RuntimeException", e);
+                    } catch (Exception e) {
+                        Log.e(TAG, "onCreateView: Something happened", e);
+                    }
                 }
+            } else {
+                // If user is not logged in, don't allow input
+                complete_chip.setCheckable(false);
+                verify_chip.setCheckable(false);
             }
         });
 
-        verify_chip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                // Don't let non owner mark it as verified
-                if (user != null) {
-                    if (!user.getUid().equals(taskOwnerUUID)) {
-                        // Owner can only set verified, ignore input
-                        verify_chip.setChecked(!isChecked);
-                        Snackbar snackBar = Snackbar.make(
-                                findViewById(android.R.id.content),
-                                "Only the owner of a task can mark it as verified",
-                                Snackbar.LENGTH_SHORT
-                        );
-                        snackBar.setAction("Dismiss", v12 -> {
-                            // Call your action method here
-                            snackBar.dismiss();
-                        });
-                        snackBar.show();
-                    } else{
-                        // Sync with firestore
-                        try {
-                            // Database call here
-                            if (isChecked)
-                                updateVerifiedFirestore(true, taskCompletionDoerUUID, melonReward);
-                            else
-                                updateVerifiedFirestore(false, taskCompletionDoerUUID, -1 * melonReward);
-                        } catch (SQLiteDatabaseLockedException e) {
-                            Log.e(TAG, "onCreateView: Database already in use", e);
-                        } catch (RuntimeException e) {
-                            Log.e(TAG, "onCreate: RuntimeException", e);
-                        } catch (Exception e) {
-                            Log.e(TAG, "onCreateView: Something happened", e);
-                        }
+        verify_chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            // Don't let non owner mark it as verified
+            if (user != null) {
+                if (!user.getUid().equals(taskOwnerUUID)) {
+                    // Owner can only set verified, ignore input
+                    verify_chip.setChecked(!isChecked);
+                    Snackbar snackBar = Snackbar.make(
+                            findViewById(android.R.id.content),
+                            "Only the owner of a task can mark it as verified",
+                            Snackbar.LENGTH_SHORT
+                    );
+                    snackBar.setAction("Dismiss", v12 -> {
+                        // Call your action method here
+                        snackBar.dismiss();
+                    });
+                    snackBar.show();
+                } else{
+                    // Sync with firestore
+                    try {
+                        // Database call here
+                        if (isChecked)
+                            updateVerifiedFirestore(true, taskCompletionDoerUUID, melonReward);
+                        else
+                            updateVerifiedFirestore(false, taskCompletionDoerUUID, -1 * melonReward);
+                    } catch (SQLiteDatabaseLockedException e) {
+                        Log.e(TAG, "onCreateView: Database already in use", e);
+                    } catch (RuntimeException e) {
+                        Log.e(TAG, "onCreate: RuntimeException", e);
+                    } catch (Exception e) {
+                        Log.e(TAG, "onCreateView: Something happened", e);
                     }
-                } else {
-                    // If user is not logged in, don't allow input
-                    complete_chip.setCheckable(false);
-                    verify_chip.setCheckable(false);
                 }
+            } else {
+                // If user is not logged in, don't allow input
+                complete_chip.setCheckable(false);
+                verify_chip.setCheckable(false);
             }
         });
     }
