@@ -71,26 +71,23 @@ public class RewardsLVAdapter extends ArrayAdapter<Reward> {
 
         // below line is use to add item click listener
         // for our item of list view.
-        card.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (db != null) {
-                    db.terminate();
-                }
-                // Use the itemID to load the task details from firestore
-                Log.i("RewardsLVAdapter", "getView: " + dataModal.getName());
-                Intent i = new Intent(v.getContext(), RewardDetailActivity.class);
-                i.putExtra("owner", dataModal.getOwner());
-                i.putExtra("ownerUUID", dataModal.getUUID());
-                i.putExtra("itemID", dataModal.getItemID());
-                i.putExtra("name", dataModal.getName());
-                i.putExtra("description", dataModal.getDescription());
-                i.putExtra("points", dataModal.getPoints());
-                i.putExtra("redeemed", dataModal.getRedeemed());
-                i.putExtra("redeemer", dataModal.getRedeemer());
-                i.putExtra("redeemerUUID", dataModal.getRedeemerUUID());
-                getContext().startActivity(i);
+        card.setOnClickListener(v -> {
+            if (db != null) {
+                db.terminate();
             }
+            // Use the itemID to load the task details from firestore
+            Log.i("RewardsLVAdapter", "getView: " + dataModal.getName());
+            Intent i = new Intent(v.getContext(), RewardDetailActivity.class);
+            i.putExtra("owner", dataModal.getOwner());
+            i.putExtra("ownerUUID", dataModal.getUUID());
+            i.putExtra("itemID", dataModal.getItemID());
+            i.putExtra("name", dataModal.getName());
+            i.putExtra("description", dataModal.getDescription());
+            i.putExtra("points", dataModal.getPoints());
+            i.putExtra("redeemed", dataModal.getRedeemed());
+            i.putExtra("redeemer", dataModal.getRedeemer());
+            i.putExtra("redeemerUUID", dataModal.getRedeemerUUID());
+            getContext().startActivity(i);
         });
         return listitemView;
     }

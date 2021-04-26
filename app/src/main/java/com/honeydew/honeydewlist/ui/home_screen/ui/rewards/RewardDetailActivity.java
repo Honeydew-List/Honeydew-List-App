@@ -23,8 +23,8 @@ import java.util.Map;
 public class RewardDetailActivity extends AppCompatActivity {
     private static final String TAG = "DB ERROR";
     private String owner, ownerUUID, itemID, itemName, description, redeemer, redeemerUUID;
-    private long points;
-    private Boolean redeemed;
+    private long melonCost;
+    private Boolean redeemedStatus;
     FirebaseFirestore db;
 
     @Override
@@ -46,6 +46,17 @@ public class RewardDetailActivity extends AppCompatActivity {
 
         // Initialize database
         db = FirebaseFirestore.getInstance();
+
+        // Get data from intents
+        description = i.getStringExtra("description");
+        owner = i.getStringExtra("owner");
+        ownerUUID = i.getStringExtra("ownerUUID");
+        itemID = i.getStringExtra("itemID");
+        melonCost = i.getLongExtra("points", -1);
+
+        redeemerUUID = i.getStringExtra("completionDoerUUID");
+        redeemer = i.getStringExtra("completionDoer");
+        redeemedStatus = i.getBooleanExtra("completionStatus", false);
 
         // Buy button, only works for non owners and if user has enough melons
         FloatingActionButton fab = findViewById(R.id.fab);
