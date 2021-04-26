@@ -13,6 +13,7 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
@@ -48,7 +49,7 @@ public class TaskDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // Declare variables
-        TextView reward_tv, owner_tv, description_tv;
+        TextView reward_tv, owner_tv, description_tv, description_label_tv;
         FirebaseAuth auth;
         FirebaseUser user;
         db = FirebaseFirestore.getInstance();
@@ -83,6 +84,7 @@ public class TaskDetailActivity extends AppCompatActivity {
         // Find text views
         reward_tv = findViewById(R.id.reward);
         owner_tv = findViewById(R.id.owner);
+        description_label_tv = findViewById(R.id.description_label);
         description_tv = findViewById(R.id.description);
         complete_chip = findViewById(R.id.complete_chip);
         verify_chip = findViewById(R.id.verify_chip);
@@ -136,6 +138,10 @@ public class TaskDetailActivity extends AppCompatActivity {
         reward_tv.setText(MessageFormat.format("{0}🍈", melonReward));
         owner_tv.setText(taskOwner);
         description_tv.setText(taskDescription);
+        if (TextUtils.isEmpty(taskDescription)) {
+            description_label_tv.setVisibility(View.GONE);
+            description_tv.setVisibility(View.GONE);
+        }
         try {
             db.collection("users").document(taskOwnerUUID).collection("tasks").document(taskID).addSnapshotListener((value, error) -> {
                 if (value != null) {

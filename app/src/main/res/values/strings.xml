@@ -170,4 +170,5 @@
     <string name="NotCompletedText">Not Completed</string>
     <string name="complete">Complete</string>
     <string name="verify">Verify</string>
+    <string name="NotRedeemed">Not redeemed yet</string>
 </resources>
