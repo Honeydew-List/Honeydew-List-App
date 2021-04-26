@@ -29,4 +29,10 @@
         android:label="@string/title_options"
         tools:layout="@layout/fragment_options" />
 
+    <fragment
+        android:id="@+id/navigation_friends"
+        android:name="com.honeydew.honeydewlist.ui.home_screen.ui.friends.FriendsFragment"
+        android:label="@string/title_friends"
+        tools:layout="@layout/fragment_friends" />
+
 </navigation>
