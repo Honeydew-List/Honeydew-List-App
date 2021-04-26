@@ -22,6 +22,9 @@ import java.util.Map;
 
 public class RewardDetailActivity extends AppCompatActivity {
     private static final String TAG = "DB ERROR";
+    private String owner, ownerUUID, itemID, itemName, description, redeemer, redeemerUUID;
+    private long points;
+    private Boolean redeemed;
     FirebaseFirestore db;
 
     @Override
@@ -32,14 +35,19 @@ public class RewardDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
 
-        Intent intent = getIntent();
-        toolBarLayout.setTitle(intent.getStringExtra("name"));
+        // Set title
+        Intent i = getIntent();
+        itemName = i.getStringExtra("name");
+        toolBarLayout.setTitle(itemName == null ? getTitle() : itemName);
 
+        // Back button
         toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_material);
         toolbar.setNavigationOnClickListener(view -> onBackPressed());
 
+        // Initialize database
         db = FirebaseFirestore.getInstance();
 
+        // Buy button, only works for non owners and if user has enough melons
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,8 +68,8 @@ public class RewardDetailActivity extends AppCompatActivity {
                 Map<String, Object> stringObjectMap = new HashMap<String, Object>() {{
                     put("redeemed", true);
                 }};
-                db.collection("users/" + intent.getStringExtra("ownerUUID") + "/rewards").
-                        document(intent.getStringExtra("itemID")).update(stringObjectMap);
+                db.collection("users/" + i.getStringExtra("ownerUUID") + "/rewards").
+                        document(i.getStringExtra("itemID")).update(stringObjectMap);
             }
         });
     }
