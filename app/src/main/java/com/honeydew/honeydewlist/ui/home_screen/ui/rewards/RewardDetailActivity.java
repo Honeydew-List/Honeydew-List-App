@@ -135,8 +135,12 @@ public class RewardDetailActivity extends AppCompatActivity {
                         if (red_obj != null) redeemer = red_obj.toString();
                         if (red_uuid_obj != null) redeemerUUID = red_uuid_obj.toString();
                     }
-                    value.getLong("points");
-
+                    try {
+                        //noinspection ConstantConditions
+                        melonCost = value.getLong("points");
+                    } catch (RuntimeException e) {
+                        Log.e(TAG, "onCreate: RuntimeException", e);
+                    }
                     cost_tv.setText(MessageFormat.format("{0}🍈", melonCost));
                     description_tv.setText(description);
                     if (redeemedStatus) {

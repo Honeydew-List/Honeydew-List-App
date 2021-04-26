@@ -58,7 +58,7 @@ public class TaskDetailActivity extends AppCompatActivity {
 
         // Set app bar title
         taskName = i.getStringExtra("name");
-        CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        CollapsingToolbarLayout toolBarLayout = findViewById(R.id.toolbar_layout);
         toolBarLayout.setTitle(taskName == null ? getTitle() : taskName);
 
         // Add back button
@@ -121,13 +121,17 @@ public class TaskDetailActivity extends AppCompatActivity {
             try {
                 db.collection("users").document(uuid).get()
                         .addOnSuccessListener(documentSnapshot -> {
-                            username = documentSnapshot.getData().get("username").toString();
+                            Map<String, Object> data = documentSnapshot.getData();
+                            Object username_obj;
+                            if (data != null) {
+                                username_obj = data.get("username");
+                                if (username_obj != null)
+                                    username = username_obj.toString();
+                            }
                         })
-                        .addOnFailureListener(e -> {
-                            Toast.makeText(getApplicationContext(),
-                                    "Could not find username from Firestore",
-                                    Toast.LENGTH_SHORT).show();
-                        });
+                        .addOnFailureListener(e -> Toast.makeText(getApplicationContext(),
+                                "Could not find username from Firestore",
+                                Toast.LENGTH_SHORT).show());
             } catch (SQLiteDatabaseLockedException e) {
                 Log.e(TAG, "onCreateView: Database already in use", e);
             } catch (RuntimeException e) {
@@ -147,12 +151,25 @@ public class TaskDetailActivity extends AppCompatActivity {
         try {
             db.collection("users").document(taskOwnerUUID).collection("tasks").document(taskID).addSnapshotListener((value, error) -> {
                 if (value != null) {
+                    Map<String, Object> data  = value.getData();
+                    if (data != null) {
+                        Object taskDescription_obj, taskCompletionDoer_obj, taskCompletionDoerUUID_obj;
+                        taskDescription_obj = data.get("description");
+                        taskCompletionDoer_obj = data.get("completionDoer");
+                        taskCompletionDoerUUID_obj = data.get("completionDoerUUID");
+
+                        if (taskDescription_obj != null) taskDescription = taskDescription_obj.toString();
+                        if (taskCompletionDoer_obj != null) taskCompletionDoer = taskCompletionDoer_obj.toString();
+                        if (taskCompletionDoerUUID_obj != null) taskCompletionDoerUUID = taskCompletionDoerUUID_obj.toString();
+                    }
                     completionStatus = value.getBoolean("completionStatus");
-                    taskCompletionDoer = value.getData().get("completionDoer").toString();
-                    taskCompletionDoerUUID = value.getData().get("completionDoerUUID").toString();
                     verifiedStatus = value.getBoolean("verifiedStatus");
-                    taskDescription = value.getData().get("description").toString();
-                    melonReward = value.getLong("points");
+                    try {
+                        //noinspection ConstantConditions
+                        melonReward = value.getLong("points");
+                    } catch (RuntimeException e) {
+                        Log.e(TAG, "onCreate: RuntimeException", e);
+                    }
 
                     // Update chips
                     if (completionStatus) {
