@@ -15,21 +15,24 @@
         <activity
             android:name=".ui.home_screen.ui.rewards.RewardDetailActivity"
             android:label="@string/title_activity_reward_detail"
-            android:theme="@style/Theme.HoneydewList.NoActionBar"></activity>
+            android:theme="@style/Theme.HoneydewList.NoActionBar" />
         <activity
             android:name=".ui.home_screen.ui.tasks.TaskDetailActivity"
             android:label="@string/title_activity_task_detail"
             android:theme="@style/Theme.HoneydewList.NoActionBar" />
         <activity
             android:name=".ui.home_screen.ui.friends.AddFriendActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize"
             android:label="Add Friend"
             android:theme="@style/Theme.HoneydewList.NoActionBar" />
         <activity
             android:name=".ui.home_screen.ui.tasks.CreateTaskActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize"
             android:label="@string/title_activity_create_task"
             android:theme="@style/Theme.HoneydewList.NoActionBar" />
         <activity
             android:name=".ui.home_screen.ui.rewards.CreateRewardActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize"
             android:label="@string/title_activity_create_reward"
             android:theme="@style/Theme.HoneydewList.NoActionBar" />
         <activity
