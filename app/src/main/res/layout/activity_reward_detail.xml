@@ -43,7 +43,7 @@
         app:layout_anchorGravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:contentDescription="@string/done"
-        app:srcCompat="@drawable/ic_baseline_done_outline_24"
+        app:srcCompat="@drawable/ic_baseline_shopping_cart_24"
         tools:ignore="VectorDrawableCompat" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
