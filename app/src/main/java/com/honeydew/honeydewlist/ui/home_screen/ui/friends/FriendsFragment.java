@@ -43,16 +43,18 @@ public class FriendsFragment extends Fragment {
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseUser user = auth.getCurrentUser();
     private String username,melons;
+    private ProgressBar progressBar;
 
     private String userID;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_options, container, false);
+        View root = inflater.inflate(R.layout.fragment_friends, container, false);
         setHasOptionsMenu(true);
         friendsLV = root.findViewById(R.id.idLVFriends);
         dataModalArrayList = new ArrayList<>();
+        progressBar = root.findViewById(R.id.progressBar);
 
         LayoutInflater layoutInflater = getLayoutInflater();
         ViewGroup footer = (ViewGroup) layoutInflater.inflate(R.layout.lv_footer, friendsLV, false);
@@ -78,6 +80,7 @@ public class FriendsFragment extends Fragment {
 
         db.collection("users/" + userID + "/friends").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+                    progressBar.setVisibility(View.GONE);
                     if (!queryDocumentSnapshots.isEmpty()) {
                         // if the snapshot is not empty we are hiding
                         // our progress bar and adding our data in a list.
@@ -93,14 +96,15 @@ public class FriendsFragment extends Fragment {
                             // after getting data from Firebase we are
                             // storing that data in our array list
                             dataModalArrayList.add(dataModel);
+                            adapter.notifyDataSetChanged();
                         }
-                        adapter.notifyDataSetChanged();
                     } else {
                         // if the snapshot is empty we are displaying a toast message.
                         Toast.makeText(requireContext(), "No data found in Database", Toast.LENGTH_SHORT).show();
                         Log.i("Firebase", "loadDetailListview: No data found in Database");
                     }
                 }).addOnFailureListener(e -> {
+            progressBar.setVisibility(View.GONE);
             Toast.makeText(requireContext(), "Fail to load data..", Toast.LENGTH_SHORT).show();
             Log.d("Firestore Error", "loadDetailListview: " + e.getMessage());
         });

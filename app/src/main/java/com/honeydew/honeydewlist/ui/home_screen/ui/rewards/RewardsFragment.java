@@ -135,8 +135,8 @@ public class RewardsFragment extends Fragment {
                             // after getting data from Firebase we are
                             // storing that data in our array list
                             dataModalArrayList.add(dataModel);
+                            adapter.notifyDataSetChanged();
                         }
-                        adapter.notifyDataSetChanged();
                     } else {
                         // if the snapshot is empty we are displaying a toast message.
                         Toast.makeText(requireContext(), "No data found in Database for " + userID, Toast.LENGTH_SHORT).show();
