@@ -21,6 +21,10 @@
             android:label="@string/title_activity_task_detail"
             android:theme="@style/Theme.HoneydewList.NoActionBar" />
         <activity
+            android:name=".ui.home_screen.ui.friends.AddFriendActivity"
+            android:label="Add Friend"
+            android:theme="@style/Theme.HoneydewList.NoActionBar" />
+        <activity
             android:name=".ui.home_screen.ui.tasks.CreateTaskActivity"
             android:label="@string/title_activity_create_task"
             android:theme="@style/Theme.HoneydewList.NoActionBar" />

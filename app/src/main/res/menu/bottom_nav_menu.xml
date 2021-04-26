@@ -20,5 +20,9 @@
         android:id="@+id/navigation_options"
         android:icon="@drawable/ic_baseline_settings_24"
         android:title="@string/title_options" />
+    <item
+        android:id="@+id/navigation_friends"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="@string/title_friends" />
 
 </menu>
