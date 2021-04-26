@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.honeydew.honeydewlist.R;
 
@@ -32,6 +33,7 @@ public class RewardDetailActivity extends AppCompatActivity {
     String username, uuid;
     private long melonCost;
     private Boolean redeemedStatus;
+    private Snackbar snackBar;
     FirebaseFirestore db;
 
     @Override
@@ -98,13 +100,17 @@ public class RewardDetailActivity extends AppCompatActivity {
             try {
                 db.collection("users").document(uuid).get()
                         .addOnSuccessListener(documentSnapshot -> {
-                            username = documentSnapshot.getData().get("username").toString();
+                            Map<String, Object> data = documentSnapshot.getData();
+                            Object username_obj;
+                            if (data != null) {
+                                username_obj = data.get("username");
+                                if (username_obj != null)
+                                    username = username_obj.toString();
+                            }
                         })
-                        .addOnFailureListener(e -> {
-                            Toast.makeText(getApplicationContext(),
-                                    "Could not find username from Firestore",
-                                    Toast.LENGTH_SHORT).show();
-                        });
+                        .addOnFailureListener(e -> Toast.makeText(getApplicationContext(),
+                                "Could not find username from Firestore",
+                                Toast.LENGTH_SHORT).show());
             } catch (SQLiteDatabaseLockedException e) {
                 Log.e(TAG, "onCreateView: Database already in use", e);
             } catch (RuntimeException e) {
@@ -117,11 +123,19 @@ public class RewardDetailActivity extends AppCompatActivity {
         try {
             db.collection("users").document(ownerUUID).collection("rewards").document(itemID).addSnapshotListener((value, error) -> {
                 if (value != null) {
+                    Map<String, Object> data  = value.getData();
                     redeemedStatus = value.getBoolean("redeemed");
-                    description = value.getData().get("description").toString();
-                    redeemer = value.getData().get("redeemer").toString();
-                    redeemerUUID = value.getData().get("redeemerUUID").toString();
-                    melonCost = value.getLong("points");
+                    if (data != null) {
+                        Object desc_obj, red_obj, red_uuid_obj;
+                        desc_obj = data.get("description");
+                        red_obj = data.get("redeemer");
+                        red_uuid_obj = data.get("redeemerUUID");
+
+                        if (desc_obj != null) description = desc_obj.toString();
+                        if (red_obj != null) redeemer = red_obj.toString();
+                        if (red_uuid_obj != null) redeemerUUID = red_uuid_obj.toString();
+                    }
+                    value.getLong("points");
 
                     cost_tv.setText(MessageFormat.format("{0}🍈", melonCost));
                     description_tv.setText(description);
@@ -146,7 +160,32 @@ public class RewardDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 try {
-                    // updateFirestore();
+                    // Only allow it to be redeemed if it is not redeemed yet
+                    if (redeemedStatus) {
+                        snackBar = Snackbar.make(
+                                findViewById(android.R.id.content),
+                                "This reward has alreay been redeemed",
+                                Snackbar.LENGTH_SHORT
+                        );
+                        snackBar.setAction("Dismiss", v12 -> {
+                            // Call your action method here
+                            snackBar.dismiss();
+                        });
+                        snackBar.show();
+                    } else if (ownerUUID.equals(uuid)) {
+                        snackBar = Snackbar.make(
+                                findViewById(android.R.id.content),
+                                "You cannot redeem your own reward",
+                                Snackbar.LENGTH_SHORT
+                        );
+                        snackBar.setAction("Dismiss", v12 -> {
+                            // Call your action method here
+                            snackBar.dismiss();
+                        });
+                        snackBar.show();
+                    } else {
+                        updateFirestore(username, uuid, melonCost);
+                    }
                 } catch (SQLiteDatabaseLockedException e) {
                     Log.e(TAG, "onCreateView: Database already in use", e);
                 } catch (RuntimeException e) {
@@ -154,15 +193,23 @@ public class RewardDetailActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     Log.e(TAG, "onCreateView: Something happened", e);
                 }
-                finish();
+                // finish();
             }
 
-            private void updateFirestore() {
-                Map<String, Object> stringObjectMap = new HashMap<String, Object>() {{
+            private void updateFirestore(String redeemer, String redeemerUUID, long melonCost) {
+                Map<String, Object> redeemedMap = new HashMap<String, Object>() {{
                     put("redeemed", true);
+                    put("redeemer", redeemer);
+                    put("redeemerUUID", redeemerUUID);
                 }};
-                db.collection("users/" + i.getStringExtra("ownerUUID") + "/rewards").
-                        document(i.getStringExtra("itemID")).update(stringObjectMap);
+                db.collection("users/" + ownerUUID + "/rewards").
+                        document(itemID).update(redeemedMap);
+
+                Map<String, Object> costMap = new HashMap<String, Object>() {{
+                    put("points", FieldValue.increment(-1 * melonCost));
+                }};
+                db.collection("users").
+                        document(redeemerUUID).update(costMap);
             }
         });
     }
