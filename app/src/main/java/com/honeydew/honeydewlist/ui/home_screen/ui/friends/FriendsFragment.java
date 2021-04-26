@@ -43,6 +43,7 @@ public class FriendsFragment extends Fragment {
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseUser user = auth.getCurrentUser();
     private String username,melons;
+    private ProgressBar progressBar;
 
     private String userID;
 
@@ -53,6 +54,7 @@ public class FriendsFragment extends Fragment {
         setHasOptionsMenu(true);
         friendsLV = root.findViewById(R.id.idLVFriends);
         dataModalArrayList = new ArrayList<>();
+        progressBar = root.findViewById(R.id.progressBar);
 
         LayoutInflater layoutInflater = getLayoutInflater();
         ViewGroup footer = (ViewGroup) layoutInflater.inflate(R.layout.lv_footer, friendsLV, false);
@@ -78,6 +80,7 @@ public class FriendsFragment extends Fragment {
 
         db.collection("users/" + userID + "/friends").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+                    progressBar.setVisibility(View.GONE);
                     if (!queryDocumentSnapshots.isEmpty()) {
                         // if the snapshot is not empty we are hiding
                         // our progress bar and adding our data in a list.
@@ -101,6 +104,7 @@ public class FriendsFragment extends Fragment {
                         Log.i("Firebase", "loadDetailListview: No data found in Database");
                     }
                 }).addOnFailureListener(e -> {
+            progressBar.setVisibility(View.GONE);
             Toast.makeText(requireContext(), "Fail to load data..", Toast.LENGTH_SHORT).show();
             Log.d("Firestore Error", "loadDetailListview: " + e.getMessage());
         });
