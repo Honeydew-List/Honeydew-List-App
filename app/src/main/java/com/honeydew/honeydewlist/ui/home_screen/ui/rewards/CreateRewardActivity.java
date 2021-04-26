@@ -124,7 +124,7 @@ public class CreateRewardActivity extends AppCompatActivity {
                 username,
                 userID,
                 (long) MelonCost,
-                false, "");
+                false, "", "", "");
 
         // below method is use to add data to Firebase Firestore.
         dbTasks.add(reward).addOnSuccessListener(documentReference -> {

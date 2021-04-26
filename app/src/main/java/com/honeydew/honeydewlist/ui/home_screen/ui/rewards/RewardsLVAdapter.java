@@ -84,6 +84,11 @@ public class RewardsLVAdapter extends ArrayAdapter<Reward> {
                 i.putExtra("ownerUUID", dataModal.getUUID());
                 i.putExtra("itemID", dataModal.getItemID());
                 i.putExtra("name", dataModal.getName());
+                i.putExtra("description", dataModal.getDescription());
+                i.putExtra("points", dataModal.getPoints());
+                i.putExtra("redeemed", dataModal.getRedeemed());
+                i.putExtra("redeemer", dataModal.getRedeemer());
+                i.putExtra("redeemerUUID", dataModal.getRedeemerUUID());
                 getContext().startActivity(i);
             }
         });
