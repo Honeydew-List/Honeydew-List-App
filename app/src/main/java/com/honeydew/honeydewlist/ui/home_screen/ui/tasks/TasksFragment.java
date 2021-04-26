@@ -27,6 +27,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.honeydew.honeydewlist.R;
 import com.honeydew.honeydewlist.data.Task;
 import com.honeydew.honeydewlist.ui.home_screen.inteface.GetFriendCallback;
+import com.honeydew.honeydewlist.ui.home_screen.ui.DatabaseViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +64,10 @@ public class TasksFragment extends Fragment {
 
         // initializing our variable for firebase
         // firestore and getting its instance.
-        db = FirebaseFirestore.getInstance();
+//        db = FirebaseFirestore.getInstance();
+        DatabaseViewModel databaseViewModel = new DatabaseViewModel();
+        databaseViewModel.initializeDb();
+        db = databaseViewModel.getDb();
 
         // Get current user
         auth = FirebaseAuth.getInstance();
@@ -192,9 +196,9 @@ public class TasksFragment extends Fragment {
         int itemId = item.getItemId();
         if (itemId == R.id.action_add_item) {
             // navigate to add task screen
-            if (db != null) {
-                db.terminate();
-            }
+//            if (db != null) {
+//                db.terminate();
+//            }
             Intent i = new Intent(getContext(), CreateTaskActivity.class);
             startActivity(i);
 
@@ -203,21 +207,21 @@ public class TasksFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (db != null) {
-            db.terminate();
-        }
-    }
-
-    @Override
-    public void onDestroyOptionsMenu() {
-        super.onDestroyOptionsMenu();
-        if (db != null) {
-            db.terminate();
-        }
-    }
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        if (db != null) {
+//            db.terminate();
+//        }
+//    }
+//
+//    @Override
+//    public void onDestroyOptionsMenu() {
+//        super.onDestroyOptionsMenu();
+//        if (db != null) {
+//            db.terminate();
+//        }
+//    }
 
     public void readFriendData(GetFriendCallback myCallback) {
         try {

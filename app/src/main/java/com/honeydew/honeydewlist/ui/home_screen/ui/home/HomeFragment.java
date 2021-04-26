@@ -24,6 +24,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.honeydew.honeydewlist.R;
+import com.honeydew.honeydewlist.ui.home_screen.ui.DatabaseViewModel;
 import com.honeydew.honeydewlist.ui.login.LoginActivity;
 
 public class HomeFragment extends Fragment {
@@ -43,7 +44,10 @@ public class HomeFragment extends Fragment {
         Button logout;
         logout = root.findViewById(R.id.button);
 
-        db = FirebaseFirestore.getInstance();
+//        db = FirebaseFirestore.getInstance();
+        DatabaseViewModel databaseViewModel = new DatabaseViewModel();
+        databaseViewModel.initializeDb();
+        db = databaseViewModel.getDb();
         logout.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
             Intent i = new Intent(getContext(), LoginActivity.class);
@@ -74,19 +78,19 @@ public class HomeFragment extends Fragment {
 
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (db != null) {
-            db.terminate();
-        }
-    }
-
-    @Override
-    public void onDestroyOptionsMenu() {
-        super.onDestroyOptionsMenu();
-        if (db != null) {
-            db.terminate();
-        }
-    }
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        if (db != null) {
+//            db.terminate();
+//        }
+//    }
+//
+//    @Override
+//    public void onDestroyOptionsMenu() {
+//        super.onDestroyOptionsMenu();
+//        if (db != null) {
+//            db.terminate();
+//        }
+//    }
 }
