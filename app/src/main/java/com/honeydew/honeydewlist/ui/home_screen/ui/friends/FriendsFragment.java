@@ -128,6 +128,9 @@ public class FriendsFragment extends Fragment {
         int itemId = item.getItemId();
         if (itemId == R.id.action_add_item) {
             // navigate to add friend screen
+            if (db != null) {
+                db.terminate();
+            }
             Intent i = new Intent(getContext(), AddFriendActivity.class);
             startActivity(i);
 
