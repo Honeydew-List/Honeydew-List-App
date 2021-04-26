@@ -49,7 +49,7 @@ public class FriendsFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_options, container, false);
+        View root = inflater.inflate(R.layout.fragment_friends, container, false);
         setHasOptionsMenu(true);
         friendsLV = root.findViewById(R.id.idLVFriends);
         dataModalArrayList = new ArrayList<>();
