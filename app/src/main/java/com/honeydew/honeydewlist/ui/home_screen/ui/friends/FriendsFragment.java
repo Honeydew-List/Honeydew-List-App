@@ -37,6 +37,9 @@ public class FriendsFragment extends Fragment {
     ListView friendsLV;
     ArrayList<Friend> dataModalArrayList;
     FirebaseFirestore db;
+    FirebaseAuth auth = FirebaseAuth.getInstance();
+    FirebaseUser user = auth.getCurrentUser();
+    private String username,melons;
 
     private String userID;
 
@@ -53,8 +56,6 @@ public class FriendsFragment extends Fragment {
         friendsLV.addFooterView(footer);
 
         db = FirebaseFirestore.getInstance();
-        final FirebaseAuth auth = FirebaseAuth.getInstance();
-        final FirebaseUser user = auth.getCurrentUser();
         if (user != null) {
             userID = user.getUid();
             // here we are calling a method
@@ -104,7 +105,22 @@ public class FriendsFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        userID = user.getUid();
         inflater.inflate(R.menu.app_bar_menu, menu);
+
+        db.collection("users").document(userID).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    username = documentSnapshot.getData().get("username").toString();
+                    menu.findItem(R.id.menuUsername).setTitle(getString(R.string.menuUser, username));
+                })
+                .addOnFailureListener(e -> Toast.makeText(requireContext(),
+                        "Could not find username from Firestore",
+                        Toast.LENGTH_SHORT).show());
+
+        db.collection("users").document(userID).addSnapshotListener((value, error) -> {
+            melons = value.getData().get("melon_count").toString();
+            menu.findItem(R.id.melon_stats).setTitle(getString(R.string.melonText, melons));
+        });
     }
 
     @Override
@@ -112,6 +128,9 @@ public class FriendsFragment extends Fragment {
         int itemId = item.getItemId();
         if (itemId == R.id.action_add_item) {
             // navigate to add friend screen
+            if (db != null) {
+                db.terminate();
+            }
             Intent i = new Intent(getContext(), AddFriendActivity.class);
             startActivity(i);
 
