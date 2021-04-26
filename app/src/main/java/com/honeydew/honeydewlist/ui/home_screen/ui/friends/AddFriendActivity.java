@@ -114,5 +114,13 @@ public class AddFriendActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         });
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (db != null) {
+            db.terminate();
+        }
+    }
 }
 

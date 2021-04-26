@@ -119,5 +119,21 @@ public class FriendsFragment extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (db != null) {
+            db.terminate();
+        }
+    }
+
+    @Override
+    public void onDestroyOptionsMenu() {
+        super.onDestroyOptionsMenu();
+        if (db != null) {
+            db.terminate();
+        }
+    }
 }
 
